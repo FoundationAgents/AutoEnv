@@ -1,0 +1,126 @@
+agent:
+  inventory:
+    animal_feed: 3
+    animal_products: 0
+    coins: 0
+    crops: 0
+    gifts: 3
+    seeds: 5
+    water: 5
+  pos:
+  - 7
+  - 7
+globals:
+  map_size:
+  - 15
+  - 15
+objects:
+  barns:
+  - animal:
+      hungry: true
+      product_count: 0
+      species: cow
+      timer: 0
+    id: barn_0
+    pos:
+    - 5
+    - 10
+  - animal:
+      hungry: true
+      product_count: 0
+      species: sheep
+      timer: 0
+    id: barn_1
+    pos:
+    - 0
+    - 12
+  - animal:
+      hungry: true
+      product_count: 0
+      species: chicken
+      timer: 0
+    id: barn_2
+    pos:
+    - 3
+    - 14
+  cottages:
+  - id: cottage_0
+    pos:
+    - 8
+    - 14
+  - id: cottage_1
+    pos:
+    - 12
+    - 4
+  - id: cottage_2
+    pos:
+    - 10
+    - 2
+  crop_fields:
+  - crop:
+      stage: empty
+      waterings: 0
+    id: field_0
+    pos:
+    - 5
+    - 0
+  - crop:
+      stage: empty
+      waterings: 0
+    id: field_1
+    pos:
+    - 3
+    - 7
+  - crop:
+      stage: empty
+      waterings: 0
+    id: field_2
+    pos:
+    - 0
+    - 3
+  - crop:
+      stage: empty
+      waterings: 0
+    id: field_3
+    pos:
+    - 14
+    - 9
+  market:
+  - 9
+  - 1
+  villagers:
+  - home_pos:
+    - 8
+    - 14
+    id: villager_0
+    mood: neutral
+    pos:
+    - 8
+    - 14
+    relationship: 30
+  - home_pos:
+    - 12
+    - 4
+    id: villager_1
+    mood: neutral
+    pos:
+    - 12
+    - 4
+    relationship: 0
+  - home_pos:
+    - 10
+    - 2
+    id: villager_2
+    mood: neutral
+    pos:
+    - 10
+    - 2
+    relationship: 20
+termination:
+  conditions: []
+  max_steps: 50
+tiles:
+  default_type: grass
+  size:
+  - 15
+  - 15

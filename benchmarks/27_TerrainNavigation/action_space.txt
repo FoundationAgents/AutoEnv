@@ -1,0 +1,29 @@
+[
+  {
+    "name": "MoveNorth",
+    "description": "Move one step northward (up) on the lake grid.",
+    "parameters": {}
+  },
+  {
+    "name": "MoveSouth", 
+    "description": "Move one step southward (down) on the lake grid.",
+    "parameters": {}
+  },
+  {
+    "name": "MoveEast",
+    "description": "Move one step eastward (right) toward the goal shore.",
+    "parameters": {}
+  },
+  {
+    "name": "MoveWest",
+    "description": "Move one step westward (left) back toward the starting shore.",
+    "parameters": {}
+  },
+  {
+    "name": "Wait",
+    "description": "Stay in current position without moving.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

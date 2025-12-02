@@ -1,0 +1,61 @@
+## Implementation Guide for Hive Mind Consensus Environment
+
+### Core Files Structure:
+- `hive_mind_env.py`: Main environment class inheriting from SkinEnv
+- `hive_observation.py`: ObservationPolicy implementation  
+- `hive_generator.py`: WorldGenerator implementation
+- `worlds/hive_mind_consensus/`: Directory for generated world files
+
+### Main Environment Class (`HiveMindEnv(SkinEnv)`):
+
+**_dsl_config()**: Load YAML config from `worlds/{env_id}/config.yaml`
+
+**reset()**: Load existing world or generate new one using WorldGenerator
+
+**transition()**: 
+- Parse action (MERGE/SPLIT/STIMULATE/MEDITATE/ARCHIVE/REDISTRIBUTE_CE)
+- Apply action effects to target sub-streams
+- Calculate knowledge production: `size * (coherence + novelty) / 200` for each stream  
+- Update global Unity as weighted average of coherences (weighted by size)
+- Update global Diversity as `100 - variance(novelty_values)`
+- Reset Cognitive Energy to 100, increment step counter
+- Check fragmentation risk if Unity < 40% (probabilistic sub-stream removal)
+
+**reward()**:
+- Continuous: `0.05 * unity + 0.05 * diversity + 0.2 * new_knowledge_points`
+- Milestone bonuses: 10 points when crossing 50/100/150/200 knowledge thresholds
+- Synergy bonus: 20 points when unity > 80% AND diversity > 60%  
+- Completion bonus: 50 points when knowledge_score >= 200
+- Return (total_reward, event_list, reward_breakdown_dict)
+
+**done()**: Check max_steps OR unity < 20% OR diversity < 20%
+
+### Observation Policy (`FullHiveObservation(ObservationPolicy)`):
+
+**__call__()**: Extract complete state including all sub-stream details, global metrics, 
+milestone status, and warning flags. Add derived values like knowledge production trends.
+
+### World Generator (`HiveMindGenerator(WorldGenerator)`):
+
+**generate()**: Create world_id, execute pipeline, save to file, return world_id
+
+**_execute_pipeline()**:
+- init_from_template: Copy state_template as base
+- randomize_sub_streams: Add controlled variance to coherence/novelty within ranges
+- validate_initial_conditions: Ensure unity >= 70%, diversity >= 50%
+
+Action Parameter Validation:
+- MERGE: Ensure both stream IDs exist and are different
+- SPLIT: Ratio must be 0.2-0.8, stream must exist  
+- STIMULATE/MEDITATE: Energy amount <= available cognitive_energy
+- ARCHIVE: Stream must have novelty > 0
+- REDISTRIBUTE_CE: Total allocation must equal available energy
+
+Key Mechanics:
+- Merging averages properties, increases unity risk
+- Splitting creates diversity, may fragment unity  
+- Stimulate boosts novelty, Meditate boosts coherence
+- Archive converts accumulated insights to permanent knowledge
+- Fragmentation removes incoherent sub-streams permanently
+
+Remember: max_steps in termination may be overridden by level-specific settings during world loading.

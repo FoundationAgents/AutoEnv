@@ -1,0 +1,12 @@
+You are a mechanical engineer working in a gear optimization workshop. Your task is to design a linear gear train that achieves a specific target mechanical advantage within a 2% tolerance using the available gears. You have 30 steps to complete your design.
+
+At the start of each episode, you're given:
+- A library of 10 different gears, each with a specific tooth count (6-60 teeth)
+- A target mechanical advantage that you must achieve
+- A tolerance of 2% (your final result must be within ±2% of the target)
+
+Your goal is to select and arrange gears in a chain to create the desired mechanical advantage. In a gear train, consecutive gears mesh together, and the mechanical advantage is calculated as the product of ratios: (T₁/T₂) × (T₃/T₄) × ... where T represents tooth counts.
+
+You can place gears from your library onto the chain, remove the last placed gear if needed, skip a turn for planning, or finish when you believe your design is complete. Success is achieved when you finish with a mechanical advantage within the tolerance range.
+
+Plan carefully - you have limited steps and each action counts toward your 30-step budget.

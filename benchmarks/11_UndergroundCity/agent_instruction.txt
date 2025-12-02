@@ -1,0 +1,7 @@
+You are the chief urban planner for an underground civilization with anomalous physics. Your task is to expand a small subterranean outpost into a thriving megacity with 6 operational districts within exactly 40 construction steps.
+
+The underground world operates under unique physical laws: gravity gradients pull structures sideways along mineral veins, removing material in one location can strengthen distant connected areas, and air currents reverse direction every 8 steps in predictable cycles.
+
+You must maintain three critical safety metrics while expanding: keep structural integrity above 80% to prevent catastrophic collapse, maintain breathable air quality above 60% for citizen survival, and manage all activities within your power budget. The environment provides complete visibility of current conditions including rock stress levels, airflow patterns, and infrastructure status, but you must discover the underlying physics relationships through experimentation and observation.
+
+Success requires balancing rapid expansion with safety, learning to work with the counterintuitive mechanics rather than against them, and strategically timing your actions around the cyclical airflow changes.

@@ -1,0 +1,57 @@
+## Implementation Guide for Dream Sequence Navigation Environment
+
+### Core Files Structure
+- `dream_nav_env.py` - Main environment class inheriting from SkinEnv
+- `dream_observation.py` - Custom observation policy class
+- `dream_generator.py` - World generation pipeline class
+
+### DreamNavEnv Class (dream_nav_env.py)
+**Key Methods:**
+
+`_dsl_config()`: Load YAML config from worlds/{env_id}/config.yaml, parse room layouts and connection rules.
+
+`reset(mode, world_id, seed)`: If mode="load", call _load_world(world_id). If mode="generate", call _generate_world(seed) then load the returned world_id. Initialize agent position and reset episode state.
+
+`_load_world(world_id)`: Load YAML file from worlds/{env_id}/{world_id}.yaml containing complete room layout, connections, key location, portal position.
+
+`_generate_world(seed)`: Instantiate DreamGenerator, call generate(seed), return the world_id of saved world file.
+
+`transition(action)`: Handle 5 actions:
+- ENTER_X_DOOR: Check if door exists in current room, apply room effects (Anti-Gravity swaps red/blue destinations, Time-Slow requires prior WAIT), move to destination
+- PICK_UP_KEY: If key in current room, set agent.has_key=true
+- WAIT: Set wait_used_in_room=true for Time-Slow mechanics
+Invalid door attempts keep agent in same room but consume step.
+
+`reward(action)`: Return 1.0 only if agent reaches portal_room while has_key=true. All other cases return 0.0. Return events list for logging.
+
+`observe_semantic()`: Extract current room info, available doors (considering room effects), key status, steps remaining. Compute room_type from room properties.
+
+`render_skin(omega)`: Format text display using skin template, show room ID, available exits, key status, step counter.
+
+`done()`: Check termination conditions - max_steps reached, portal reached with key, or entered dead-end room.
+
+### DreamObservationPolicy Class (dream_observation.py)
+`__call__(env_state, t)`: Extract full room information including current room ID, available exits (apply Anti-Gravity door swapping if needed), room special property, key possession status, whether key is in current room.
+
+### DreamGenerator Class (dream_generator.py)
+**Pipeline Implementation:**
+
+`_execute_pipeline()`: Run generation steps in sequence with shared state dict.
+
+`setup_difficulty_rooms()`: Create 6 rooms (Easy), 8 (Medium), or 10 (Hard). Set portal_room to room 5, 7, or 9 respectively.
+
+`generate_room_connections()`: For each room, randomly assign 1-3 colored doors. Ensure connectivity - no isolated rooms. Create bidirectional connections where possible. Store in connections dict as {room_id: {color: destination_room}}.
+
+`assign_room_properties()`: Randomly assign each room a type: "Normal" (standard doors), "Anti-Gravity" (red/blue swap), "Time-Slow" (requires WAIT before door use). Ensure at least one Normal room exists.
+
+`place_key_and_portal()`: Randomly select one room for key placement (excluding portal room). Portal always in final room per difficulty.
+
+`select_start_room()`: Randomly choose starting room (can be any room including key/portal rooms).
+
+**Important Notes:**
+- When reading max_steps, if the loaded world has changed max_steps value, it should override the environment's self.configs["termination"]["max_steps"]
+- Room connections are bidirectional but may have different door colors in each direction
+- Anti-Gravity effect applies only to door destinations, not door availability
+- Time-Slow rooms reset wait_used_in_room when agent leaves the room
+- Dead-end rooms are rooms with no exit doors - should be avoided in generation but handled in termination
+- Generator must ensure every room is reachable from every other room through some path

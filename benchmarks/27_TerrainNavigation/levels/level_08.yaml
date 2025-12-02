@@ -1,0 +1,83 @@
+agent:
+  pos:
+  - 4
+  - 0
+  steps_remaining: 40
+globals:
+  max_steps: 40
+goal_pos:
+- 4
+- 7
+start_pos:
+- 4
+- 0
+tiles:
+  default_type: ice
+  layout:
+  - - ice
+    - ice
+    - ice
+    - ice
+    - water
+    - ice
+    - ice
+    - ice
+  - - ice
+    - water
+    - ice
+    - water
+    - ice
+    - ice
+    - ice
+    - water
+  - - water
+    - water
+    - water
+    - ice
+    - ice
+    - ice
+    - water
+    - ice
+  - - ice
+    - ice
+    - ice
+    - ice
+    - ice
+    - ice
+    - ice
+    - ice
+  - - ice
+    - ice
+    - ice
+    - ice
+    - ice
+    - ice
+    - ice
+    - ice
+  - - ice
+    - ice
+    - ice
+    - ice
+    - water
+    - water
+    - ice
+    - ice
+  - - ice
+    - ice
+    - ice
+    - ice
+    - ice
+    - ice
+    - ice
+    - water
+  - - ice
+    - ice
+    - water
+    - water
+    - ice
+    - ice
+    - ice
+    - ice
+  size:
+  - 8
+  - 8

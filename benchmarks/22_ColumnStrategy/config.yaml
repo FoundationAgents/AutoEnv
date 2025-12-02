@@ -1,0 +1,111 @@
+meta:
+  id: "tower_stack_connect_four"
+  name: "Tower-Stack Connect-Four"
+  description: "Strategic Connect-Four game where agent competes against heuristic opponent on 6x7 grid"
+
+state_template:
+  globals:
+    max_steps: 40
+    board_height: 6
+    board_width: 7
+  agent:
+    player_id: 1
+    wins: 0
+  opponent:
+    player_id: 2
+    last_move: -1
+    policy: "heuristic_depth1"
+  board:
+    grid: []
+    filled_columns: []
+  game:
+    current_player: 1
+    winner: 0
+    game_over: false
+    moves_made: 0
+
+observation:
+  policy: "full_board"
+  params: {}
+  expose:
+    - board.grid
+    - opponent.last_move
+    - globals.max_steps
+    - game.moves_made
+    - t
+
+reward:
+  events:
+    - trigger: "game_won"
+      value_key: "win_rewards"
+    - trigger: "game_lost"
+      value_key: "loss_rewards"
+    - trigger: "game_timeout"
+      value_key: "timeout_rewards"
+  win_rewards:
+    agent_victory: 1.0
+  loss_rewards:
+    opponent_victory: 0.0
+  timeout_rewards:
+    no_winner: 0.0
+
+transition:
+  actions:
+    - name: "drop_disk"
+      params: [column]
+
+skin:
+  type: "text"
+  template: |
+    Step {t}/{max_steps} | Moves: {moves_made}
+    Last opponent move: Column {opponent_last_move}
+    
+    Board (1=You, 2=Opponent, 0=Empty):
+    {board_display}
+    
+    Available actions: drop_disk(column) where column in [0,1,2,3,4,5,6]
+    Game status: {game_status}
+
+termination:
+  max_steps: 40
+  conditions:
+    - "game.game_over == true"
+    - "game.winner != 0"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with empty 6x7 Connect-Four board"
+      args: {}
+    - name: "setup_empty_board"
+      desc: "Create 6x7 grid filled with zeros, initialize column tracking"
+      args:
+        height: 6
+        width: 7
+    - name: "initialize_game_state"
+      desc: "Set agent as first player, reset counters and flags"
+      args:
+        starting_player: 1
+    - name: "setup_opponent_heuristic"
+      desc: "Configure opponent AI with depth-1 heuristic policy"
+      args:
+        policy_type: "win_block_random"
+        depth: 1
+
+  randomization:
+    seed_based: true
+    parameters:
+      opponent_randomness: [0.0, 0.1]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

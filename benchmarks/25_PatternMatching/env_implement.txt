@@ -1,0 +1,63 @@
+## Implementation Guidance for Memory Pair Matching Environment
+
+### Files to Create:
+1. `memory_pair_env.py` - Main environment class
+2. `memory_observation.py` - Observation policy 
+3. `memory_generator.py` - World generator
+4. `worlds/memory_pair_matching/` - Directory for generated worlds
+
+### Class: MemoryPairEnv(SkinEnv)
+
+**_dsl_config()**: Load YAML config from `worlds/{env_id}/config.yaml`. Parse and store in `self.configs`.
+
+**reset()**: 
+- If mode="load": call `_load_world(world_id)` to restore saved game state
+- If mode="generate": call `_generate_world(seed)` to create new shuffled layout
+- Initialize `self._t = 0`, reset steps_remaining to 40
+- Clear any temporary state like revealed_positions
+
+**_load_world(world_id)**: Load YAML file from `worlds/memory_pair_matching/{world_id}.yaml`, return state dict
+
+**_generate_world(seed)**: Create MemoryGenerator instance, call generate(seed), return world_id of saved file
+
+**transition(action)**: 
+- Validate action is flip with position 0-15
+- If position already cleared, set _last_action_result="illegal_move", return unchanged state  
+- If position face-down: reveal it, add to revealed_positions, set current_revealed_symbol
+- Check if 2 cards revealed: if symbols match, clear both (state=2), increment cleared_pairs; if no match, hide both (state=0)
+- Clear revealed_positions list, decrement steps_remaining
+- Return updated state
+
+**reward(action, prev_state)**:
+- Check if pair was cleared this step: +1.0 reward, event="pair_cleared"
+- Check if position was explored for first time: +0.05 reward, event="first_exploration"  
+- Otherwise: 0.0 reward, event="no_reward"
+- Return (reward_value, [event], {details})
+
+**observe_semantic()**: Return dict with card_states grid, current_revealed_symbol, steps_remaining, timestep
+
+**render_skin(omega)**: Format card_states as 4x4 ASCII grid, substitute values into skin template
+
+**done()**: Return True if cleared_pairs >= 8 OR steps_remaining <= 0. Note: when reading max_steps from level config, if the level has changed max_steps, it should override the environment's self.configs["termination"]["max_steps"]
+
+### Class: MemoryObservationPolicy(ObservationPolicy)
+
+**__call__(env_state, t)**: Extract game.card_states, game.current_revealed_symbol, agent.steps_remaining. Return observation dict.
+
+### Class: MemoryGenerator(WorldGenerator) 
+
+**generate(seed, save_path)**: Execute pipeline with seed, save to file, return world_id
+
+**_execute_pipeline(base_state, seed)**:
+- init_from_template: Copy state_template as starting point
+- generate_card_symbols: Create list [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7] representing 8 symbol pairs
+- shuffle_cards: Use seed with random.Random to shuffle 16-element symbol list via Fisher-Yates
+- initialize_states: Set card_states to all zeros (face-down), clear revealed_positions, set cleared_pairs=0
+- Return complete world state dict
+
+Key implementation notes:
+- Use random.Random(seed) for reproducible shuffling
+- Grid positions indexed 0-15 in row-major order (pos = row*4 + col)
+- Maintain card symbols separate from visual states for matching logic
+- Track explored_positions set to prevent duplicate exploration rewards
+- Auto-hide mismatched cards at start of next turn, not immediately

@@ -1,0 +1,739 @@
+{
+  "environment_id": "20250919_185613_env_107_AlienDec",
+  "calculation_timestamp": "2025-09-19 19:09:02",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.4,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 39 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 9,
+          "reward_per_discovery": 0.1,
+          "total": 0.9,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "corroded_metal"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.0,
+          "achievable": false,
+          "target_population": 27,
+          "initial_population": 9,
+          "potential_boost": 16
+        }
+      },
+      "feasibility": {
+        "population_gap": 18,
+        "available_nutrition_resources": 16,
+        "goal_achievable": false
+      }
+    },
+    "level_02.yaml": {
+      "max_reward": 1.5,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 37 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 10,
+          "reward_per_discovery": 0.1,
+          "total": 1.0,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "poisonous_plants",
+            "infected_samples"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.0,
+          "achievable": false,
+          "target_population": 39,
+          "initial_population": 13,
+          "potential_boost": 18
+        }
+      },
+      "feasibility": {
+        "population_gap": 26,
+        "available_nutrition_resources": 18,
+        "goal_achievable": false
+      }
+    },
+    "level_03.yaml": {
+      "max_reward": 2.2,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 32 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 10,
+          "reward_per_discovery": 0.1,
+          "total": 1.0,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "corroded_metal",
+            "radioactive_ore"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.7,
+          "achievable": true,
+          "target_population": 32,
+          "initial_population": 15,
+          "potential_boost": 18
+        }
+      },
+      "feasibility": {
+        "population_gap": 17,
+        "available_nutrition_resources": 18,
+        "goal_achievable": true
+      }
+    },
+    "level_04.yaml": {
+      "max_reward": 1.5,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 39 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 10,
+          "reward_per_discovery": 0.1,
+          "total": 1.0,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "infected_samples",
+            "radioactive_ore"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.0,
+          "achievable": false,
+          "target_population": 40,
+          "initial_population": 11,
+          "potential_boost": 20
+        }
+      },
+      "feasibility": {
+        "population_gap": 29,
+        "available_nutrition_resources": 20,
+        "goal_achievable": false
+      }
+    },
+    "level_05.yaml": {
+      "max_reward": 1.4,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 33 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 9,
+          "reward_per_discovery": 0.1,
+          "total": 0.9,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "poisonous_plants"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.0,
+          "achievable": false,
+          "target_population": 34,
+          "initial_population": 10,
+          "potential_boost": 18
+        }
+      },
+      "feasibility": {
+        "population_gap": 24,
+        "available_nutrition_resources": 18,
+        "goal_achievable": false
+      }
+    },
+    "level_06.yaml": {
+      "max_reward": 1.5,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 54 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 10,
+          "reward_per_discovery": 0.1,
+          "total": 1.0,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "infected_samples",
+            "poisonous_plants"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.0,
+          "achievable": false,
+          "target_population": 48,
+          "initial_population": 11,
+          "potential_boost": 20
+        }
+      },
+      "feasibility": {
+        "population_gap": 37,
+        "available_nutrition_resources": 20,
+        "goal_achievable": false
+      }
+    },
+    "level_07.yaml": {
+      "max_reward": 1.6,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 52 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 11,
+          "reward_per_discovery": 0.1,
+          "total": 1.1,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "infected_samples",
+            "radioactive_ore",
+            "corroded_metal"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.0,
+          "achievable": false,
+          "target_population": 58,
+          "initial_population": 14,
+          "potential_boost": 16
+        }
+      },
+      "feasibility": {
+        "population_gap": 44,
+        "available_nutrition_resources": 16,
+        "goal_achievable": false
+      }
+    },
+    "level_08.yaml": {
+      "max_reward": 1.5,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 40 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 10,
+          "reward_per_discovery": 0.1,
+          "total": 1.0,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "infected_samples",
+            "radioactive_ore"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.0,
+          "achievable": false,
+          "target_population": 54,
+          "initial_population": 13,
+          "potential_boost": 11
+        }
+      },
+      "feasibility": {
+        "population_gap": 41,
+        "available_nutrition_resources": 11,
+        "goal_achievable": false
+      }
+    },
+    "level_09.yaml": {
+      "max_reward": 1.5,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 44 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 10,
+          "reward_per_discovery": 0.1,
+          "total": 1.0,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "poisonous_plants",
+            "radioactive_ore"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.0,
+          "achievable": false,
+          "target_population": 40,
+          "initial_population": 15,
+          "potential_boost": 7
+        }
+      },
+      "feasibility": {
+        "population_gap": 25,
+        "available_nutrition_resources": 7,
+        "goal_achievable": false
+      }
+    },
+    "level_10.yaml": {
+      "max_reward": 1.6,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 50 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 11,
+          "reward_per_discovery": 0.1,
+          "total": 1.1,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "radioactive_ore",
+            "infected_samples",
+            "poisonous_plants"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.0,
+          "achievable": false,
+          "target_population": 56,
+          "initial_population": 9,
+          "potential_boost": 5
+        }
+      },
+      "feasibility": {
+        "population_gap": 47,
+        "available_nutrition_resources": 5,
+        "goal_achievable": false
+      }
+    },
+    "level_11.yaml": {
+      "max_reward": 1.6,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 50 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 11,
+          "reward_per_discovery": 0.1,
+          "total": 1.1,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "poisonous_plants",
+            "corroded_metal",
+            "infected_samples"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.0,
+          "achievable": false,
+          "target_population": 58,
+          "initial_population": 10,
+          "potential_boost": 5
+        }
+      },
+      "feasibility": {
+        "population_gap": 48,
+        "available_nutrition_resources": 5,
+        "goal_achievable": false
+      }
+    },
+    "level_12.yaml": {
+      "max_reward": 1.6,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 55 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 11,
+          "reward_per_discovery": 0.1,
+          "total": 1.1,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "radioactive_ore",
+            "poisonous_plants",
+            "corroded_metal"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.0,
+          "achievable": false,
+          "target_population": 59,
+          "initial_population": 11,
+          "potential_boost": 4
+        }
+      },
+      "feasibility": {
+        "population_gap": 48,
+        "available_nutrition_resources": 4,
+        "goal_achievable": false
+      }
+    },
+    "level_13.yaml": {
+      "max_reward": 1.6,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 54 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 11,
+          "reward_per_discovery": 0.1,
+          "total": 1.1,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "infected_samples",
+            "poisonous_plants",
+            "radioactive_ore"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.0,
+          "achievable": false,
+          "target_population": 65,
+          "initial_population": 14,
+          "potential_boost": 2
+        }
+      },
+      "feasibility": {
+        "population_gap": 51,
+        "available_nutrition_resources": 2,
+        "goal_achievable": false
+      }
+    },
+    "level_14.yaml": {
+      "max_reward": 1.7,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 61 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 12,
+          "reward_per_discovery": 0.1,
+          "total": 1.2000000000000002,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "poisonous_plants",
+            "corroded_metal",
+            "radioactive_ore",
+            "infected_samples"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.0,
+          "achievable": false,
+          "target_population": 58,
+          "initial_population": 13,
+          "potential_boost": 2
+        }
+      },
+      "feasibility": {
+        "population_gap": 45,
+        "available_nutrition_resources": 2,
+        "goal_achievable": false
+      }
+    },
+    "level_15.yaml": {
+      "max_reward": 1.7,
+      "calculation_method": "optimal_resource_allocation_analysis",
+      "notes": "Assumes perfect resource discovery and optimal allocation within 55 steps",
+      "breakdown": {
+        "resource_discoveries": {
+          "count": 12,
+          "reward_per_discovery": 0.1,
+          "total": 1.2000000000000002,
+          "resources": [
+            "toxic_waste",
+            "rotten_food",
+            "contaminated_water",
+            "broken_machinery",
+            "poisonous_plants",
+            "radioactive_ore",
+            "infected_samples",
+            "corroded_metal",
+            "radioactive_ore",
+            "corroded_metal",
+            "poisonous_plants",
+            "infected_samples"
+          ]
+        },
+        "building_discoveries": {
+          "count": 5,
+          "reward_per_discovery": 0.1,
+          "total": 0.5,
+          "buildings": [
+            "poison_distributor",
+            "corruption_hub",
+            "contamination_center",
+            "decay_chamber",
+            "waste_processor"
+          ]
+        },
+        "goal_achievement": {
+          "reward": 0.0,
+          "achievable": false,
+          "target_population": 63,
+          "initial_population": 13,
+          "potential_boost": 2
+        }
+      },
+      "feasibility": {
+        "population_gap": 50,
+        "available_nutrition_resources": 2,
+        "goal_achievable": false
+      }
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 1.59,
+    "min_max_reward": 1.4,
+    "max_max_reward": 2.2
+  }
+}

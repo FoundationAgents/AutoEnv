@@ -1,0 +1,39 @@
+[
+  {
+    "name": "move_north",
+    "description": "Move the agent one tile north (decreasing y-coordinate). If blocked by walls or boundaries, the agent remains in place.",
+    "parameters": {}
+  },
+  {
+    "name": "move_south", 
+    "description": "Move the agent one tile south (increasing y-coordinate). If blocked by walls or boundaries, the agent remains in place.",
+    "parameters": {}
+  },
+  {
+    "name": "move_east",
+    "description": "Move the agent one tile east (increasing x-coordinate). If blocked by walls or boundaries, the agent remains in place.", 
+    "parameters": {}
+  },
+  {
+    "name": "move_west",
+    "description": "Move the agent one tile west (decreasing x-coordinate). If blocked by walls or boundaries, the agent remains in place.",
+    "parameters": {}
+  },
+  {
+    "name": "rotate_left",
+    "description": "Rotate the agent's facing direction 90 degrees counterclockwise without changing position.",
+    "parameters": {}
+  },
+  {
+    "name": "rotate_right", 
+    "description": "Rotate the agent's facing direction 90 degrees clockwise without changing position.",
+    "parameters": {}
+  },
+  {
+    "name": "mark",
+    "description": "Mark the current location as the suspected vulnerability position. This immediately ends the episode.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

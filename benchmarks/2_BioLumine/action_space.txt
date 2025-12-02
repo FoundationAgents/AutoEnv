@@ -1,0 +1,14 @@
+[
+  {
+    "name": "RESPOND_PATTERN",
+    "description": "Transmit a bioluminescent response pattern to communicate with the deep-sea creature.",
+    "parameters": {
+      "pattern_length": "number of light pulses in the response sequence (must be between 2 and 6)",
+      "pulse_colors": "list of color values for each pulse in sequence (available: blue, green, purple, white)",
+      "pulse_durations": "list of duration values for each pulse in sequence (available: short, long)",
+      "pulse_intensities": "list of intensity values for each pulse in sequence (available: low, high)"
+    }
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "RESPOND_PATTERN", "params": {"pattern_length": 3, "pulse_colors": ["blue", "green", "white"], "pulse_durations": ["short", "long", "short"], "pulse_intensities": ["low", "high", "low"]}}

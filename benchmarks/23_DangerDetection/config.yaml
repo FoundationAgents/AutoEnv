@@ -1,0 +1,107 @@
+meta:
+  id: "inverted_treasure_hunt"
+  name: "Inverted-Symbol Treasure Hunt Grid"
+  description: "Navigate 8x8 grid to find inverted-symbol treasure while avoiding deadly flower traps"
+
+state_template:
+  globals:
+    grid_size: [8, 8]
+    max_steps: 30
+  agent:
+    pos: [0, 0]
+  tiles:
+    size: [8, 8]
+    default_type: "unrevealed"
+    icons:
+      bomb_count: 1
+      flower_count: 10
+      empty_count: 53
+  grid:
+    revealed: {}
+    icons: {}
+
+observation:
+  policy: "radius"
+  params:
+    radius: 2
+  expose:
+    - agent.pos
+    - globals.max_steps
+    - visible_tiles
+    - t
+
+reward:
+  events:
+    - trigger: "treasure_found"
+      value: 1.0
+  conditions:
+    - if: "stepped_on_bomb"
+      value: 1.0
+
+transition:
+  actions:
+    - name: "MOVE_NORTH"
+      params: []
+    - name: "MOVE_SOUTH"
+      params: []
+    - name: "MOVE_EAST"
+      params: []
+    - name: "MOVE_WEST"
+      params: []
+    - name: "REVEAL"
+      params: []
+    - name: "WAIT"
+      params: []
+
+skin:
+  type: "text"
+  template: |
+    Step {t}/{max_steps} - Inverted Symbol Hunt
+    Position: {agent_pos} | Remaining Steps: {remaining_steps}
+    
+    Local View (5x5 centered on agent):
+    {grid_view}
+    
+    Legend: A=Agent, B=Bomb(treasure!), F=Flower(danger!), .=Empty, ?=Unrevealed
+    Remember: BOMBS are treasure, FLOWERS are deadly traps!
+    
+    Available: MOVE_NORTH, MOVE_SOUTH, MOVE_EAST, MOVE_WEST, REVEAL, WAIT
+
+termination:
+  max_steps: 30
+  conditions:
+    - "stepped_on_flower"
+    - "found_treasure"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "place_icons_randomly"
+      desc: "Randomly distribute 1 bomb, 10 flowers, 53 empty across 64 tiles using uniform placement"
+      args:
+        bomb_positions: 1
+        flower_positions: 10
+        empty_positions: 53
+    - name: "initialize_revealed_state"
+      desc: "Set all tiles to unrevealed state, create revelation tracking structure"
+      args:
+        default_revealed: false
+  randomization:
+    seed_based: true
+    parameters:
+      icon_placement: "uniform_random"
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

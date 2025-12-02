@@ -1,0 +1,72 @@
+## Implementation Guide for Subterranean Megacity Environment
+
+### Core Files Needed:
+- `subterranean_env.py`: Main environment class inheriting from SkinEnv
+- `underground_physics.py`: Physics simulation engine for anomalous mechanics  
+- `underground_generator.py`: WorldGenerator subclass for procedural level creation
+- `underground_observation.py`: ObservationPolicy subclass for semantic observation
+
+### Main Environment Class (subterranean_env.py):
+**SubterraneanMegacityEnv(SkinEnv)**
+
+**_dsl_config()**: Load YAML config, initialize physics engine, set up airflow cycle tracking
+
+**reset()**: Load/generate world, initialize grid with stress/airflow data, reset metrics and research state
+
+**transition()**: 
+- excavate_cell: Remove rock, trigger counterintuitive stress redistribution via physics engine
+- place_support_column: Add support, calculate structural improvements based on material and gravity gradients  
+- dig_ventilation_shaft: Modify airflow vectors, account for 8-step cycle reversals
+- install_power_conduit: Create energy paths, update gravity field interactions
+- build_district_core: Convert excavated cells to districts if prerequisites met
+- research_anomaly: Unlock physics rules, expand available materials
+- diagnostic_scan: Reveal hidden stress/airflow data without changing state
+
+**reward()**: Calculate point changes based on metric improvements, district completions, research progress, continuous operation bonuses, and penalties for safety violations
+
+**done()**: Check max_steps (40), structural integrity <= 0, or breathable_air <= 0. Note: When reading max_steps, if the level has changed max_steps, it should override the environment's self.configs["termination"]["max_steps"]
+
+**observe_semantic()**: Extract current grid state, metrics, research status, available actions
+
+**render_skin()**: Format text display showing grid visualization, metrics dashboard, research progress, and available actions
+
+### Physics Engine (underground_physics.py):
+**UndergroundPhysics**
+
+**calculate_stress_redistribution()**: Implement counterintuitive load transfer where excavation can strengthen distant areas via mineral seam connections
+
+**update_structural_integrity()**: Compute overall stability from support placement and inverted gravity gradients
+
+**simulate_airflow()**: Model air circulation with 8-step directional reversals, update breathable_air_index
+
+**apply_power_gravity_feedback()**: Calculate how power conduit placement affects local gravity fields and structural metrics
+
+**get_physics_hints()**: Return discovered rules based on research progress
+
+### World Generator (underground_generator.py):
+**UndergroundWorldGenerator(WorldGenerator)**
+
+**generate()**: Create unique world_id, execute pipeline, save to file
+
+**_execute_pipeline()**: 
+1. Start with state_template
+2. generate_rock_stress_map: Create 5x5 stress values (10-90) with realistic geological patterns, mineral veins, fault lines
+3. generate_airflow_field: Set initial air current vectors with directional bias
+4. place_starting_infrastructure: Add 2 pre-excavated cells and 1 power conduit for playability
+5. calculate_initial_physics: Compute starting structural_integrity and breathable_air_index
+
+**Pipeline Logic**: Each level should have different geological patterns but consistent physics rules. Stress patterns determine where excavation helps vs hurts. Airflow field establishes baseline circulation before reversals begin. Starting infrastructure ensures immediate action viability.
+
+### Observation Policy (underground_observation.py):
+**UndergroundObservation(ObservationPolicy)**
+
+**__call__()**: Extract full grid state including stress values, airflow vectors, structure types. Include metrics, research status, current airflow phase. Never reveal underlying physics equations directly - agents must learn through experimentation.
+
+### Key Implementation Notes:
+- Physics equations must remain consistent across all episodes
+- Airflow reversal happens every 8 steps (check t % 8 == 0)  
+- Structural integrity and air quality must be continuously monitored
+- Research actions gradually unlock advanced materials and physics understanding
+- Victory requires 6 districts with safety metrics maintained by step 40
+- Grid visualization should clearly show excavated areas, supports, districts, conduits
+- Stress redistribution calculations are the core challenge - excavation effects must be counterintuitive but learnable

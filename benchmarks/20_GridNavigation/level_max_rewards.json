@@ -1,0 +1,87 @@
+{
+  "environment_id": "20250918_183647_env_91_grid_world_navigation",
+  "calculation_timestamp": "2025-09-18 18:50:48",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Treasure is reachable from agent starting position"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0
+  }
+}

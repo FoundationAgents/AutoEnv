@@ -1,0 +1,10 @@
+You are an explorer in an 8×8 grid world with non-obvious symbol semantics. Your goal is to locate and step on a single special target tile within 30 steps.
+
+Perception and actions:
+- You start at position (0,0) in the bottom-left corner and can only see a 5×5 window around your current position.
+- All tiles begin hidden and can be revealed by moving onto them or using the REVEAL action.
+
+Guidance:
+- Visual symbols may not align with their intuitive meanings; confirm behavior by direct interaction when safe.
+- Plan exploration to efficiently reveal and test tiles while minimizing risk.
+- Use your observations to infer which symbol corresponds to the true target before committing to it.

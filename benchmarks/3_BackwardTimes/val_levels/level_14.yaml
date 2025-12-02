@@ -1,0 +1,165 @@
+agent:
+  current_time_index: 40
+  investigation_status: active
+crime_scene:
+  initial_evidence:
+  - Crime scene photographs
+  - Initial police report
+  - Witness contact information
+  location: primary_scene
+  suspect_list:
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_1
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_2
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_3
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_4
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_5
+  witness_statements: []
+globals:
+  max_steps: 40
+ground_truth:
+  decoy_suspects:
+  - person_2
+  - person_3
+  - person_4
+  - person_5
+  essential_clues:
+  - description: Evidence piece 1 found at office
+    id: clue_1
+    location: office
+    object: phone
+    relevance: essential
+    time_available: 19
+    type: witness
+  - description: Evidence piece 2 found at reception
+    id: clue_2
+    location: parking_lot
+    object: document
+    relevance: essential
+    time_available: 21
+    type: witness
+  - description: Evidence piece 3 found at warehouse
+    id: clue_3
+    location: parking_lot
+    object: tool
+    relevance: essential
+    time_available: 17
+    type: physical
+  - description: Evidence piece 4 found at warehouse
+    id: clue_4
+    location: warehouse
+    object: computer
+    relevance: essential
+    time_available: 17
+    type: digital
+  - description: Evidence piece 5 found at office
+    id: clue_5
+    location: reception
+    object: tool
+    relevance: essential
+    time_available: 26
+    type: forensic
+  - description: Evidence piece 6 found at warehouse
+    id: clue_6
+    location: reception
+    object: phone
+    relevance: essential
+    time_available: 17
+    type: witness
+  - description: Evidence piece 7 found at office
+    id: clue_7
+    location: parking_lot
+    object: phone
+    relevance: essential
+    time_available: 32
+    type: physical
+  - description: Misleading evidence 1
+    id: decoy_1
+    location: office
+    object: tool
+    relevance: decoy
+    time_available: 31
+    type: physical
+  - description: Misleading evidence 2
+    id: decoy_2
+    location: office
+    object: computer
+    relevance: decoy
+    time_available: 24
+    type: digital
+  - description: Misleading evidence 3
+    id: decoy_3
+    location: parking_lot
+    object: phone
+    relevance: decoy
+    time_available: 34
+    type: digital
+  root_cause_action: fraud
+  root_cause_perpetrator: person_1
+  root_cause_time: 14
+investigation:
+  collected_clues: []
+  proposed_connections: []
+  timeline_ledger: {}
+  unresolved_effects:
+  - Missing security footage from critical time period
+  - Unexplained access to secured area
+  - Contradictory witness statements about suspect locations
+timeline:
+  events:
+    '14':
+      action: fraud
+      event: person_1 performs fraud
+      perpetrator: person_1
+      type: root_cause
+    '17':
+      caused_by: 13
+      event: discovery by person_2 at time 17
+      perpetrator: person_2
+      type: discovery
+    '19':
+      caused_by: 17
+      event: cover_attempt by person_3 at time 19
+      perpetrator: person_3
+      type: cover_attempt
+    '21':
+      caused_by: 19
+      event: evidence_creation by person_4 at time 21
+      perpetrator: person_4
+      type: evidence_creation
+    '25':
+      caused_by: 20
+      event: cover_attempt by person_4 at time 25
+      perpetrator: person_4
+      type: cover_attempt
+    '28':
+      caused_by: 24
+      event: evidence_creation by person_2 at time 28
+      perpetrator: person_2
+      type: evidence_creation
+    '32':
+      caused_by: 29
+      event: discovery by person_1 at time 32
+      perpetrator: person_1
+      type: discovery
+    '36':
+      caused_by: 33
+      event: cover_attempt by person_2 at time 36
+      perpetrator: person_2
+      type: cover_attempt
+  time_indices: 40
+  validated_connections: {}

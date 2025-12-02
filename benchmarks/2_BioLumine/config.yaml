@@ -1,0 +1,112 @@
+meta:
+  id: "bioluminescent_signal_decoding"
+  name: "BioluminescentSignalDecoding"
+  description: "Deep-sea creature communication through bioluminescent pattern matching"
+
+state_template:
+  globals:
+    max_steps: 40
+    protocol_families: ["color_mirroring", "duration_inversion", "intensity_parity", "sequence_fibonacci"]
+    colors: ["blue", "green", "purple", "white"]
+    durations: ["short", "long"]
+    intensities: ["low", "high"]
+  session:
+    active_protocol: ""
+    protocol_params: [0, 0]
+    handshakes_completed: 0
+    current_incoming_pattern: []
+    energy: 100
+    session_active: true
+  history:
+    exchanges: []
+    max_history: 5
+  agent:
+    last_response: []
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "select_protocol"
+      desc: "Randomly select one of four protocol families and generate two random parameters"
+      args:
+        param_range: [0, 10]
+    - name: "generate_first_pattern"
+      desc: "Generate initial incoming pattern with 2-6 pulses using selected protocol"
+      args:
+        min_length: 2
+        max_length: 6
+  randomization:
+    seed_based: true
+    parameters:
+      protocol_selection: [0, 3]
+      param_values: [0, 10]
+      pattern_length: [2, 6]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+observation:
+  policy: "full_communication"
+  params: {}
+  expose:
+    - session.current_incoming_pattern
+    - session.handshakes_completed
+    - session.energy
+    - history.exchanges
+    - globals.max_steps
+    - globals.colors
+    - globals.durations
+    - globals.intensities
+    - t
+
+reward:
+  events:
+    - trigger: "handshake_success"
+      value_key: "success_rewards"
+    - trigger: "handshake_failure"
+      value_key: "failure_rewards"
+  success_rewards:
+    accepted: 1.0
+  failure_rewards:
+    rejected: 0.0
+
+transition:
+  actions:
+    - name: "RESPOND_PATTERN"
+      params: [pattern_length, pulse_colors, pulse_durations, pulse_intensities]
+
+termination:
+  max_steps: 40
+  conditions:
+    - "session.handshakes_completed >= 3"
+    - "session.session_active == false"
+
+skin:
+  type: "text"
+  template: |
+    === DEEP-SEA COMMUNICATION SESSION ===
+    Step: {t}/{max_steps} | Energy: {energy} | Handshakes: {handshakes_completed}/3
+    
+    INCOMING PATTERN:
+    {current_pattern_display}
+    
+    COMMUNICATION HISTORY:
+    {exchange_history}
+    
+    Available colors: {colors}
+    Available durations: {durations} 
+    Available intensities: {intensities}
+    
+    Action: RESPOND_PATTERN(length, colors_list, durations_list, intensities_list)
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

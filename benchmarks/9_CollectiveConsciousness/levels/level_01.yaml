@@ -1,0 +1,35 @@
+globals:
+  cognitive_energy: 100
+  diversity: 95.34823472957217
+  knowledge_score: 0
+  step_count: 0
+  unity: 50.993202541799256
+milestones:
+  knowledge_100: false
+  knowledge_150: false
+  knowledge_200: false
+  knowledge_50: false
+sub_streams:
+- coherence: 55.5943788383042
+  id: 0
+  knowledge_per_turn: 0.0
+  novelty: 46.72776672934232
+  size: 27.075080256588603
+- coherence: 55.20771110827879
+  id: 1
+  knowledge_per_turn: 0.0
+  novelty: 43.52490042643169
+  size: 23.243475841902814
+- coherence: 57.24563732072658
+  id: 2
+  knowledge_per_turn: 0.0
+  novelty: 41.384610525361175
+  size: 26.383422254119047
+- coherence: 54.75628016873666
+  id: 3
+  knowledge_per_turn: 0.0
+  novelty: 41.528426308719624
+  size: 23.298021647389536
+warnings:
+  diversity_critical: false
+  unity_critical: false

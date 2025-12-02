@@ -1,0 +1,37 @@
+## Alien Colony Environment Design Document
+
+### Background
+
+The environment simulates the management of an alien colony on a distant planet where the agent takes the role of a colony administrator. The setting features a harsh alien world with unique environmental conditions, mysterious resources, and strange atmospheric phenomena that affect colony operations. The planet experiences distinct seasonal cycles and weather patterns that influence resource effectiveness and colony dynamics. The alien civilization operates under fundamentally different principles than Earth-based logic, requiring the agent to develop understanding through direct experimentation rather than relying on intuitive assumptions about resource management.
+
+### Objective
+
+The agent must successfully grow the alien colony population from an initial count of 10 inhabitants to a thriving community of 50 individuals. This growth must be achieved while maintaining adequate happiness levels among the colonists and ensuring the sustainability of resource systems. The challenge lies in discovering the true nature of available resources and buildings through experimentation, as the alien environment operates under principles that may not align with conventional expectations.
+
+### State Setup
+
+The environment initializes with a base population of 10 colonists and a moderate happiness level of 60 out of 100. The colony begins with limited quantities of various resources including "toxic waste" (quantity: 15), "rotten food" (quantity: 12), "contaminated water" (quantity: 8), and "broken machinery" (quantity: 5). The initial state includes basic infrastructure consisting of a "decay chamber" and "poison distributor" facility. Environmental conditions start in the "harsh season" with "corrosive weather" patterns. The colony's area exploration level begins at 1, representing limited knowledge of surrounding territories. All resource effectiveness modifiers start at baseline values that will be influenced by seasonal and weather changes throughout the episode.
+
+### Actions
+
+The agent can perform resource gathering operations by selecting specific resource types and allocation quantities, with parameters ranging from 1 to 10 units per action. Building construction allows the agent to create new facilities by choosing from available building types and specifying construction locations within the colony grid. Resource allocation actions enable distribution of gathered materials to different colony systems, with parameters for resource type and target allocation amounts. Environmental management actions allow the agent to influence weather patterns and seasonal transitions through various intervention methods with intensity parameters from 1 to 5. Area exploration actions expand the colony's knowledge and access to new regions, with parameters for exploration direction and resource investment levels.
+
+### State Transition Rule
+
+Resource gathering actions modify resource quantities based on the chosen type and amount, with effectiveness influenced by current environmental conditions and available facilities. When buildings are constructed, they are added to the colony infrastructure and begin affecting resource generation rates and population capacity according to their true functional properties. Resource allocation actions distribute materials among different colony systems, influencing population growth rates and happiness levels based on how well the allocations match actual colonist needs. Environmental management actions alter weather and seasonal states according to specified parameters, with changes taking effect over multiple time steps. Area exploration expands the accessible territory and may unlock new resource types or building options based on exploration investment and current colony development level.
+
+### Rewards
+
+The environment employs a cumulative reward system where multiple reward events can occur simultaneously and stack together. Resource Discovery rewards provide +0.1 points each time the agent successfully identifies the true effect of a resource through experimentation, with a maximum of 3 such discoveries possible per episode, totaling up to 0.3 points. Goal Achievement rewards grant +0.7 points upon successfully reaching the target population of 50 colonists while maintaining sustainable happiness levels. The maximum possible reward per episode is 1.0 points, combining all discovery bonuses with the primary objective completion bonus.
+
+### Observation
+
+The agent observes the current population count and happiness level as primary indicators of colony health. Resource inventories are displayed with their quantities and apparent names, though their true effects must be discovered through experimentation. Building information shows constructed facilities with their stated functions and current operational status. Environmental data includes current season, weather patterns, and their described effects on colony operations. The agent can observe the results of all actions through immediate state changes, including population fluctuations, happiness variations, resource quantity modifications, and environmental condition transitions. Previous action outcomes remain visible to support learning, showing which combinations of actions and conditions led to positive or negative results. The observation space provides sufficient information for the agent to correlate actions with outcomes while maintaining the challenge of discovering true resource and building effects.
+
+### Termination
+
+Episodes terminate under three specific conditions that provide clear endpoints for learning. The environment ends immediately if the colony population drops below 5 individuals, representing a critical colony collapse from which recovery is not feasible. A step limit of 50 actions provides an upper bound on episode length, ensuring episodes conclude within reasonable time frames while allowing sufficient opportunity for experimentation and goal achievement. Successful termination occurs when the colony population reaches exactly 50 inhabitants, marking the completion of the primary objective and triggering immediate episode conclusion with full reward allocation.
+
+### Special Features
+
+The environment's core mechanic revolves around semantic inversion, where all resource names, building descriptions, and action effects are deliberately designed to mislead agents away from their actual functions. This inversion remains consistent across all episodes and difficulty levels, ensuring that once an agent discovers the true nature of a resource or building, that knowledge transfers reliably to future episodes. Environmental cycles create dynamic challenges where the effectiveness of resources and buildings varies predictably with seasonal and weather changes, requiring agents to adapt their strategies based on discovered patterns. The ecosystem maintains complex feedback loops where actions affect multiple interconnected systems simultaneously, creating emergent behaviors that reward sophisticated strategic thinking. Difficulty progression across levels maintains consistent core mechanics while introducing new resources, buildings, or environmental conditions that follow the same inversion principles, ensuring the environment remains learnable while scaling in complexity.

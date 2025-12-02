@@ -1,0 +1,87 @@
+Files / Classes
+---------------
+1. envs/backwards_valley_farm/env.py  (class BackwardsValleyFarmEnv(SkinEnv))
+2. generators/backwards_valley_farm/gen.py  (class BackwardsValleyFarmGenerator(WorldGenerator))
+3. observations/radius_observer.py    (class RadiusObserver(ObservationPolicy))
+
+Class method guidelines
+-----------------------
+BackwardsValleyFarmEnv
+  _dsl_config():
+    • Load YAML above into self.configs.
+    • Keep a deep copy of state_template in self._base_state.
+
+  reset(mode="generate"| "load", world_id=None, seed=None):
+    • If mode=="load": self._state = self._load_world(world_id)
+    • Else: world_id = self._generate_world(seed); then _load_world.
+    • Set self._t=0, history=[].
+
+  _load_world(world_id):
+    • Read YAML from worlds/backwards_valley_farm/{world_id}.yaml and validate keys.
+
+  _generate_world(seed):
+    • Instantiate BackwardsValleyFarmGenerator with self.configs["generator"]; call generate(seed).
+
+  transition(action):
+    1. Parse action["action"].
+    2. Handle movement: block if target tile fence or out of bounds.
+    3. For interaction verbs, target front tile; if entity exists apply LOCAL inverted effect
+       (water/fertilise → crop stage = Seed, feed/clean → animal state = Weak,
+        compliment → mood down one tier, insult → mood up one tier).
+    4. After local effect, iterate all entities for GLOBAL tick:
+         • Crops not reset advance one stage; if reach HarvestReady mark ready flag.
+         • Animals untouched improve one tier if not Thriving.
+    5. Automatic harvest/bonus:
+         • If agent stands on HarvestReady crop, add harvest_crop event with crop_type, remove object.
+         • If any animal reaches Thriving first time emit animal_thriving.
+         • If any villager reaches Friendly first time emit villager_friendly.
+    6. Append prev state to history, update self._state; return new state dict.
+
+  reward(action):
+    • Examine events list generated in transition.
+    • Accumulate ΔV from self._state.globals.farm_value and previous.
+    • Return (ΔV, events, {"farm_value":current_value}).
+
+  observe_semantic():
+    • Call self.obs_policy(self._state, self._t); observer handles radius crop.
+
+  render_skin(omega):
+    • Convert 5×5 local grid into ASCII using mapping.
+    • Fill template from config["skin"]["template"].
+
+  done():
+    • Check step counter >= self.configs["termination"]["max_steps"].
+    • Also evaluate 'globals.farm_value >= 300'.
+    • If the loaded world sets a different max_steps in its globals,
+      override self.configs["termination"]["max_steps"] accordingly.
+
+BackwardsValleyFarmGenerator
+  generate(seed=None, save_path=None):
+    • world_id = self._generate_world_id(seed)
+    • base = deepcopy(self.config["state_template"])
+    • world = self._execute_pipeline(base, seed)
+    • self._save_world(world, world_id); return world_id.
+
+  _execute_pipeline(base_state, seed):
+    • Use np.random.RandomState(seed).
+    • place_zones: split map rows/cols, mark tiles.
+    • populate_entities: randomly choose tiles in each zone, create objects with type/meta.
+    • assign_initial_states: sample categorical stage/state/mood with uniform dist.
+    • place_agent: choose empty tile, set agent.pos.
+    • Return completed state.
+
+  _save_world: dump YAML to worlds/backwards_valley_farm/{world_id}.yaml.
+
+RadiusObserver
+  __call__(env_state, t):
+    • Read agent pos, radius; slice 2*radius+1 square.
+    • Build visible_tiles list with (dx,dy,type,detail).
+    • Return dict: { "visible_tiles": [...], "agent": {...}, "t": t,
+                     "remaining": max_steps - t, "farm_value": env_state.globals.farm_value }
+
+Notes
+-----
+• Maintain determinism by seeding numpy & python random in both generator and transition layers.
+• Always update env_state.globals.farm_value immediately after reward events.
+• Ensure ΔV ≥ 0 by design; assert before returning reward.
+• Remember to override max_steps if loaded world specifies a different value inside its globals.

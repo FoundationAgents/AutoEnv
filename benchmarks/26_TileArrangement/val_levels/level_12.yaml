@@ -1,0 +1,56 @@
+board:
+  card_states:
+  - - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+  cards:
+  - - H
+    - D
+    - C
+    - E
+  - - C
+    - F
+    - A
+    - F
+  - - E
+    - B
+    - B
+    - G
+  - - D
+    - G
+    - H
+    - A
+  size:
+  - 4
+  - 4
+game:
+  cumulative_reward: 0.0
+  discovered_pairs: 0
+  seen_symbols: []
+  step_count: 0
+  symbol_pairs:
+    A: C
+    B: F
+    C: A
+    D: G
+    E: H
+    F: B
+    G: D
+    H: E
+globals:
+  grid_size: 4
+  max_steps: 40
+  total_pairs: 4

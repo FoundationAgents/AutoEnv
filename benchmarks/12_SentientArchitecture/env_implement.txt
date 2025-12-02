@@ -1,0 +1,63 @@
+Implementation Guide for Sentient Architecture Management Environment
+
+## Files Structure:
+- `sentient_architecture_env.py` - Main environment class
+- `sentient_building.py` - Building entity with personality system
+- `city_generator.py` - World generation logic
+- `architecture_observation.py` - Observation policy implementation
+
+## Core Classes:
+
+### SentientArchitectureEnv(SkinEnv):
+- `_dsl_config()`: Load YAML config from worlds/{env_id}/config.yaml
+- `reset()`: Load existing world or generate new one using CityGenerator
+- `_load_world()`: Read world YAML file and validate against state_template
+- `_generate_world()`: Use CityGenerator to create new city, save to file, return world_id
+- `transition()`: Process 7 action types, update building states, handle autonomous city behavior
+- `reward()`: Calculate cumulative rewards from 6 event types, track all positive events
+- `observe_semantic()`: Extract full city state including all building attributes and conflicts
+- `render_skin()`: Format text display showing city status, building details, available actions
+- `done()`: Check for failure (any building Trust/Integrity <= 0), success (Synergy >= 100), or max_steps
+
+### SentientBuilding:
+Represents individual building entity with attributes: integrity (0-100), energy_reserves (0-50), 
+trust (0-100), growth_stage (Seedling/Mature/Monumental), mood (from 5 options), building_id.
+Methods: update_trust(), consume_energy(), repair_integrity(), advance_growth(), change_mood().
+
+### CityGenerator(WorldGenerator):
+- `generate()`: Create new city with 4-8 buildings, save to worlds/{env_id}/{world_id}.yaml
+- `_execute_pipeline()`: Run 4-step generation: init_from_template -> generate_buildings -> 
+  randomize_city_resources -> initialize_relationships
+- `generate_buildings()`: Create buildings with randomized attributes within specified ranges
+- `randomize_city_resources()`: Set bio_material_stock (40-60), energy_grid_capacity (80-120)
+- `initialize_relationships()`: Create potential conflicts between incompatible mood buildings
+
+### ArchitectureObservationPolicy(ObservationPolicy):
+- `__call__()`: Return complete city state including building list with all attributes,
+  city resources, harmony_index, synergy_score, active conflicts, step counter
+
+## Key Implementation Notes:
+
+### Action Processing:
+- Negotiate: Modify building trust based on interaction history, potentially change mood
+- AllocateEnergy: Transfer from city grid to building reserves (bounded by capacity)
+- SupplyBioMaterial: Transfer materials (bounded by stock), enable growth/repair
+- Mediate: Reduce conflict between two buildings, boost harmony_index
+- StimulateGrowth: Advance growth_stage, temporarily reduce integrity
+- Repair: Convert bio_materials to integrity restoration
+- CityFestival: Global positive effects, high resource cost
+
+### Autonomous Behavior:
+Between agent actions, buildings regenerate small amounts of energy/materials, mood states evolve
+based on harmony_index, potential conflicts emerge from incompatible personalities.
+
+### Termination Logic:
+When reading max_steps, if the level has changed max_steps, it should override the environment's 
+self.configs["termination"]["max_steps"]. Check failure conditions first (Trust/Integrity <= 0),
+then success (Synergy >= 100), finally time limit (40 steps).
+
+### Generator Logic:
+The generator creates balanced starting conditions where no building begins in crisis, but
+resource scarcity and personality conflicts create strategic challenges. Building personalities
+determine interaction outcomes and conflict potential. The harmony_index acts as a global
+modifier affecting all relationship changes.

@@ -1,0 +1,66 @@
+Implementation guidance for MagneticFieldDecodeEnv:
+
+## File Structure
+- `magnetic_field_env.py`: Main environment class
+- `magnetic_field_generator.py`: World generator class  
+- `magnetic_field_observer.py`: Full grid observation policy
+
+## MagneticFieldEnv Class (extends SkinEnv)
+
+**_dsl_config()**: Load YAML config from `worlds/magnetic_field_decode/config.yaml`
+
+**_generate_world(seed)**: 
+- Create WorldGenerator instance with config
+- Call generator.generate(seed) to create world file
+- Returns world_id for the generated world
+
+**_load_world(world_id)**:
+- Load YAML file from `worlds/magnetic_field_decode/{world_id}.yaml` 
+- Validate against state_template schema
+- Return complete world state dict
+
+**reset(mode, world_id, seed)**:
+- If mode=="generate": call _generate_world(seed) then load result
+- If mode=="load": call _load_world(world_id)
+- Initialize self._state with loaded world, set _t=0
+
+**transition(action)**:
+- INPUT_HEX(0-15): Set answer_slots[cursor_pos] = hex_char, increment step_count
+- MOVE_CURSOR_RIGHT/LEFT: Update cursor_pos with wraparound (0-3), increment step_count  
+- SUBMIT_ANSWER: Set submitted=True, increment step_count
+- Return updated state
+
+**reward(action)**:
+- Only give reward when submitted=True or max_steps reached
+- Compare "".join(answer_slots) with grid.encoded_message  
+- Return (1.0, ["answer_submitted"], {"correct": match}) if match else (0.0, ["answer_submitted"], {"correct": False})
+
+**observe_semantic()**: Return full state dict (grid pattern, cursor pos, answer slots, step count)
+
+**render_skin(omega)**: Format grid as 9x9 display, show answer slots with cursor indicator, list available actions
+
+**done()**: Return step_count >= max_steps OR submitted == True
+
+## MagneticFieldGenerator Class (extends WorldGenerator)
+
+**_execute_pipeline(base_state, seed)**:
+- init_from_template: Copy base_state
+- generate_encoding_table: Create 16 unique 2x2 patterns, map each to 2-bit values (00,01,10,11), ensuring 4 patterns per value
+- generate_message: Create random 4-char hex string (e.g., "A3F7")  
+- create_grid_pattern: Convert message to 16 bits, use encoding table to place corresponding 2x2 patterns in raster order across 8x8 subgrid, add decorative elements in remaining border cells
+- validate_encoding: Verify decoding grid produces original message
+- Return complete world state with populated grid.pattern and grid.encoded_message
+
+**Key encoding logic**: 9x9 grid uses 8x8 subregion for encoding (36 2x2 patterns total). First 16 patterns encode the 4-hex message (4 bits each). Remaining 20 patterns can be random for obfuscation. Agent must learn which 2x2 visual patterns map to which 2-bit values.
+
+## FullGridObserver Class (extends ObservationPolicy)
+
+**__call__(env_state, t)**: Return env_state directly since we want full observability of the static grid.
+
+## Key Implementation Notes
+- The encoding_table maps 2x2 pattern tuples to 2-bit integers consistently across episodes
+- Grid cells: 0=empty, 1=field_line, 2=intersection  
+- Difficulty scaling via decorative_density parameter adds visual noise
+- max_steps in termination should override env default if changed in loaded world
+- Input validation: hex_value must be 0-15, cursor_pos must be 0-3
+- The environment maintains the hidden encoding table but agents must discover it through interaction

@@ -1,0 +1,465 @@
+{
+  "environment_id": "20250907_173627_env_underground_city",
+  "calculation_timestamp": "2025-09-08 12:03:10",
+  "reward_system_version": "enhanced_strategic_v2",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 392.78831124039306,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 70.404,
+        "air": 85.75228279965614,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 75.29287683970536,
+        "air_improvement": 28.495434400687714,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    },
+    "level_02.yaml": {
+      "max_reward": 387.2994597880554,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 72.156,
+        "air": 86.04054950910962,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 70.38055880627468,
+        "air_improvement": 27.91890098178075,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    },
+    "level_03.yaml": {
+      "max_reward": 389.3162826254951,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 71.28,
+        "air": 86.25753260965847,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 72.83134784481203,
+        "air_improvement": 27.484934780683062,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    },
+    "level_04.yaml": {
+      "max_reward": 386.17941760148176,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 72.816,
+        "air": 85.68092590225883,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 68.54126940599944,
+        "air_improvement": 28.63814819548233,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    },
+    "level_05.yaml": {
+      "max_reward": 391.7432385241152,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 70.668,
+        "air": 85.90334335940295,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 74.54992524292115,
+        "air_improvement": 28.193313281194094,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    },
+    "level_06.yaml": {
+      "max_reward": 375.97302756915406,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 76.32,
+        "air": 85.95507888412145,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 58.88318533739697,
+        "air_improvement": 28.089842231757103,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    },
+    "level_07.yaml": {
+      "max_reward": 388.32301097652146,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 71.964,
+        "air": 85.79688983108463,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 70.91679063869074,
+        "air_improvement": 28.406220337830746,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    },
+    "level_08.yaml": {
+      "max_reward": 382.33456745099704,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 73.944,
+        "air": 86.03886905162173,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 65.41230555424048,
+        "air_improvement": 27.922261896756538,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    },
+    "level_09.yaml": {
+      "max_reward": 382.21386338411565,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 74.06400000000001,
+        "air": 85.9333334498516,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 65.08053028381885,
+        "air_improvement": 28.133333100296795,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    },
+    "level_10.yaml": {
+      "max_reward": 386.29797734210905,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 72.6,
+        "air": 85.9222776048552,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 69.14253255181944,
+        "air_improvement": 28.155444790289607,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    },
+    "level_11.yaml": {
+      "max_reward": 386.02826269936077,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 72.98400000000001,
+        "air": 85.52291072755001,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 68.0740841544608,
+        "air_improvement": 28.954178544899975,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    },
+    "level_12.yaml": {
+      "max_reward": 393.57663626833335,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 70.056,
+        "air": 85.84852661969998,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 76.27368950773328,
+        "air_improvement": 28.302946760600037,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    },
+    "level_13.yaml": {
+      "max_reward": 385.1874411511211,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 72.612,
+        "air": 86.46083516535714,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 69.10911148183536,
+        "air_improvement": 27.078329669285722,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    },
+    "level_14.yaml": {
+      "max_reward": 387.03192698193243,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 72.52799999999999,
+        "air": 85.65558765095369,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 69.34310228383981,
+        "air_improvement": 28.688824698092617,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    },
+    "level_15.yaml": {
+      "max_reward": 390.89532557641695,
+      "calculation_method": "enhanced_strategic_analysis_v2",
+      "initial_state": {
+        "integrity": 71.064,
+        "air": 85.7709916577142,
+        "districts": 0,
+        "power": 50,
+        "research": 0
+      },
+      "reward_breakdown": {
+        "base_survival": 8.0,
+        "structural_improvement": 73.43730889184538,
+        "air_improvement": 28.45801668457159,
+        "district_completion": 72.0,
+        "research_breakthrough": 69.0,
+        "power_milestone": 15.0,
+        "strategic_excellence": 15.0,
+        "mission_progress": 10.0,
+        "mission_completion": 100.0
+      },
+      "assumptions": [
+        "Perfect strategic play with no penalties",
+        "All possible improvements achieved",
+        "Strategic excellence bonus achieved",
+        "All research unlocked with synergy",
+        "Mission completed successfully",
+        "Exponential improvement scaling utilized"
+      ]
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "successfully_analyzed": 15,
+    "average_max_reward": 387.01258327864014,
+    "min_max_reward": 375.97302756915406,
+    "max_max_reward": 393.57663626833335,
+    "total_max_reward": 5805.188749179602
+  }
+}

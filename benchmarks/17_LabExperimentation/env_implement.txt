@@ -1,0 +1,73 @@
+Files / Classes
+---------------
+1. bizarro_lab_env.py      : class BizarroLabEnv(SkinEnv)
+2. lab_generator.py        : class BizarroLabGenerator(WorldGenerator)
+3. lab_observation.py      : class FullLabObservation(ObservationPolicy)
+
+BizarroLabEnv key methods
+-------------------------
+_dsl_config():
+  - Load YAML config from worlds/bizarro_lab_v1/config.yaml via yaml.safe_load.
+  - Store into self.configs.
+
+reset(mode, world_id, seed):
+  - If mode=="load": call _load_world(world_id) and set self._state.
+  - If mode=="generate": ask LabGenerator to generate(seed) -> world_id then _load_world.
+  - After load, set self._t = 0 and recompute self._state["globals"]["step_remaining"]=max_steps.
+
+_generate_world / _load_world:
+  - Delegate generation to LabGenerator; loading reads YAML world file and validates against state_template.
+
+transition(action):
+  - Copy current state to prev_state.
+  - Parse action["action"] and params; modify beakers/equipment accordingly.
+  - After action processing, apply kinetic evolution:
+      • For each beaker, adjust temperature: -5 °C per hot_plate_on +5 °C per cooling_coil_on.
+      • Add ±1 °C noise (uniform integer).
+      • Use inverted_reaction_table to update composition_pct and pH.
+  - Decrease globals.step_remaining by 1.
+  - Store prev_state in self._history and return new state.
+
+reward(action):
+  - Track max purity of target compound across beakers for prev_state and current state.
+  - dense_reward = max(current) - max(prev); clip at ≥0.
+  - If action["action"]=="SubmitForAnalysis":
+        success = submitted_beaker_purity ≥ target_purity
+        bonus = success * (self.configs["reward"]["success_bonus"] +
+                self.configs["reward"]["time_efficiency_factor"] *
+                (self.configs["termination"]["max_steps"] - self._t)/self.configs["termination"]["max_steps"])
+  - Return total_reward, ["improved_purity", "success"] when triggered, extra info dict.
+
+observe_semantic():
+  - If FullLabObservation supplied, just call policy(self._state, self._t).
+
+render_skin(omega):
+  - Format the skin.template with omega; return multiline string.
+
+done():
+  - Base done() plus stop if "submitted" flag is set in state or step_remaining==0.
+  - When reading max_steps, check if level’s YAML overrides termination.max_steps and use that value instead of env default.
+
+FullLabObservation.__call__():
+  - Simply deep-copy env_state and inject field "t".
+
+BizarroLabGenerator
+-------------------
+generate(seed, save_path):
+  - Create base_state = deepcopy(state_template).
+  - Execute _execute_pipeline(base_state, seed) to fill target_compound etc.
+  - Save YAML to worlds/bizarro_lab_v1/{world_id}.yaml, return id.
+
+_execute_pipeline(base_state, seed):
+  - Step “init_from_template”: nothing (already copied).
+  - “assign_target_compound”: choose compound from fixed pool (seeded RNG).
+  - “set_random_seed”: store supplied seed in state["globals"]["seed"].
+  - Return completed state.
+
+Unique aspects / edge cases
+---------------------------
+• Illegal actions: do nothing but still consume a step (keep _state unchanged apart from timers).
+• Temperature noise: random.randint(-1,1) once per beaker per step.
+• Composition_pct dicts must always sum to 100 or less (track volume for scaling).
+• Termination max_steps can differ per level; always read current_state["termination"]["max_steps"] if present and override self.configs copy.
+• SubmitForAnalysis immediately flips state flag “submitted” so done()==True next loop.

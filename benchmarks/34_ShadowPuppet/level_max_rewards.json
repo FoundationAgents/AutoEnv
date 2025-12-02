@@ -1,0 +1,347 @@
+{
+  "environment_id": "20250919_185300_env_16_shadow_puppet_re",
+  "calculation_timestamp": "2025-09-19 19:02:57",
+  "reward_structure": {
+    "target_in_goal_reward": 1.0,
+    "completion_bonus": 1.0,
+    "max_steps": 40
+  },
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        7,
+        3
+      ],
+      "goal_area": [
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "min_distance_to_goal": 4,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        2,
+        0
+      ],
+      "goal_area": [
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          7
+        ]
+      ],
+      "min_distance_to_goal": 8,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        0,
+        2
+      ],
+      "goal_area": [
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          7
+        ]
+      ],
+      "min_distance_to_goal": 8,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        7,
+        1
+      ],
+      "goal_area": [
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          7
+        ]
+      ],
+      "min_distance_to_goal": 7,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        6,
+        1
+      ],
+      "goal_area": [
+        [
+          6,
+          4
+        ],
+        [
+          7,
+          5
+        ]
+      ],
+      "min_distance_to_goal": 3,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        3,
+        5
+      ],
+      "goal_area": [
+        [
+          6,
+          5
+        ],
+        [
+          7,
+          6
+        ]
+      ],
+      "min_distance_to_goal": 3,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        0,
+        0
+      ],
+      "goal_area": [
+        [
+          6,
+          6
+        ],
+        [
+          7,
+          7
+        ]
+      ],
+      "min_distance_to_goal": 12,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        0,
+        4
+      ],
+      "goal_area": [
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          5
+        ]
+      ],
+      "min_distance_to_goal": 4,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        3,
+        7
+      ],
+      "goal_area": [
+        [
+          6,
+          6
+        ],
+        [
+          7,
+          7
+        ]
+      ],
+      "min_distance_to_goal": 3,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        3,
+        7
+      ],
+      "goal_area": [
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          5
+        ]
+      ],
+      "min_distance_to_goal": 4,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        5,
+        7
+      ],
+      "goal_area": [
+        [
+          6,
+          4
+        ],
+        [
+          7,
+          5
+        ]
+      ],
+      "min_distance_to_goal": 3,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        2,
+        3
+      ],
+      "goal_area": [
+        [
+          6,
+          4
+        ],
+        [
+          7,
+          5
+        ]
+      ],
+      "min_distance_to_goal": 5,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        3,
+        4
+      ],
+      "goal_area": [
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "min_distance_to_goal": 4,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        2,
+        0
+      ],
+      "goal_area": [
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          5
+        ]
+      ],
+      "min_distance_to_goal": 6,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_completion",
+      "notes": "Target in goal reward: 1.0",
+      "target_position": [
+        0,
+        4
+      ],
+      "goal_area": [
+        [
+          6,
+          4
+        ],
+        [
+          7,
+          5
+        ]
+      ],
+      "min_distance_to_goal": 6,
+      "max_steps": 40,
+      "theoretically_solvable": true
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0
+  }
+}

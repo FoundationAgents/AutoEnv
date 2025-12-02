@@ -1,0 +1,66 @@
+## Implementation Guide for Terraforming Environment
+
+### Core Files Structure:
+- `terraforming_env.py` - Main SkinEnv implementation
+- `terraforming_generator.py` - WorldGenerator implementation  
+- `terraforming_observation.py` - ObservationPolicy implementation
+
+### TerraformingEnv (SkinEnv) Implementation:
+
+**_dsl_config()**: Load config from `worlds/{env_id}/config.yaml`, store in self.configs
+
+**_load_world(world_id)**: Load YAML world file using world_loading config, return complete state dict
+
+**_generate_world(seed)**: Create WorldGenerator instance, call generate(seed), return world_id
+
+**transition(action)**: 
+- Parse action name and execute corresponding planetary system update
+- DEPLOY_ATMOSPHERIC_PROCESSOR: Modify O₂/CO₂ levels, trigger temperature/pressure cascades
+- RELEASE_WATER_CATALYSTS: Convert ice to surface water, adjust pH, affect atmospheric humidity  
+- SEED_MICROBIAL_LIFE: Activate dormant organisms if conditions suitable, enhance soil fertility
+- STABILIZE_TECTONICS: Reduce tectonic stress, consume energy proportionally
+- CONSTRUCT_UPGRADE_STATION: Increment stations/upgrade level, temporary instability spike
+- DIVERT_ENERGY_TO_SHIELDS: Linear instability reduction for energy cost
+- PASSIVE_OBSERVATION: Natural system evolution without intervention
+- Update habitability_index based on weighted combination of all subsystems
+- Update instability_index based on system stress and cascade effects
+- Apply non-linear feedback between atmospheric/hydrological/biological systems
+
+**reward(action)**: 
+- Calculate stability_maintained (+0.1 if instability < 50%)
+- Calculate atmospheric_progress (+0.05 per O₂ point in 15-25% range)
+- Calculate hydrological_progress (+0.1 per water point in 30-70% range)  
+- Calculate habitability_increase (+0.2 per habitability point gained)
+- Calculate mission_completed (+20.0 if habitability >= 100%)
+- Calculate instability_penalty (-0.2 per point above 70% instability)
+- Calculate catastrophic_failure (-40.0 if instability >= 100%)
+- Return total reward, event list, detailed reward breakdown
+
+**observe_semantic()**: Return full state dict with all exposed keys from observation config
+
+**render_skin(omega)**: Apply template formatting using omega dict values for text display
+
+**done()**: Check if habitability >= 100%, instability >= 100%, or t >= max_steps
+
+### TerraformingGenerator (WorldGenerator):
+
+**generate(seed, save_path)**: Execute pipeline, save result, return world_id
+
+**_execute_pipeline(base_state, seed)**: 
+- init_from_template: Copy state_template as starting point
+- randomize_initial_conditions: Apply seed-based variance to atmospheric composition, geological stress, energy reserves within specified ranges
+- set_planet_parameters: Configure hidden planet constants affecting feedback loop strength and stability thresholds  
+- validate_initial_state: Ensure planet is solvable and has consistent physics relationships
+
+**NOTE ON GENERATOR LOGIC**: The generator creates 10 distinct planet scenarios by varying initial atmospheric toxicity, geological instability, and energy budgets. Each seed produces consistent planet parameters affecting how systems interact, ensuring learned strategies transfer while providing sufficient variety for robust policy development.
+
+### TerraformingObservation (ObservationPolicy):
+
+**__call__(env_state, t)**: Return complete state observation - this environment uses full observability where strategic complexity comes from system interactions rather than hidden information.
+
+### Critical Implementation Notes:
+- When reading max_steps in done(), if the loaded level has changed max_steps in its state, it should override the environment's self.configs["termination"]["max_steps"]
+- Implement cascading effects where atmospheric changes affect water systems, which affect biological success
+- Energy constraint enforcement - all active actions except PASSIVE_OBSERVATION consume energy
+- Non-linear instability calculation based on system incompatibilities and rapid changes
+- Habitability index should be weighted combination: 30% atmosphere, 25% water, 25% biology, 20% stability

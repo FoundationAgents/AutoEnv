@@ -1,0 +1,17 @@
+Magnetic Field Pattern Decoding Task
+
+You are solving a structured pattern recognition task. Each episode presents a 9×9 grid that contains magnetic field patterns encoded with three symbols: 0 (empty), 1 (line), and 2 (intersection).
+
+Your objective is to infer a 4-character hexadecimal code that corresponds to patterns detected within the grid and to enter that code using the available actions within the step limit.
+
+What you observe may include:
+- The 9×9 grid or relevant excerpts from it.
+- Example 2×2 pattern patches and their associated hexadecimal values.
+- Reference information intended to help interpret how local patterns map to hexadecimal characters.
+
+How to proceed (guidance, not prescription):
+- Use the provided reference information and examples to understand how 2×2 magnetic patterns correspond to hexadecimal digits.
+- Cross-check examples against the current grid to verify consistency before entering characters.
+- Plan cursor movement and character entry efficiently to remain within the time/step budget.
+
+Success criterion: enter the correct 4-character hexadecimal code within the allowed number of steps.

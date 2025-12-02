@@ -1,0 +1,139 @@
+generator:
+  mode: procedural
+  output_format: yaml
+  pipeline:
+  - args: {}
+    desc: Start from state_template with empty object lists
+    name: init_from_template
+  - args:
+      num_barns: 3
+      num_cottages: 3
+      num_fields: 4
+    desc: Randomly choose coordinates for 4 crop fields, 3 barns, 3 cottages and 1
+      market; avoid overlap
+    name: place_static_structures
+  - args: {}
+    desc: "Assign animal species to barns, create villagers with starting relationships\
+      \ (multiples of 5, 0\u201340)"
+    name: populate_entities
+  - args: {}
+    desc: Write all additions into objects and return full world dict
+    name: finalize
+  randomization:
+    parameters:
+      anchor_spread:
+      - 0
+      - 14
+      relationship_init:
+      - 0
+      - 40
+    seed_based: true
+meta:
+  description: Partially observable 15x15 farming and social-trading environment with
+    a 50-step limit and always-positive rewards.
+  id: valley_farm_v1
+  name: ValleyFarm50
+observation:
+  expose:
+  - visible_tiles
+  - agent.pos
+  - agent.inventory.seeds
+  - agent.inventory.water
+  - agent.inventory.crops
+  - agent.inventory.animal_feed
+  - agent.inventory.animal_products
+  - agent.inventory.gifts
+  - agent.inventory.coins
+  - villagers.relationships_rounded
+  - t_remaining
+  params:
+    radius: 2
+  policy: radius
+reward:
+  events:
+  - trigger: HarvestCrop
+    value_key: harvest_reward
+  - trigger: CollectProduct
+    value_key: product_reward
+  - trigger: RelationshipGain
+    value_key: relationship_reward_multiplier
+  - trigger: MarketSale
+    value_key: market_reward_multiplier
+  harvest_reward: 0.1
+  market_reward_multiplier: 0.1
+  product_reward: 0.2
+  relationship_reward_multiplier: 0.5
+skin:
+  template: 'Daylight left: {t_remaining}/50
+
+    Coins: {agent.inventory.coins}
+
+    Inventory: S:{agent.inventory.seeds} W:{agent.inventory.water} F:{agent.inventory.animal_feed}
+    C:{agent.inventory.crops} P:{agent.inventory.animal_products} G:{agent.inventory.gifts}
+
+    Relationships: {villagers.relationships_rounded}
+
+    View:
+
+    {tiles_ascii}
+
+    Actions: Move(N,S,E,W), PlantSeed, WaterCrop, HarvestCrop, FeedAnimal, CollectProduct,
+    GiveGift, SellAtMarket, Wait'
+  type: text
+state_template:
+  agent:
+    inventory:
+      animal_feed: 3
+      animal_products: 0
+      coins: 0
+      crops: 0
+      gifts: 3
+      seeds: 5
+      water: 5
+    pos:
+    - 7
+    - 7
+  globals:
+    map_size:
+    - 15
+    - 15
+  objects:
+    barns: []
+    cottages: []
+    crop_fields: []
+    market: null
+    villagers: []
+  tiles:
+    default_type: grass
+    size:
+    - 15
+    - 15
+termination:
+  conditions: []
+  max_steps: 50
+transition:
+  actions:
+  - name: MoveNorth
+    params: []
+  - name: MoveSouth
+    params: []
+  - name: MoveEast
+    params: []
+  - name: MoveWest
+    params: []
+  - name: PlantSeed
+    params: []
+  - name: WaterCrop
+    params: []
+  - name: HarvestCrop
+    params: []
+  - name: FeedAnimal
+    params: []
+  - name: CollectProduct
+    params: []
+  - name: GiveGift
+    params: []
+  - name: SellAtMarket
+    params: []
+  - name: Wait
+    params: []

@@ -1,0 +1,17 @@
+[
+  {
+    "name": "FLIP",
+    "description": "Reveal a face-down card at the specified grid coordinates to see its symbol.",
+    "parameters": {
+      "x": "row coordinate (0-3) of the card to flip",
+      "y": "column coordinate (0-3) of the card to flip"
+    }
+  },
+  {
+    "name": "WAIT", 
+    "description": "Pass the current turn without performing any action.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "FLIP", "params": {"x": 2, "y": 1}} or {"action": "WAIT", "params": {}}

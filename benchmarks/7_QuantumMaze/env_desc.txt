@@ -1,0 +1,37 @@
+**Quantum Maze Escape Environment Design Document**
+
+**Background**
+
+The Quantum Maze Escape environment presents a novel navigation challenge where an agent must traverse a 10×10 grid maze with walls existing in quantum superposition. Unlike traditional mazes where wall configurations are predetermined and fully observable, this environment leverages quantum mechanics principles where wall segments remain probabilistic until observed. The agent finds itself trapped in this quantum labyrinth and must strategically collapse wall segments through observation to discover viable paths. This creates a dynamic exploration scenario where the maze structure emerges through the agent's actions rather than being fixed from the start.
+
+**Objective**
+
+The agent's goal is to navigate from a predetermined starting position to a fixed exit cell within exactly 40 steps. Success is binary - either the agent reaches the exit within the step limit or fails completely. The challenge lies not only in pathfinding but in strategically managing the quantum observation process to reveal favorable maze configurations while conserving limited steps.
+
+**State Setup**
+
+Each episode begins with the agent positioned at a fixed starting coordinate in the 10×10 grid. Every wall segment in the maze is initialized in quantum superposition, with each segment assigned an independent probability p_wall randomly sampled from the range [0.2, 0.5]. This probability remains constant for each wall segment throughout the episode but varies between episodes to ensure diverse maze configurations. The exit position is fixed and known, providing a consistent target across all episodes. All wall segments begin in an "unknown" quantum state, meaning their actual passability status remains undetermined until explicitly observed by the agent.
+
+**Actions**
+
+The agent has access to five distinct actions that enable both movement and strategic observation. Four directional movement actions allow the agent to attempt moving North, South, East, or West to adjacent cells. These movement actions serve a dual purpose - they both relocate the agent and automatically observe the destination cell, collapsing its quantum state before movement resolution. Additionally, a dedicated Observe action allows the agent to collapse the quantum states of all four orthogonally adjacent cells simultaneously without changing position. This action provides strategic value by revealing multiple wall segments at once, enabling more informed movement decisions in subsequent steps.
+
+**State Transition Rule**
+
+When the agent selects a movement action, the destination cell undergoes quantum collapse if it hasn't been observed previously. The system performs a Bernoulli trial using the cell's assigned p_wall probability to determine whether the segment becomes a permanent wall or empty space. If the collapsed state is "empty," the agent successfully moves to that position. If the collapsed state is "wall," the agent remains in their current position but still expends one step. The Observe action triggers quantum collapse for all four adjacent cells without any positional change. Once any cell undergoes quantum collapse, its state becomes permanently fixed for the remainder of the episode, ensuring temporal consistency and deterministic replay of actions.
+
+**Rewards**
+
+The environment employs a sparse binary reward structure designed to create clear success criteria. The agent receives exactly +1 reward only upon entering the exit cell, marking successful episode completion. All other state transitions, including failed movement attempts, successful movements to non-exit cells, and observation actions, provide 0 reward. This sparse reward signal requires the agent to develop long-term planning capabilities and efficient exploration strategies, as immediate feedback is minimal throughout most of the episode.
+
+**Observation**
+
+The agent receives a carefully designed observation space that balances information availability with strategic challenge. The primary observation consists of a 3×3 local view centered on the agent's current position, where each cell displays one of three states: "unknown" indicating continued quantum superposition, "wall" showing a collapsed impassable segment, or "empty" representing a collapsed passable area. This local observation window moves with the agent, providing immediate tactical information while requiring strategic planning for areas beyond the immediate vicinity. Additional observations include the agent's exact grid coordinates and the number of remaining steps, enabling temporal awareness crucial for step-budget management. The observation design ensures agents can identify actionable patterns - clusters of collapsed walls suggest alternative routes, while unknown regions present both opportunities and risks that agents must learn to evaluate.
+
+**Termination**
+
+Episode termination occurs under two specific conditions that create clear success and failure states. Immediate termination with success occurs when the agent enters the exit cell, regardless of remaining steps, as the primary objective has been achieved. Failure termination occurs when the 40-step limit is exhausted without reaching the exit. The step budget is deliberately calibrated to be challenging but achievable, requiring efficient exploration and movement strategies while preventing indefinite episodes that could complicate learning dynamics.
+
+**Special Features**
+
+The Quantum Maze Escape environment incorporates several unique mechanics that distinguish it from traditional navigation tasks. The core quantum superposition mechanic ensures that maze topology emerges dynamically through agent interaction rather than being predetermined, creating a fundamentally different exploration paradigm. The dual-purpose nature of movement actions, which simultaneously relocate and observe, introduces strategic depth as agents must balance information gathering with progress toward the goal. Episodes maintain structural consistency through fixed start and exit positions, identical grid dimensions, and uniform action sets, while achieving variety through randomized quantum collapse probabilities. The environment guarantees learnability through consistent observation rules and permanent state collapse, preventing the temporal inconsistencies that could undermine learning algorithms. The local observation model creates natural curriculum progression as agents learn to chain together local observations into global navigation strategies, while the sparse reward structure encourages development of sophisticated planning capabilities essential for solving complex sequential decision problems.

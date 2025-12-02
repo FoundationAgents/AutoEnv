@@ -1,0 +1,88 @@
+{
+  "environment_id": "20250917_214707_env_80_electromagnetic_field_detection",
+  "calculation_timestamp": "2025-09-17 21:58:10",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 13 steps, 17 steps remaining for marking"
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 12 steps, 18 steps remaining for marking"
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 4 steps, 26 steps remaining for marking"
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 1 steps, 29 steps remaining for marking"
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 11 steps, 19 steps remaining for marking"
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 14 steps, 16 steps remaining for marking"
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 11 steps, 19 steps remaining for marking"
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 5 steps, 25 steps remaining for marking"
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 1 steps, 29 steps remaining for marking"
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 6 steps, 24 steps remaining for marking"
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 9 steps, 21 steps remaining for marking"
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 10 steps, 20 steps remaining for marking"
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 9 steps, 21 steps remaining for marking"
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 17 steps, 13 steps remaining for marking"
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "pathfinding_analysis",
+      "notes": "Target reachable in 7 steps, 23 steps remaining for marking"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0,
+    "achievable_levels": 15
+  }
+}

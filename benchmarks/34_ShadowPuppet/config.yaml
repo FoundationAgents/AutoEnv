@@ -1,0 +1,141 @@
+meta:
+  id: "shadow_puppet"
+  name: "Shadow Puppet Reality Manipulation"  
+  description: "Manipulate reality through shadows to guide objects to goals"
+
+state_template:
+  globals:
+    max_steps: 40
+    grid_size: [8, 8]
+    light_source: [3, 0]
+    goal_area: [[6, 6], [7, 7]]
+  shadow:
+    position: [4, 2]
+    shape: "square"
+    active: true
+  objects:
+    - id: "target"
+      position: [1, 1]
+      property: "Heavy"
+      velocity: [0, 0]
+      is_target: true
+    - id: "obj1"
+      position: [2, 4]
+      property: "Light"
+      velocity: [0, 0]
+      is_target: false
+    - id: "obj2"
+      position: [5, 3]
+      property: "Bouncy"
+      velocity: [0, 0]
+      is_target: false
+  physics:
+    gravity_enabled: false
+    collision_enabled: true
+    boundary_enforce: true
+
+observation:
+  policy: "full"
+  params: {}
+  expose:
+    - globals.grid_size
+    - globals.light_source
+    - globals.goal_area
+    - shadow.position
+    - shadow.shape
+    - shadow.active
+    - objects
+    - globals.max_steps
+    - t
+
+reward:
+  events:
+    - trigger: "target_in_goal"
+      value: 1.0
+  completion_bonus: 1.0
+
+transition:
+  actions:
+    - name: "MOVE_SHADOW"
+      params: [dx, dy]
+    - name: "CYCLE_SHAPE"
+      params: [shape]
+    - name: "TOGGLE_SHADOW"
+      params: []
+    - name: "WIND_PULSE"
+      params: []
+    - name: "WAIT"
+      params: []
+
+skin:
+  type: "text"
+  template: |
+    === Shadow Puppet Reality Lab ===
+    Step {t}/{max_steps}
+    
+    Grid (8x8):
+    {grid_display}
+    
+    Legend: T=Target, O=Object, G=Goal, L=Light, S=Shadow
+    Shadow: {shadow_shape} at {shadow_pos} ({'ON' if shadow_active else 'OFF'})
+    
+    Object Properties:
+    {object_details}
+    
+    Actions: MOVE_SHADOW(dx,dy), CYCLE_SHAPE(shape), TOGGLE_SHADOW, WIND_PULSE, WAIT
+
+termination:
+  max_steps: 40
+  conditions:
+    - "target_in_goal_area"
+    - "max_steps_reached"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "randomize_positions"
+      desc: "Randomly place objects avoiding overlaps and ensuring solvability"
+      args:
+        min_distance_from_goal: 3
+        avoid_immediate_goal: true
+    - name: "set_goal_area"
+      desc: "Place goal area in strategic location that requires multi-step solution"
+      args:
+        size: [2, 2]
+        min_distance_from_start: 4
+    - name: "assign_properties"
+      desc: "Give objects initial properties that create interesting puzzle dynamics"
+      args:
+        target_property: "Heavy"
+        randomize_others: true
+    - name: "validate_solvability"
+      desc: "Ensure the generated level is solvable within step limit"
+      args:
+        max_validation_steps: 40
+
+randomization:
+  seed_based: true
+  parameters:
+    difficulty: [0.3, 0.9]
+    object_count: [2, 4]
+    initial_shadow_shape: ["square", "circle", "triangle", "cross"]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false
+  property_mappings:
+    square: "Heavy"
+    circle: "Light" 
+    triangle: "Bouncy"
+    cross: "Sticky"

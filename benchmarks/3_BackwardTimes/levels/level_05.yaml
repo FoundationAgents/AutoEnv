@@ -1,0 +1,146 @@
+agent:
+  current_time_index: 40
+  investigation_status: active
+crime_scene:
+  initial_evidence:
+  - Crime scene photographs
+  - Initial police report
+  - Witness contact information
+  location: primary_scene
+  suspect_list:
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_5
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_1
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_6
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_3
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_4
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_2
+  witness_statements: []
+globals:
+  max_steps: 40
+ground_truth:
+  decoy_suspects:
+  - person_1
+  - person_6
+  - person_3
+  - person_4
+  - person_2
+  essential_clues:
+  - description: Evidence piece 1 found at warehouse
+    id: clue_1
+    location: storage_room
+    object: document
+    relevance: essential
+    time_available: 22
+    type: witness
+  - description: Evidence piece 2 found at reception
+    id: clue_2
+    location: storage_room
+    object: phone
+    relevance: essential
+    time_available: 29
+    type: forensic
+  - description: Evidence piece 3 found at office
+    id: clue_3
+    location: storage_room
+    object: tool
+    relevance: essential
+    time_available: 27
+    type: forensic
+  - description: Evidence piece 4 found at parking_lot
+    id: clue_4
+    location: parking_lot
+    object: tool
+    relevance: essential
+    time_available: 33
+    type: forensic
+  - description: Evidence piece 5 found at reception
+    id: clue_5
+    location: office
+    object: phone
+    relevance: essential
+    time_available: 26
+    type: digital
+  - description: Evidence piece 6 found at warehouse
+    id: clue_6
+    location: storage_room
+    object: document
+    relevance: essential
+    time_available: 28
+    type: witness
+  - description: Misleading evidence 1
+    id: decoy_1
+    location: storage_room
+    object: key
+    relevance: decoy
+    time_available: 30
+    type: physical
+  - description: Misleading evidence 2
+    id: decoy_2
+    location: reception
+    object: computer
+    relevance: decoy
+    time_available: 25
+    type: witness
+  root_cause_action: theft
+  root_cause_perpetrator: person_5
+  root_cause_time: 10
+investigation:
+  collected_clues: []
+  proposed_connections: []
+  timeline_ledger: {}
+  unresolved_effects:
+  - Missing security footage from critical time period
+  - Unexplained access to secured area
+  - Contradictory witness statements about suspect locations
+timeline:
+  events:
+    '10':
+      action: theft
+      event: person_5 performs theft
+      perpetrator: person_5
+      type: root_cause
+    '14':
+      caused_by: 11
+      event: cover_attempt by person_3 at time 14
+      perpetrator: person_3
+      type: cover_attempt
+    '18':
+      caused_by: 16
+      event: escalation by person_2 at time 18
+      perpetrator: person_2
+      type: escalation
+    '23':
+      caused_by: 18
+      event: cover_attempt by person_2 at time 23
+      perpetrator: person_2
+      type: cover_attempt
+    '28':
+      caused_by: 25
+      event: evidence_creation by person_4 at time 28
+      perpetrator: person_4
+      type: evidence_creation
+    '31':
+      caused_by: 27
+      event: cover_attempt by person_5 at time 31
+      perpetrator: person_5
+      type: cover_attempt
+  time_indices: 40
+  validated_connections: {}

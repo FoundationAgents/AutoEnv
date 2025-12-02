@@ -1,0 +1,51 @@
+## Background
+
+The Chaos Slide Puzzle Environment presents a fundamental inversion of the classical 3×3 sliding tile puzzle paradigm. In traditional sliding puzzles, players arrange numbered tiles from 1 to 8 in sequential order with a blank space, representing visual and conceptual "order" as the success state. This environment deliberately subverts that expectation by establishing a visually chaotic, seemingly random tile arrangement as the sole success condition, while treating the conventional ordered state as an explicit failure. This design creates a cognitive challenge that forces agents to abandon intuitive notions of order and pattern recognition, instead learning to identify and pursue a specific "disordered" configuration through direct experience rather than semantic understanding.
+
+The environment operates on a standard 3×3 grid where eight numbered tiles and one blank space can be manipulated through sliding movements. Each episode begins with the board in a randomly scrambled but solvable configuration, ensuring that the target Chaos Pattern remains reachable within the allocated step budget. The fixed nature of the target pattern across all episodes maintains consistency necessary for reinforcement learning while preserving the counterintuitive challenge of seeking apparent disorder as the goal state.
+
+## Objective
+
+The agent must successfully transform any given starting board configuration into one specific predetermined Chaos Pattern within exactly 30 moves. The target configuration is permanently fixed as a 3×3 arrangement where tiles are positioned as follows: position (0,0) contains tile 2, position (0,1) contains tile 7, position (0,2) contains tile 5, position (1,0) contains tile 1, position (1,1) contains the blank space (represented as 0), position (1,2) contains tile 8, position (2,0) contains tile 4, position (2,1) contains tile 6, and position (2,2) contains tile 3. Success requires precise tile placement matching this exact pattern, with no partial credit or alternative acceptable arrangements. The agent must accomplish this objective while avoiding the conventional ordered arrangement (1-2-3 in top row, 4-5-6 in middle row, 7-8-blank in bottom row), which triggers immediate episode termination with failure.
+
+## State Setup
+
+Each episode initializes with a systematically generated starting configuration that guarantees solvability within the 30-step constraint. The initialization process begins with the standard ordered arrangement and applies a sequence of 50 to 100 random valid moves, creating sufficient scrambling while maintaining reachability of the target Chaos Pattern. The random generation explicitly excludes both the target Chaos Pattern and the forbidden ordered pattern as potential starting states, ensuring episodes begin from neither success nor failure conditions.
+
+The environment state consists of two primary components maintained throughout the episode. The board matrix represents the current tile configuration as a 3×3 integer array, where each cell contains a value from 0 to 8, with 0 indicating the blank space and values 1 through 8 representing the correspondingly numbered tiles. The steps remaining counter tracks the decreasing move budget, initialized at 30 and decremented after each action regardless of whether the action successfully modifies the board state or results in an illegal move attempt.
+
+## Actions
+
+The agent selects from four discrete movement actions during each step. SlideUp attempts to move the blank space upward by one row, effectively sliding the tile immediately below the blank into the blank's current position. SlideDown moves the blank space downward by one row, sliding the tile above the blank into the blank's position. SlideLeft shifts the blank space left by one column, moving the tile to the blank's right into the blank's current location. SlideRight moves the blank space right by one column, sliding the tile to the blank's left into the blank's position.
+
+When an action attempts an impossible movement, such as trying to slide the blank upward when it already occupies the top row, or sliding left when positioned in the leftmost column, the action is registered as illegal. Illegal actions consume one step from the remaining budget but leave the board configuration completely unchanged, providing clear feedback about movement constraints while maintaining the time pressure of the step limit.
+
+## State Transition Rule
+
+Valid movement actions create deterministic state transitions by swapping the blank space with an adjacent numbered tile according to the specified direction. When the agent selects SlideUp and the blank space has a tile directly below it, the blank and that tile exchange positions instantaneously. Similar position exchanges occur for SlideDown, SlideLeft, and SlideRight when valid tiles exist in the corresponding adjacent positions. Every valid action results in exactly one tile changing position relative to the blank space, maintaining the fundamental constraint that only tiles adjacent to the blank can move.
+
+Invalid movement attempts, where the blank space cannot move in the specified direction due to board boundaries, result in no positional changes to any tiles. The board configuration remains identical to the previous step, but the steps remaining counter decreases by one, maintaining consistent time progression regardless of action validity. This transition rule ensures agents receive immediate feedback about movement feasibility while learning the spatial constraints of the puzzle environment.
+
+## Rewards
+
+The environment implements a strict binary reward structure with no intermediate scoring or reward shaping mechanisms. The agent receives a reward of +1 exclusively when the board configuration exactly matches the predefined Chaos Pattern within the allocated 30-step limit. This success reward triggers immediately upon achieving the target arrangement and coincides with episode termination.
+
+All other outcomes result in zero reward, including episodes that terminate due to step limit exhaustion, episodes where illegal moves consume the entire step budget without progress, and episodes that reach the forbidden ordered pattern. The binary nature of the reward system requires agents to discover the complete solution path rather than relying on incremental progress signals, emphasizing the importance of exploration and precise sequence learning over gradient-following approaches.
+
+## Observation
+
+The agent receives complete environmental information at every step, providing full observability necessary for strategic planning and pattern recognition. The board matrix observation presents the current configuration as a 3×3 integer array clearly indicating the position of each numbered tile and the blank space location. This representation allows agents to track tile movements, identify spatial relationships, and maintain awareness of the puzzle state throughout the episode.
+
+The steps remaining observation provides crucial temporal information enabling agents to balance exploration with goal-directed behavior as the episode progresses. Early in episodes, agents can afford exploratory moves to understand the current configuration's relationship to the target pattern, while later steps require focused movement toward the goal. The combination of complete spatial information and explicit time constraints creates an observation space that supports both strategic planning and tactical execution while maintaining appropriate challenge through the inverted success criteria and tight step budget.
+
+## Termination
+
+Episodes conclude under three distinct conditions that provide clear boundaries for agent learning. Successful termination occurs immediately when the board configuration matches the target Chaos Pattern, rewarding the agent and ending the episode at the moment of success regardless of remaining steps. This immediate termination upon success aligns with the binary reward structure and prevents unnecessary continuation after goal achievement.
+
+Failure termination occurs when the board reaches the conventional ordered arrangement (tiles 1-8 in sequential positions with blank in bottom-right), immediately ending the episode with zero reward. This condition reinforces the semantic inversion central to the environment's design challenge. Timeout termination activates when the agent consumes all 30 allocated steps without reaching either success or failure conditions, concluding the episode with zero reward and emphasizing the importance of efficient pathfinding within the constrained step budget.
+
+## Special Features
+
+The environment incorporates several distinctive mechanisms that differentiate it from conventional sliding puzzles. The semantic inversion feature explicitly treats visual disorder as success and conventional order as failure, challenging agents to overcome intuitive pattern recognition biases. This inversion remains consistent across all episodes, ensuring that learned strategies transfer reliably between training and evaluation phases.
+
+Guaranteed solvability represents another crucial feature, where every generated starting configuration maintains a mathematically verified solution path to the target Chaos Pattern within the 30-step limit. This guarantee prevents unsolvable puzzle instances from corrupting the learning process while maintaining appropriate challenge through complex but feasible solution requirements. The fixed target pattern across all episodes enables agents to develop consistent recognition strategies rather than adapting to changing success criteria, supporting the fundamental learnability requirement for reinforcement learning environments.

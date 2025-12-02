@@ -1,0 +1,7 @@
+You are the operator of an Atmosphere Regulation Array (ARA) on an alien planet with counterintuitive atmospheric physics. Your mission is to stabilize the planet's atmosphere for incoming human colonization by maintaining the Climate Stability Index (CSI) between 45-55 throughout a 30-step operational cycle.
+
+The alien atmosphere behaves opposite to Earth's meteorology - actions will have unexpected effects that you must learn through experimentation. You have a limited energy budget of 45 units that must last the entire episode, so plan your interventions carefully.
+
+Your success depends on keeping the CSI in the safe range while efficiently managing your energy resources. The atmospheric system has natural drift toward instability and complex coupled dynamics where changes propagate through multiple weather variables over time.
+
+Monitor all atmospheric readings (temperature, humidity, pressure, cloud coverage, storm energy, solar flux) and use the six available intervention actions strategically to maintain planetary habitability.

@@ -1,0 +1,81 @@
+## Implementation Guide for Molecular Taste Navigation Environment
+
+### Core Files Structure:
+- `molecular_taste_env.py` - Main environment class
+- `taste_observation.py` - Chemical sensor observation policy  
+- `maze_generator.py` - World generator for mazes with chemical signatures
+- `chemical_utils.py` - Utilities for taste signature computation
+
+### Key Implementation Details:
+
+#### MolecularTasteEnv Class (inherits SkinEnv):
+
+**_dsl_config()**: Load YAML config from `worlds/{env_id}/config.yaml`, store in self.configs
+
+**reset()**: 
+- If mode="load": call _load_world(world_id) to get complete maze state
+- If mode="generate": call _generate_world(seed) to create new maze, then load it
+- Set agent to random valid starting position ensuring optimal path length 8-12 to goal
+- Initialize self._state with loaded world state, set self._t = 0
+
+**transition()**: 
+- Parse action dict for action name and params
+- DO_NOTHING: agent stays at current position
+- MOVE_*: attempt to move in direction, check against walls using maze.walls
+- If move hits wall/boundary: agent stays put but step still counts
+- Update self._state["agent"]["pos"], store previous state in self._history
+
+**reward()**: 
+- Check if agent.pos == maze.goal_pos for first time (track in episode state)
+- Return (1.0, ["goal_reached"], {}) if first goal visit
+- Return (0.0, [], {}) for all other states including goal revisits
+
+**observe_semantic()**: 
+- Get current chemical signature from maze.chemical_map[agent.pos]
+- Return dict with flavor_vector (5 floats), remaining_steps, wall_bitmask (4 bools)
+- Call self.obs_policy to apply any observation filtering
+
+**render_skin()**: 
+- Format flavor vector values into template string
+- Add movement possibility flags based on wall detection
+- Return formatted text observation for agent
+
+**done()**: 
+- Return True if self._t >= max_steps OR agent reached goal
+- Note: When reading max_steps, if level has changed max_steps in its state, it should override self.configs["termination"]["max_steps"]
+
+#### ChemicalSensorPolicy Class (inherits ObservationPolicy):
+
+**__call__()**: 
+- Extract current flavor signature for agent's position from chemical_map
+- Compute wall_bitmask by checking maze boundaries and walls in 4 directions
+- Return observation dict with current chemical readings and navigation info
+- Apply any sensor noise or filtering as specified in observation params
+
+#### MazeChemicalGenerator Class (inherits WorldGenerator): 
+
+**generate()**: 
+- Use seed for reproducible generation, create unique world_id
+- Call _execute_pipeline() to build complete maze with chemical signatures
+- Save result using _save_world(), return world_id
+
+**_execute_pipeline()**: 
+- Start with state_template as base
+- generate_maze_layout: Create 9x9 grid with walls, ensure solvability  
+- place_goal_position: Set goal ensuring path length constraints met
+- generate_chemical_signatures: For each cell, compute 5-compound signature
+  * Sweet/Umami: decrease with Manhattan distance to goal (+ small noise)
+  * Bitter: increase with distance to goal  
+  * Sour/Salty: controlled random values ensuring local uniqueness
+- validate_level: Verify all 3x3 neighborhoods have unique signatures, maze solvable
+- Return complete world state with maze geometry and chemical_map
+
+#### Chemical Signature Generation Logic:
+The chemical_map should be a dict mapping (x,y) coordinates to 5-element flavor vectors. 
+Sweet and Umami intensities correlate negatively with distance to goal (closer = stronger).
+Bitter intensity correlates positively with distance (farther = more bitter).
+Sour and Salty add controlled randomness while maintaining uniqueness within 3x3 regions.
+All values normalized to [0.0, 1.0] range for consistent agent observations.
+
+This creates a learnable gradient landscape where agents can develop navigation strategies
+by recognizing that sweet/umami guide toward goals while bitter indicates distance away.

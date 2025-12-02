@@ -1,0 +1,267 @@
+{
+  "environment_id": "20250918_152710_env_89_agricultural_life_simulation",
+  "calculation_timestamp": "2025-09-18 15:41:24",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 10.44,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.54
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.1,
+        "total_coins_from_sales": 15.4
+      }
+    },
+    "level_02.yaml": {
+      "max_reward": 10.7,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.8
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.28,
+        "total_coins_from_sales": 17.97
+      }
+    },
+    "level_03.yaml": {
+      "max_reward": 10.63,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.73
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.23,
+        "total_coins_from_sales": 17.27
+      }
+    },
+    "level_04.yaml": {
+      "max_reward": 10.56,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.66
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.18,
+        "total_coins_from_sales": 16.57
+      }
+    },
+    "level_05.yaml": {
+      "max_reward": 10.46,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.56
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.12,
+        "total_coins_from_sales": 15.63
+      }
+    },
+    "level_06.yaml": {
+      "max_reward": 10.6,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.7
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.22,
+        "total_coins_from_sales": 17.03
+      }
+    },
+    "level_07.yaml": {
+      "max_reward": 10.51,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.61
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.15,
+        "total_coins_from_sales": 16.1
+      }
+    },
+    "level_08.yaml": {
+      "max_reward": 10.65,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.75
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.25,
+        "total_coins_from_sales": 17.5
+      }
+    },
+    "level_09.yaml": {
+      "max_reward": 10.63,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.73
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.23,
+        "total_coins_from_sales": 17.27
+      }
+    },
+    "level_10.yaml": {
+      "max_reward": 10.77,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.87
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.33,
+        "total_coins_from_sales": 18.67
+      }
+    },
+    "level_11.yaml": {
+      "max_reward": 10.58,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.68
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.2,
+        "total_coins_from_sales": 16.8
+      }
+    },
+    "level_12.yaml": {
+      "max_reward": 10.63,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.73
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.23,
+        "total_coins_from_sales": 17.27
+      }
+    },
+    "level_13.yaml": {
+      "max_reward": 10.67,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.77
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.27,
+        "total_coins_from_sales": 17.73
+      }
+    },
+    "level_14.yaml": {
+      "max_reward": 10.56,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.66
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.18,
+        "total_coins_from_sales": 16.57
+      }
+    },
+    "level_15.yaml": {
+      "max_reward": 10.53,
+      "calculation_method": "analytical_optimization",
+      "notes": "Conservative estimate assuming optimal play with resource constraints",
+      "breakdown": {
+        "harvest_reward": 0.2,
+        "relationship_reward": 7.5,
+        "product_reward": 1.2,
+        "market_reward": 1.63
+      },
+      "assumptions": {
+        "max_crops": 2,
+        "max_products": 6,
+        "relationship_multiplier": 1.17,
+        "total_coins_from_sales": 16.33
+      }
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 10.59,
+    "min_max_reward": 10.44,
+    "max_max_reward": 10.77
+  }
+}

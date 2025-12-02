@@ -1,0 +1,17 @@
+# We use this yaml to configure the environment generation from scratch.
+
+# configure model used to generate environment, we use Claude-4-Sonnet as Default. 
+model: "<model_name>"
+
+# concurrency for generating environments.
+concurrency: 1
+
+# configure themes folder, when you want to generate multiple envs.
+themes_folder: "<themes_folder>"
+
+# configure theme, when you want to only generate one env.
+theme: "<inline_text>"
+
+# optional custom root for generated env folders
+envs_root_path: "workspace/envs"
+

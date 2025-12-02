@@ -1,0 +1,55 @@
+## File Structure
+- `electromagnetic_env.py`: Main environment class `ElectromagneticEnv(SkinEnv)`
+- `em_observation.py`: Custom observation policy `EMFieldObservationPolicy(ObservationPolicy)`  
+- `em_generator.py`: World generator `EMWorldGenerator(WorldGenerator)`
+
+## ElectromagneticEnv Implementation
+
+**Key Methods:**
+
+`_dsl_config()`: Load config from `worlds/{env_id}/config.yaml`
+
+`reset(mode, world_id, seed)`: 
+- If mode="load": call `_load_world(world_id)` and set self._state
+- If mode="generate": call `_generate_world(seed)` then load the generated world
+
+`transition(action)`: 
+- Handle 7 actions: move_north/south/east/west (update pos + facing), rotate_left/right (update facing), mark (set termination flag)
+- Wall collisions: keep agent in place but consume step
+- Update steps_remaining, increment self._t
+- Store action result in self._last_action_result
+
+`reward(action)`: 
+- Return (1.0, ["mark_success"], {}) if mark action and manhattan_distance(agent.pos, vulnerability_node.pos) <= 1
+- Return (0.0, ["mark_failure"], {}) for incorrect mark
+- Return (0.0, [], {}) for all other actions
+
+`observe_semantic()`: Call self.obs_policy to get 3x3 EM field window + agent state
+
+`render_skin(omega)`: Format text display with EM field grid, facing direction, steps remaining
+
+`done()`: Check if mark action executed OR steps >= max_steps. When reading max_steps, if the level has changed max_steps, it should override the environment's self.configs["termination"]["max_steps"]
+
+## EMFieldObservationPolicy Implementation
+
+`__call__(env_state, t)`:
+- Extract 3x3 window of EM field values centered on agent position
+- Handle boundary cases (pad with 0s outside grid)
+- Return dict with local_em_field, agent_facing, steps_remaining
+
+## EMWorldGenerator Implementation
+
+`generate(seed, save_path)`:
+- Execute pipeline steps in order using provided seed
+- Save complete world state to YAML file
+- Return world_id for loading
+
+`_execute_pipeline(base_state, seed)`:
+- **generate_walls**: Use flood-fill to ensure connectivity while placing ~20% walls randomly
+- **place_vulnerability_node**: Random free tile selection  
+- **calculate_em_field**: For each tile, compute max(0, 3-manhattan_dist) from node, but set to 0 if any wall blocks line-of-sight (Faraday shielding)
+- **spawn_agent**: Random free tile + random facing direction
+
+**EM Field Calculation**: Use breadth-first search from vulnerability node, spreading field strength that decreases by 1 per Manhattan distance step. Walls completely block propagation (create shadow zones with 0 field strength).
+
+The generator ensures each level is solvable by guaranteeing connectivity and placing the node in an accessible location.

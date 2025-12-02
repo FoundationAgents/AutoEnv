@@ -1,0 +1,47 @@
+[
+  {
+    "name": "HOLD_POSITION",
+    "description": "Keep the specified squad in its current position while maintaining reconnaissance of the surrounding area.",
+    "parameters": {
+      "squad_id": "ID of the squad to hold position (0, 1, or 2)"
+    }
+  },
+  {
+    "name": "MOVE_NORTH",
+    "description": "Move the specified squad one grid cell to the north.",
+    "parameters": {
+      "squad_id": "ID of the squad to move (0, 1, or 2)"
+    }
+  },
+  {
+    "name": "MOVE_SOUTH", 
+    "description": "Move the specified squad one grid cell to the south.",
+    "parameters": {
+      "squad_id": "ID of the squad to move (0, 1, or 2)"
+    }
+  },
+  {
+    "name": "MOVE_EAST",
+    "description": "Move the specified squad one grid cell to the east.", 
+    "parameters": {
+      "squad_id": "ID of the squad to move (0, 1, or 2)"
+    }
+  },
+  {
+    "name": "MOVE_WEST",
+    "description": "Move the specified squad one grid cell to the west.",
+    "parameters": {
+      "squad_id": "ID of the squad to move (0, 1, or 2)"
+    }
+  },
+  {
+    "name": "ATTACK_ENEMY_CAMP",
+    "description": "Order the specified squad to attack an adjacent enemy camp using coordinated strength from all nearby squads.",
+    "parameters": {
+      "squad_id": "ID of the squad initiating the attack (0, 1, or 2)",
+      "camp_id": "ID of the target enemy camp (0 or 1)"
+    }
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "MOVE_NORTH", "params": {"squad_id": 0}}

@@ -1,0 +1,375 @@
+enemy_camps:
+- discovered: false
+  id: 0
+  pos:
+  - 6
+  - 10
+  strength: 4
+- discovered: false
+  id: 1
+  pos:
+  - 13
+  - 9
+  strength: 6
+globals:
+  eliminated_camps: 0
+  grid_size:
+  - 15
+  - 15
+  max_steps: 40
+  total_enemy_camps: 2
+squads:
+- active: true
+  id: 0
+  pos:
+  - 1
+  - 1
+  strength: 3
+- active: true
+  id: 1
+  pos:
+  - 2
+  - 1
+  strength: 3
+- active: true
+  id: 2
+  pos:
+  - 1
+  - 2
+  strength: 3
+terrain:
+  default_type: open
+  forests:
+  - - 7
+    - 13
+  - - 8
+    - 9
+  - - 9
+    - 12
+  - - 11
+    - 8
+  - - 4
+    - 2
+  - - 5
+    - 11
+  - - 13
+    - 10
+  - - 1
+    - 8
+  - - 14
+    - 3
+  - - 10
+    - 1
+  - - 14
+    - 13
+  - - 2
+    - 9
+  - - 7
+    - 12
+  - - 5
+    - 14
+  - - 14
+    - 9
+  - - 8
+    - 10
+  - - 6
+    - 2
+  - - 1
+    - 6
+  - - 6
+    - 8
+  - - 10
+    - 13
+  size:
+  - 15
+  - 15
+  walls:
+  - - 1
+    - 4
+  - - 13
+    - 14
+  - - 5
+    - 1
+  - - 6
+    - 4
+  - - 9
+    - 5
+  - - 7
+    - 2
+  - - 9
+    - 3
+  - - 0
+    - 5
+  - - 4
+    - 1
+  - - 8
+    - 1
+  - - 14
+    - 5
+  - - 0
+    - 4
+  - - 4
+    - 7
+  - - 6
+    - 11
+  - - 7
+    - 1
+  - - 9
+    - 2
+  - - 9
+    - 13
+  - - 9
+    - 14
+  - - 5
+    - 12
+  - - 12
+    - 0
+  - - 11
+    - 4
+  - - 3
+    - 8
+  - - 0
+    - 10
+  - - 10
+    - 6
+  - - 2
+    - 5
+  - - 2
+    - 14
+  - - 8
+    - 8
+  - - 4
+    - 12
+  - - 9
+    - 0
+  - - 13
+    - 8
+  - - 8
+    - 6
+visibility_map:
+  explored:
+  - - true
+    - true
+    - true
+    - true
+    - true
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - true
+    - true
+    - true
+    - true
+    - true
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - true
+    - true
+    - true
+    - true
+    - true
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - true
+    - true
+    - true
+    - true
+    - true
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - true
+    - true
+    - true
+    - true
+    - true
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - true
+    - true
+    - true
+    - true
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false

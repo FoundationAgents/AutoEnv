@@ -1,0 +1,29 @@
+[
+  {
+    "name": "MOVE_NORTH",
+    "description": "Move the agent one cell north. If a crate is in the target cell, attempt to push it north.",
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_SOUTH", 
+    "description": "Move the agent one cell south. If a crate is in the target cell, attempt to push it south.",
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_EAST",
+    "description": "Move the agent one cell east. If a crate is in the target cell, attempt to push it east.", 
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_WEST",
+    "description": "Move the agent one cell west. If a crate is in the target cell, attempt to push it west.",
+    "parameters": {}
+  },
+  {
+    "name": "WAIT",
+    "description": "Skip this turn without moving. Consumes one step from the time limit.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

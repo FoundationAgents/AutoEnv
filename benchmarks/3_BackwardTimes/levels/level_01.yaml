@@ -1,0 +1,140 @@
+agent:
+  current_time_index: 40
+  investigation_status: active
+crime_scene:
+  initial_evidence:
+  - Crime scene photographs
+  - Initial police report
+  - Witness contact information
+  location: primary_scene
+  suspect_list:
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_5
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_4
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_3
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_1
+  witness_statements: []
+globals:
+  max_steps: 40
+ground_truth:
+  decoy_suspects:
+  - person_4
+  - person_3
+  - person_1
+  essential_clues:
+  - description: Evidence piece 1 found at office
+    id: clue_1
+    location: reception
+    object: tool
+    relevance: essential
+    time_available: 15
+    type: forensic
+  - description: Evidence piece 2 found at reception
+    id: clue_2
+    location: parking_lot
+    object: computer
+    relevance: essential
+    time_available: 34
+    type: witness
+  - description: Evidence piece 3 found at reception
+    id: clue_3
+    location: reception
+    object: document
+    relevance: essential
+    time_available: 21
+    type: digital
+  - description: Evidence piece 4 found at office
+    id: clue_4
+    location: reception
+    object: key
+    relevance: essential
+    time_available: 26
+    type: physical
+  - description: Evidence piece 5 found at parking_lot
+    id: clue_5
+    location: office
+    object: tool
+    relevance: essential
+    time_available: 31
+    type: witness
+  - description: Evidence piece 6 found at warehouse
+    id: clue_6
+    location: parking_lot
+    object: phone
+    relevance: essential
+    time_available: 35
+    type: physical
+  - description: Misleading evidence 1
+    id: decoy_1
+    location: warehouse
+    object: tool
+    relevance: decoy
+    time_available: 22
+    type: digital
+  - description: Misleading evidence 2
+    id: decoy_2
+    location: reception
+    object: tool
+    relevance: decoy
+    time_available: 35
+    type: physical
+  root_cause_action: fraud
+  root_cause_perpetrator: person_5
+  root_cause_time: 8
+investigation:
+  collected_clues: []
+  proposed_connections: []
+  timeline_ledger: {}
+  unresolved_effects:
+  - Unexplained access to secured area
+  - Contradictory witness statements about suspect locations
+timeline:
+  events:
+    '10':
+      caused_by: 7
+      event: escalation by person_5 at time 10
+      perpetrator: person_5
+      type: escalation
+    '14':
+      caused_by: 11
+      event: evidence_creation by person_6 at time 14
+      perpetrator: person_6
+      type: evidence_creation
+    '18':
+      caused_by: 14
+      event: evidence_creation by person_1 at time 18
+      perpetrator: person_1
+      type: evidence_creation
+    '21':
+      caused_by: 16
+      event: escalation by person_1 at time 21
+      perpetrator: person_1
+      type: escalation
+    '25':
+      caused_by: 21
+      event: escalation by person_4 at time 25
+      perpetrator: person_4
+      type: escalation
+    '28':
+      caused_by: 25
+      event: evidence_creation by person_4 at time 28
+      perpetrator: person_4
+      type: evidence_creation
+    '8':
+      action: fraud
+      event: person_5 performs fraud
+      perpetrator: person_5
+      type: root_cause
+  time_indices: 40
+  validated_connections: {}

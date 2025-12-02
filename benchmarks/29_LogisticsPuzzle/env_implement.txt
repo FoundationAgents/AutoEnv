@@ -1,0 +1,52 @@
+## Implementation Guidance for Inverted Box Escape
+
+### Core Files Structure:
+- `inverted_box_escape_env.py` - Main environment class
+- `inverted_box_escape_generator.py` - World generator 
+- `inverted_box_escape_observation.py` - Observation policy
+
+### Key Classes and Methods:
+
+**InvertedBoxEscapeEnv(SkinEnv):**
+- `transition()`: Handle 5 movement actions. For each move attempt:
+  - Check if target cell has crate -> attempt push (move crate to next cell if valid)
+  - Check if target cell is wall/boundary -> block movement, consume step
+  - Check if target would contact crate/uncovered storage -> terminate with hazard death
+  - Update agent position if move is safe
+- `reward()`: Return 1.0 only if ALL storage tiles covered AND agent on exit tile, else 0.0
+- `done()`: Check max_steps override from level if present, else use config max_steps. Terminate on hazards, success, or timeout
+- `observe_semantic()`: Return complete grid state with symbols: P=agent, B=crate, C=uncovered storage, A=safe floor, D=exit, E=wall
+- `render_skin()`: Format grid as ASCII display with legend and status info
+
+**InvertedBoxEscapeGenerator(WorldGenerator):**
+- `_execute_pipeline()`: 
+  1. Generate random room dimensions (6x6 to 10x10)
+  2. Place perimeter walls and some internal walls for complexity
+  3. Place 3-5 crates randomly on floor tiles
+  4. Place equal number of storage tiles, ensuring no initial overlaps
+  5. Find safe spawn point for agent (no adjacent hazards)
+  6. Place exit tile requiring traversal through puzzle area
+  7. Run solvability check using BFS/A* to verify solution exists in ≤40 steps
+- Solvability algorithm: Search state space where each state = (agent_pos, crate_positions, covered_storage_set). Goal state = (exit_pos, *, all_storage_covered)
+
+**FullGridObservation(ObservationPolicy):**
+- `__call__()`: Convert internal state to complete grid matrix with proper symbols
+- Handle dynamic symbol changes (covered storage tiles become 'A')
+- Include step counter and coverage progress
+
+### Critical Implementation Notes:
+- Crates are lethal obstacles that kill agent on direct contact
+- Storage tiles are dangerous until neutralized by crate coverage  
+- Push mechanics: agent moves toward crate pushes it to next cell if valid
+- Covered storage tiles permanently become safe floor ('A' symbol)
+- Binary reward: success requires 100% storage coverage + exit reach
+- Generator must guarantee solvability within 40-step budget
+- When reading max_steps, if the level has changed max_steps, it should override the environment's self.configs["termination"]["max_steps"]
+
+### State Validation:
+- Ensure no crates/storage spawn adjacent to agent start position
+- Verify exit accessibility after all storage tiles theoretically covered
+- Validate room connectivity and object reachability
+- Confirm solution path exists within step limit using game mechanics
+
+The environment deliberately inverts traditional Sokoban semantics - crates and storage are hazardous rather than beneficial, requiring agents to discover object properties through interaction rather than visual assumption.

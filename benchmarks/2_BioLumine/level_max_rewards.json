@@ -1,0 +1,194 @@
+{
+  "environment_id": "20250904_170900_env_bioluminescent_s",
+  "calculation_timestamp": "2025-09-04 17:20:56",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for duration_inversion with params [7, 7]. Initial pattern length: 3. Max steps: 40",
+      "protocol": "duration_inversion",
+      "protocol_params": [
+        7,
+        7
+      ],
+      "initial_pattern_length": 3,
+      "max_steps": 40
+    },
+    "level_02.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for color_mirroring with params [3, 0]. Initial pattern length: 3. Max steps: 40",
+      "protocol": "color_mirroring",
+      "protocol_params": [
+        3,
+        0
+      ],
+      "initial_pattern_length": 3,
+      "max_steps": 40
+    },
+    "level_03.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for intensity_parity with params [5, 0]. Initial pattern length: 5. Max steps: 40",
+      "protocol": "intensity_parity",
+      "protocol_params": [
+        5,
+        0
+      ],
+      "initial_pattern_length": 5,
+      "max_steps": 40
+    },
+    "level_04.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for intensity_parity with params [6, 2]. Initial pattern length: 4. Max steps: 40",
+      "protocol": "intensity_parity",
+      "protocol_params": [
+        6,
+        2
+      ],
+      "initial_pattern_length": 4,
+      "max_steps": 40
+    },
+    "level_05.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for sequence_fibonacci with params [8, 9]. Initial pattern length: 5. Max steps: 40",
+      "protocol": "sequence_fibonacci",
+      "protocol_params": [
+        8,
+        9
+      ],
+      "initial_pattern_length": 5,
+      "max_steps": 40
+    },
+    "level_06.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for intensity_parity with params [5, 10]. Initial pattern length: 5. Max steps: 40",
+      "protocol": "intensity_parity",
+      "protocol_params": [
+        5,
+        10
+      ],
+      "initial_pattern_length": 5,
+      "max_steps": 40
+    },
+    "level_07.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for duration_inversion with params [3, 7]. Initial pattern length: 3. Max steps: 40",
+      "protocol": "duration_inversion",
+      "protocol_params": [
+        3,
+        7
+      ],
+      "initial_pattern_length": 3,
+      "max_steps": 40
+    },
+    "level_08.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for sequence_fibonacci with params [9, 0]. Initial pattern length: 5. Max steps: 40",
+      "protocol": "sequence_fibonacci",
+      "protocol_params": [
+        9,
+        0
+      ],
+      "initial_pattern_length": 5,
+      "max_steps": 40
+    },
+    "level_09.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for duration_inversion with params [5, 1]. Initial pattern length: 2. Max steps: 40",
+      "protocol": "duration_inversion",
+      "protocol_params": [
+        5,
+        1
+      ],
+      "initial_pattern_length": 2,
+      "max_steps": 40
+    },
+    "level_10.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for sequence_fibonacci with params [10, 1]. Initial pattern length: 5. Max steps: 40",
+      "protocol": "sequence_fibonacci",
+      "protocol_params": [
+        10,
+        1
+      ],
+      "initial_pattern_length": 5,
+      "max_steps": 40
+    },
+    "level_11.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for color_mirroring with params [3, 8]. Initial pattern length: 3. Max steps: 40",
+      "protocol": "color_mirroring",
+      "protocol_params": [
+        3,
+        8
+      ],
+      "initial_pattern_length": 3,
+      "max_steps": 40
+    },
+    "level_12.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for intensity_parity with params [5, 8]. Initial pattern length: 5. Max steps: 40",
+      "protocol": "intensity_parity",
+      "protocol_params": [
+        5,
+        8
+      ],
+      "initial_pattern_length": 5,
+      "max_steps": 40
+    },
+    "level_13.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for intensity_parity with params [4, 6]. Initial pattern length: 2. Max steps: 40",
+      "protocol": "intensity_parity",
+      "protocol_params": [
+        4,
+        6
+      ],
+      "initial_pattern_length": 2,
+      "max_steps": 40
+    },
+    "level_14.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for duration_inversion with params [10, 8]. Initial pattern length: 4. Max steps: 40",
+      "protocol": "duration_inversion",
+      "protocol_params": [
+        10,
+        8
+      ],
+      "initial_pattern_length": 4,
+      "max_steps": 40
+    },
+    "level_15.yaml": {
+      "max_reward": 3.0,
+      "calculation_method": "optimal_protocol_decoding",
+      "notes": "Assumes perfect protocol decoding for color_mirroring with params [5, 8]. Initial pattern length: 5. Max steps: 40",
+      "protocol": "color_mirroring",
+      "protocol_params": [
+        5,
+        8
+      ],
+      "initial_pattern_length": 5,
+      "max_steps": 40
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "successfully_analyzed": 15,
+    "average_max_reward": 3.0,
+    "min_max_reward": 3.0,
+    "max_max_reward": 3.0,
+    "theoretical_explanation": "All levels have the same maximum reward of 3.0 as the environment awards 1.0 for each successful handshake, with exactly 3 handshakes required to complete a session."
+  }
+}

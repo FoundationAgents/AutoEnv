@@ -1,0 +1,124 @@
+{
+  "environment_id": "20250907_150216_env_weather_control_",
+  "calculation_timestamp": "2025-09-07 15:14:18",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 50.4,
+      "initial_csi": 54.49,
+      "initial_energy": 45,
+      "calculation_method": "perfect_episode_6_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    },
+    "level_02.yaml": {
+      "max_reward": 50.4,
+      "initial_csi": 47.85,
+      "initial_energy": 45,
+      "calculation_method": "perfect_episode_6_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    },
+    "level_03.yaml": {
+      "max_reward": 50.4,
+      "initial_csi": 47.84,
+      "initial_energy": 45,
+      "calculation_method": "perfect_episode_6_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    },
+    "level_04.yaml": {
+      "max_reward": 50.4,
+      "initial_csi": 50.45,
+      "initial_energy": 45,
+      "calculation_method": "perfect_episode_6_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    },
+    "level_05.yaml": {
+      "max_reward": 27.0,
+      "initial_csi": 55.42,
+      "initial_energy": 45,
+      "calculation_method": "recovery_strategy_4_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    },
+    "level_06.yaml": {
+      "max_reward": 27.0,
+      "initial_csi": 43.6,
+      "initial_energy": 45,
+      "calculation_method": "recovery_strategy_4_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    },
+    "level_07.yaml": {
+      "max_reward": 27.0,
+      "initial_csi": 58.88,
+      "initial_energy": 45,
+      "calculation_method": "recovery_strategy_4_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    },
+    "level_08.yaml": {
+      "max_reward": 50.4,
+      "initial_csi": 51.1,
+      "initial_energy": 45,
+      "calculation_method": "perfect_episode_6_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    },
+    "level_09.yaml": {
+      "max_reward": 50.4,
+      "initial_csi": 48.37,
+      "initial_energy": 45,
+      "calculation_method": "perfect_episode_6_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    },
+    "level_10.yaml": {
+      "max_reward": 50.4,
+      "initial_csi": 48.19,
+      "initial_energy": 45,
+      "calculation_method": "perfect_episode_6_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    },
+    "level_11.yaml": {
+      "max_reward": 50.4,
+      "initial_csi": 46.26,
+      "initial_energy": 45,
+      "calculation_method": "perfect_episode_6_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    },
+    "level_12.yaml": {
+      "max_reward": 27.0,
+      "initial_csi": 44.93,
+      "initial_energy": 45,
+      "calculation_method": "recovery_strategy_4_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    },
+    "level_13.yaml": {
+      "max_reward": 27.0,
+      "initial_csi": 58.94,
+      "initial_energy": 45,
+      "calculation_method": "recovery_strategy_4_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    },
+    "level_14.yaml": {
+      "max_reward": 50.4,
+      "initial_csi": 49.34,
+      "initial_energy": 45,
+      "calculation_method": "perfect_episode_6_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    },
+    "level_15.yaml": {
+      "max_reward": 50.4,
+      "initial_csi": 49.61,
+      "initial_energy": 45,
+      "calculation_method": "perfect_episode_6_actions",
+      "notes": "Theoretical maximum assuming optimal strategy and perfect execution"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 42.6,
+    "min_max_reward": 27.0,
+    "max_max_reward": 50.4,
+    "reward_calculation_notes": [
+      "Perfect episode: 0.5 \u00d7 30 steps + 20.0 bonus + discovery bonuses + energy efficiency",
+      "Recovery strategy: 3.0 recovery + maintenance + discovery bonuses + energy efficiency",
+      "Discovery bonus: 2.0 per unique action used during perfect streak \u22653 steps",
+      "Energy efficiency: 0.1 \u00d7 remaining_energy at episode end",
+      "Action costs: inject_cold_ions(2), release_dry_fog(1), vent_heavy_vapor(3), trigger_pressure_spike(2), emit_solar_net(1), redirect_jet_stream(2)"
+    ]
+  }
+}

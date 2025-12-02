@@ -1,0 +1,34 @@
+[
+  {
+    "name": "MOVE_NORTH",
+    "description": "Move the agent one tile north (upward) if within grid boundaries.",
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_SOUTH", 
+    "description": "Move the agent one tile south (downward) if within grid boundaries.",
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_EAST",
+    "description": "Move the agent one tile east (rightward) if within grid boundaries.", 
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_WEST",
+    "description": "Move the agent one tile west (leftward) if within grid boundaries.",
+    "parameters": {}
+  },
+  {
+    "name": "REVEAL",
+    "description": "Reveal the contents of the tile at the agent's current position without moving.",
+    "parameters": {}
+  },
+  {
+    "name": "WAIT",
+    "description": "Stay in place for one turn without taking any action.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

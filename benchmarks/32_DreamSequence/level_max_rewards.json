@@ -1,0 +1,92 @@
+{
+  "environment_id": "20250919_185220_env_10_NEW_dream_sequence_n",
+  "calculation_timestamp": "2025-09-19 19:03:00",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 4 steps (limit: 40)"
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 8 steps (limit: 40)"
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 5 steps (limit: 40)"
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 3 steps (limit: 40)"
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 8 steps (limit: 40)"
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 8 steps (limit: 40)"
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 5 steps (limit: 40)"
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 2 steps (limit: 40)"
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 9 steps (limit: 40)"
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 3 steps (limit: 40)"
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 3 steps (limit: 40)"
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 5 steps (limit: 40)"
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 10 steps (limit: 40)"
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 7 steps (limit: 40)"
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Completable in 14 steps (limit: 40)"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0,
+    "completable_levels": 15,
+    "reward_distribution": {
+      "0.0": 0,
+      "1.0": 15
+    }
+  }
+}

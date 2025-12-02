@@ -1,0 +1,174 @@
+{
+  "environment_id": "20250917_214707_env_76_optical_spectrum_analysis",
+  "calculation_timestamp": "2025-09-17 21:59:29",
+  "reward_structure_analysis": {
+    "reward_type": "binary",
+    "max_possible_reward": 1.0,
+    "reward_conditions": {
+      "correct_declaration": 1.0,
+      "incorrect_declaration": 0.0,
+      "timeout": 0.0
+    },
+    "no_intermediate_rewards": true,
+    "no_penalties": true
+  },
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 2. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 2,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 0. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 0,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 9. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 9,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 4. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 4,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 7. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 7,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 4. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 4,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 2. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 2,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 7. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 7,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 9. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 9,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 6. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 6,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 0. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 0,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 4. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 4,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 5. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 5,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 2. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 2,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "deterministic_optimal",
+      "notes": "True material ID: 4. Optimal agent can achieve 1.0 by: (1) illuminating all 5 wavelength bands, (2) comparing observed spectrum with reference library, (3) declaring correct material within 40 steps.",
+      "level_details": {
+        "true_material_id": 4,
+        "max_steps": 40,
+        "num_materials": 10
+      }
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "valid_calculations": 15,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0
+  }
+}

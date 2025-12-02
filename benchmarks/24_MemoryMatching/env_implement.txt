@@ -1,0 +1,57 @@
+## Implementation Guide for Chaos Slide Puzzle Environment
+
+### File Structure
+- `chaos_slide_puzzle_env.py` - Main environment class
+- `chaos_slide_puzzle_generator.py` - World generator class  
+- `chaos_slide_puzzle_obs.py` - Observation policy class
+
+### ChaosSlideEnv Class (extends SkinEnv)
+
+**_dsl_config()**: Load YAML config from `worlds/{env_id}/config.yaml`. Parse chaos_pattern and forbidden_pattern into numpy arrays for efficient comparison.
+
+**_load_world(world_id)**: Load world state from `worlds/{env_id}/{world_id}.yaml`. Return complete state dict with board.grid, agent.steps_remaining, etc.
+
+**_generate_world(seed)**: Create ChaosSlideGenerator instance, call generate(seed), return generated world_id.
+
+**transition(action)**: 
+- Find blank space position (value 0) in board.grid
+- Calculate target position based on action (SLIDE_UP moves blank up by swapping with tile below)
+- Check bounds - if invalid, set _last_action_result to "illegal_move" and return unchanged state
+- If valid, swap blank with adjacent tile, decrement agent.steps_remaining
+- Update self._state and add previous state to self._history
+- Return new state
+
+**reward(action)**: 
+- Compare current board.grid with targets.chaos_pattern - if match, return (1.0, ["chaos_pattern_reached"], {})
+- Compare with targets.forbidden_pattern - if match, return (0.0, ["forbidden_pattern_reached"], {})  
+- Otherwise return (0.0, ["step_taken"], {})
+
+**observe_semantic()**: Return dict with current board.grid, agent.steps_remaining, targets.chaos_pattern, and t.
+
+**render_skin(omega)**: Format board.grid as 3x3 text display, show chaos pattern, format template with current values.
+
+**done(s_next)**: Return True if board matches chaos_pattern OR forbidden_pattern OR steps_remaining <= 0. Note: When reading max_steps, if the level has changed max_steps, it should override the environment's self.configs["termination"]["max_steps"].
+
+### ChaosSlideGenerator Class (extends WorldGenerator)
+
+**generate(seed, save_path)**: Execute pipeline, save result, return world_id.
+
+**_execute_pipeline(base_state, seed)**:
+- init_from_template: Copy state_template as starting point
+- scramble_board: Set random seed, apply 50-100 random valid slide moves from ordered state
+- validate_starting_state: Ensure result != chaos_pattern and != forbidden_pattern
+- verify_solvability: Use BFS to confirm chaos_pattern reachable in ≤30 moves
+- Return final scrambled but solvable state
+
+**Key Generator Logic**: Start with ordered state [[1,2,3],[4,5,6],[7,8,0]], apply random sequence of valid slides to create scrambling. This guarantees solvability since we can always reverse the moves. The BFS verification ensures the specific chaos target is reachable within the 30-step budget.
+
+### ChaosSlideObservation Class (extends ObservationPolicy)
+
+**__call__(env_state, t)**: Extract board.grid, agent.steps_remaining, targets.chaos_pattern from env_state. Add timestep t. Return observation dict for agent.
+
+### Key Implementation Notes
+- Use efficient board representation (3x3 numpy array) for fast pattern matching
+- Implement slide logic carefully: SLIDE_UP moves blank up, which means tile below slides into blank's position
+- BFS solvability check prevents impossible starting states
+- Binary reward structure requires exact pattern matching - no partial credit
+- Illegal moves consume steps but don't change board state

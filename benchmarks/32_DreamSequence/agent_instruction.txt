@@ -1,0 +1,7 @@
+You are navigating through a surreal dreamscape consisting of interconnected rooms with dream logic physics. Your goal is to find a dream key hidden somewhere in the dreamscape, then reach the Awakening Portal within 40 steps to escape the dream.
+
+The dreamscape contains multiple rooms connected by colored doors (Red, Blue, Green). Each room may have special properties that affect navigation: Normal rooms work as expected, Anti-Gravity rooms swap the destinations of Red and Blue doors, and Time-Slow rooms require you to Wait before any door becomes usable.
+
+You must explore efficiently to locate the dream key, collect it, then navigate to the final room containing the Awakening Portal. Success requires reaching the portal while carrying the key before your 40 steps expire. Be careful of dead-end rooms with no exits, as entering one will immediately end your journey in failure.
+
+Pay attention to room types and available exits to plan optimal paths through this mystical realm.

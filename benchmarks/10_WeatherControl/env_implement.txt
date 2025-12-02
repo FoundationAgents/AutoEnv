@@ -1,0 +1,67 @@
+## File Structure
+- `atmosphere_env.py`: Main environment class inheriting from SkinEnv
+- `atmosphere_generator.py`: World generator for initial conditions
+- `atmosphere_observation.py`: Observation policy implementation
+- `atmosphere_physics.py`: Atmospheric dynamics and action effect calculations
+
+## Core Classes
+
+### AtmosphereEnv (SkinEnv)
+**_dsl_config()**: Load YAML config, set up action cost mapping and physics constants
+**reset()**: Load/generate world using AtmosphereGenerator, initialize CSI calculation
+**_load_world()**: Load atmospheric state from YAML file with validation
+**_generate_world()**: Use generator to create randomized initial conditions, save to file
+**transition()**: 
+  - Check energy budget for action affordability
+  - Apply counterintuitive action effects (inject_cold_ions increases temperature, etc.)
+  - Queue delayed effects for 2-step propagation
+  - Process natural atmospheric drift (1-3% toward instability)
+  - Update coupled dynamics (temp affects pressure/humidity, etc.)
+  - Recalculate Climate Stability Index from weighted weather variables
+**reward()**: 
+  - +0.5 for CSI in [45,55] range (stability_maintenance)
+  - +3.0 when CSI returns to safe range (stability_recovery)  
+  - +2.0 for first 3-step stability with each action (discovery_bonus)
+  - +20.0 if CSI never leaves safe range (perfect_episode)
+  - +0.1 per remaining energy unit at termination (efficiency)
+**observe_semantic()**: Extract all atmospheric readings and facility status
+**render_skin()**: Format atmospheric data into readable status display
+**done()**: Check max_steps (30), critical CSI bounds [15,85], or energy depletion
+
+### AtmosphereGenerator (WorldGenerator)  
+**generate()**: Create world_id from seed, execute pipeline, save to configured path
+**_execute_pipeline()**:
+  - init_from_template: Copy base state structure
+  - randomize_initial_conditions: Sample weather variables from specified ranges
+  - calculate_initial_csi: Compute weighted CSI from randomized weather state
+  - initialize_drift_directions: Set consistent atmospheric instability patterns
+**_save_world()**: Save complete atmospheric state as YAML file with world_id
+
+### AtmosphereObservationPolicy (ObservationPolicy)
+**__call__()**: Return full atmospheric state with proper key mapping for skin template
+
+## Key Implementation Notes
+
+### Counterintuitive Action Mappings (must be consistent):
+- inject_cold_ions: +temperature, -pressure, -storm_energy
+- release_dry_fog: +humidity, -cloud_coverage, +solar_flux  
+- vent_heavy_vapor: -temperature, +pressure, +cloud_coverage
+- trigger_pressure_spike: -humidity, +storm_energy, +pressure
+- emit_solar_net: -solar_flux, +temperature, +cloud_coverage
+- redirect_jet_stream: +humidity, +storm_energy, -pressure
+
+### Coupled Dynamics System:
+Implement 2-step delayed propagation where temperature changes affect pressure/humidity, humidity affects clouds/storms, pressure modifies temp/solar_flux, clouds alter solar_flux/temp, storms redistribute pressure/humidity, solar_flux affects temp/chemistry.
+
+### CSI Calculation:
+Weighted combination of normalized weather variables where CSI=50 represents optimal balance. Use consistent normalization ranges and weights across all episodes.
+
+### Termination Override:
+When reading max_steps, if the level has changed max_steps, it should override the environment's self.configs["termination"]["max_steps"].
+
+### Critical Systems:
+- Energy constraint validation before action execution
+- Action effect queue for delayed propagation  
+- Natural drift simulation pushing toward instability
+- Discovery bonus tracking per action type
+- Perfect episode streak monitoring

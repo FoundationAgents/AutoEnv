@@ -1,0 +1,8 @@
+You are playing a memory card game on a 4x4 grid with a non-standard pairing rule. Your goal is to discover and reveal all 8 hidden pairs within 40 steps to maximize your score.
+
+At the start, all 16 cards are face-down. You can flip cards to reveal their symbols (A through H). When exactly two cards are face-up, they will be checked for a valid pair. Valid pairs are removed from the board and score points; invalid pairs are flipped face-down again at the end of the turn.
+
+Guidance:
+- The pairing rule is consistent but not the traditional “identical symbols match.” Infer the rule through observation.
+- Track revealed positions and symbols to form hypotheses and test them efficiently.
+- Exploration may be beneficial early on; optimize flips as you gain certainty to clear the board within the step limit.

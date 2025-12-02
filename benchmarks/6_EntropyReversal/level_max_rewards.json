@@ -1,0 +1,87 @@
+{
+  "environment_id": "20250906_131528_env_entropy_reversal",
+  "calculation_timestamp": "2025-09-06 13:27:04",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 243.5,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (78 units): +156.0; Stability maintained (30 steps): +30.0; Efficient reversals (15 actions): +7.5; Penalties avoided through optimal play: +0"
+    },
+    "level_02.yaml": {
+      "max_reward": 279.5,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (95 units): +190.0; Stability maintained (30 steps): +30.0; Efficient reversals (19 actions): +9.5; Penalties avoided through optimal play: +0"
+    },
+    "level_03.yaml": {
+      "max_reward": 266.5,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (89 units): +178.0; Stability maintained (30 steps): +30.0; Efficient reversals (17 actions): +8.5; Penalties avoided through optimal play: +0"
+    },
+    "level_04.yaml": {
+      "max_reward": 338.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (124 units): +248.0; Stability maintained (30 steps): +30.0; Efficient reversals (20 actions): +10.0; Penalties avoided through optimal play: +0"
+    },
+    "level_05.yaml": {
+      "max_reward": 324.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (117 units): +234.0; Stability maintained (30 steps): +30.0; Efficient reversals (20 actions): +10.0; Penalties avoided through optimal play: +0"
+    },
+    "level_06.yaml": {
+      "max_reward": 283.5,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (97 units): +194.0; Stability maintained (30 steps): +30.0; Efficient reversals (19 actions): +9.5; Penalties avoided through optimal play: +0"
+    },
+    "level_07.yaml": {
+      "max_reward": 302.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (106 units): +212.0; Stability maintained (30 steps): +30.0; Efficient reversals (20 actions): +10.0; Penalties avoided through optimal play: +0"
+    },
+    "level_08.yaml": {
+      "max_reward": 273.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (92 units): +184.0; Stability maintained (30 steps): +30.0; Efficient reversals (18 actions): +9.0; Penalties avoided through optimal play: +0"
+    },
+    "level_09.yaml": {
+      "max_reward": 306.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (108 units): +216.0; Stability maintained (30 steps): +30.0; Efficient reversals (20 actions): +10.0; Penalties avoided through optimal play: +0"
+    },
+    "level_10.yaml": {
+      "max_reward": 360.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (135 units): +270.0; Stability maintained (30 steps): +30.0; Efficient reversals (20 actions): +10.0; Penalties avoided through optimal play: +0"
+    },
+    "level_11.yaml": {
+      "max_reward": 277.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (94 units): +188.0; Stability maintained (30 steps): +30.0; Efficient reversals (18 actions): +9.0; Penalties avoided through optimal play: +0"
+    },
+    "level_12.yaml": {
+      "max_reward": 296.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (103 units): +206.0; Stability maintained (30 steps): +30.0; Efficient reversals (20 actions): +10.0; Penalties avoided through optimal play: +0"
+    },
+    "level_13.yaml": {
+      "max_reward": 304.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (107 units): +214.0; Stability maintained (30 steps): +30.0; Efficient reversals (20 actions): +10.0; Penalties avoided through optimal play: +0"
+    },
+    "level_14.yaml": {
+      "max_reward": 256.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (84 units): +168.0; Stability maintained (30 steps): +30.0; Efficient reversals (16 actions): +8.0; Penalties avoided through optimal play: +0"
+    },
+    "level_15.yaml": {
+      "max_reward": 254.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal achievement: +50.0; Order increase (83 units): +166.0; Stability maintained (30 steps): +30.0; Efficient reversals (16 actions): +8.0; Penalties avoided through optimal play: +0"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 290.87,
+    "min_max_reward": 243.5,
+    "max_max_reward": 360.0
+  }
+}

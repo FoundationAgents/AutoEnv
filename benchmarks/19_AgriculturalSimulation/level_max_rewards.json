@@ -1,0 +1,192 @@
+{
+  "environment_id": "20250918_145530_env_90_agricultural_life_simulation",
+  "calculation_timestamp": "2025-09-18 15:08:53",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 72,
+      "theoretical_max": 72,
+      "breakdown": {
+        "crops": 42,
+        "animals": 6,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    },
+    "level_02.yaml": {
+      "max_reward": 75,
+      "theoretical_max": 75,
+      "breakdown": {
+        "crops": 42,
+        "animals": 9,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    },
+    "level_03.yaml": {
+      "max_reward": 76,
+      "theoretical_max": 76,
+      "breakdown": {
+        "crops": 45,
+        "animals": 7,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    },
+    "level_04.yaml": {
+      "max_reward": 77,
+      "theoretical_max": 77,
+      "breakdown": {
+        "crops": 44,
+        "animals": 9,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    },
+    "level_05.yaml": {
+      "max_reward": 76,
+      "theoretical_max": 76,
+      "breakdown": {
+        "crops": 42,
+        "animals": 10,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    },
+    "level_06.yaml": {
+      "max_reward": 78,
+      "theoretical_max": 78,
+      "breakdown": {
+        "crops": 46,
+        "animals": 8,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    },
+    "level_07.yaml": {
+      "max_reward": 69,
+      "theoretical_max": 69,
+      "breakdown": {
+        "crops": 36,
+        "animals": 9,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    },
+    "level_08.yaml": {
+      "max_reward": 70,
+      "theoretical_max": 70,
+      "breakdown": {
+        "crops": 40,
+        "animals": 6,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    },
+    "level_09.yaml": {
+      "max_reward": 72,
+      "theoretical_max": 72,
+      "breakdown": {
+        "crops": 42,
+        "animals": 6,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    },
+    "level_10.yaml": {
+      "max_reward": 84,
+      "theoretical_max": 84,
+      "breakdown": {
+        "crops": 50,
+        "animals": 10,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    },
+    "level_11.yaml": {
+      "max_reward": 68,
+      "theoretical_max": 68,
+      "breakdown": {
+        "crops": 35,
+        "animals": 9,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    },
+    "level_12.yaml": {
+      "max_reward": 75,
+      "theoretical_max": 75,
+      "breakdown": {
+        "crops": 45,
+        "animals": 6,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    },
+    "level_13.yaml": {
+      "max_reward": 72,
+      "theoretical_max": 72,
+      "breakdown": {
+        "crops": 40,
+        "animals": 8,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    },
+    "level_14.yaml": {
+      "max_reward": 81,
+      "theoretical_max": 81,
+      "breakdown": {
+        "crops": 47,
+        "animals": 10,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    },
+    "level_15.yaml": {
+      "max_reward": 72,
+      "theoretical_max": 72,
+      "breakdown": {
+        "crops": 41,
+        "animals": 7,
+        "villagers": 24
+      },
+      "calculation_method": "optimal_path_analysis",
+      "max_steps": 40,
+      "notes": "Assumes optimal play with perfect timing and positioning. Game ends at 300 farm_value."
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 74.46666666666667,
+    "min_max_reward": 68,
+    "max_max_reward": 84
+  }
+}

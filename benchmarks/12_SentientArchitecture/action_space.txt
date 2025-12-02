@@ -1,0 +1,55 @@
+[
+  {
+    "name": "Negotiate",
+    "description": "Engage in diplomatic dialogue with a specific building to build trust and potentially influence its emotional state.",
+    "parameters": {
+      "building_id": "identifier of the target building for negotiation"
+    }
+  },
+  {
+    "name": "AllocateEnergy",
+    "description": "Transfer energy units from the city grid to a specific building's energy reserves.",
+    "parameters": {
+      "building_id": "identifier of the target building",
+      "amount": "number of energy units to transfer"
+    }
+  },
+  {
+    "name": "SupplyBioMaterial",
+    "description": "Provide bio-materials from city stock to a specific building for construction and maintenance.",
+    "parameters": {
+      "building_id": "identifier of the target building",
+      "amount": "number of bio-material units to supply"
+    }
+  },
+  {
+    "name": "Mediate",
+    "description": "Intervene in conflicts between two buildings to reduce tensions and improve city harmony.",
+    "parameters": {
+      "building_id_1": "identifier of the first building in conflict",
+      "building_id_2": "identifier of the second building in conflict"
+    }
+  },
+  {
+    "name": "StimulateGrowth",
+    "description": "Encourage a building to advance to its next developmental stage if it has sufficient resources.",
+    "parameters": {
+      "building_id": "identifier of the building to stimulate growth"
+    }
+  },
+  {
+    "name": "Repair",
+    "description": "Restore a building's structural integrity using city bio-material resources.",
+    "parameters": {
+      "building_id": "identifier of the building to repair",
+      "resource_amount": "amount of bio-materials to use for repairs"
+    }
+  },
+  {
+    "name": "CityFestival",
+    "description": "Organize a city-wide celebration that boosts morale and trust across all buildings simultaneously.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

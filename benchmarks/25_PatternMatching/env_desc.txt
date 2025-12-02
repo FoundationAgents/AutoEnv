@@ -1,0 +1,37 @@
+The Memory Pair Matching Environment presents a classic card-matching challenge designed as a reinforcement learning testbed. The environment creates a controlled memory and pattern recognition task where an agent must efficiently discover and match pairs of hidden cards within a constrained step budget.
+
+**Background**
+
+The environment simulates a traditional memory matching game using a digital card deck. At the start of each episode, sixteen cards containing eight unique symbols (two cards per symbol) are shuffled and arranged face-down in a 4×4 grid formation. The agent operates as a player attempting to clear all pairs by systematically flipping cards and remembering their positions. The environment maintains complete determinism in its mechanics while introducing variability only through the initial shuffle, creating a learning scenario that balances consistency with diversity across episodes.
+
+**Objective**
+
+The agent's primary goal is to clear all eight pairs of matching cards within a 40-step time limit. Success requires developing effective memory strategies to track previously revealed card positions and their associated symbols. The agent must optimize its card selection strategy to minimize redundant flips while maximizing information gathering from each action. Secondary objectives include exploring new card positions to expand knowledge of the board layout and avoiding illegal moves that waste precious steps.
+
+**State Setup**
+
+Each episode begins with environment initialization that creates eight unique symbol identifiers and duplicates each symbol to form sixteen total cards. The shuffle algorithm applies uniform randomization to distribute these cards across the 4×4 grid positions indexed from 0 to 15. All cards start in the face-down state, hiding their symbols from the agent. The step counter initializes to 40, representing the maximum allowed steps for the episode. No cards begin in the cleared state, and no symbols are initially visible to the agent.
+
+**Actions**
+
+The agent selects actions from a discrete action space consisting of sixteen possible flip commands, each corresponding to a specific grid position. The Flip(i) action targets the card at grid index i, where valid indices range from 0 to 15 in row-major order. When executed on a face-down card, this action reveals the card's symbol and updates the grid state accordingly. Actions targeting already-cleared card positions are considered illegal moves that consume a step without changing the environment state. The action space remains constant throughout each episode, though the effectiveness of specific actions changes as pairs are cleared.
+
+**State Transition Rule**
+
+State transitions follow deterministic rules based on the current grid configuration and selected action. When the agent flips a face-down card, the environment reveals its symbol and marks the position as currently revealed. If exactly two cards are revealed simultaneously and contain matching symbols, both cards transition to the permanently cleared state. If two revealed cards contain different symbols, both automatically revert to face-down status at the beginning of the next step. Only one card can be flipped per step, and the environment processes matching logic immediately after each flip action. The step counter decrements by one after each action regardless of whether the action successfully flipped a card or was illegal.
+
+**Rewards**
+
+The environment employs a cumulative reward system with exclusively non-negative values to provide clear learning signals. The primary reward mechanism awards +1.0 points immediately when the agent successfully clears a pair of matching cards. This substantial reward reinforces the core objective and provides strong positive feedback for successful matching behavior. Additionally, the environment awards +0.05 points the first time any previously unseen card position is flipped, encouraging exploration of unknown areas of the grid. Subsequent flips of the same position yield no exploration reward, promoting efficient information gathering. All other actions, including illegal moves and flips of previously seen cards without matches, generate zero reward without applying penalties.
+
+**Observation**
+
+The agent receives comprehensive state information designed to support strategic decision-making while maintaining appropriate challenge levels. The primary observation component is a 4×4 integer grid where each cell encodes the current status of the corresponding card position. Face-down or unknown cards are represented by 0, cards revealed in the current step by 1, and permanently cleared pairs by 2. This encoding allows the agent to distinguish between different card states and track the progress of pair clearing. Accompanying the grid state, the agent receives the current_symbol value, which provides the integer identifier of the symbol revealed by the most recent flip action, or -1 if the targeted position was already cleared. The steps_remaining counter gives the agent awareness of time pressure and remaining opportunities for actions. Importantly, the observation deliberately excludes information about symbols of face-down cards, requiring the agent to develop and maintain internal memory of previously seen positions and their associated symbols.
+
+**Termination**
+
+Episodes conclude under two distinct conditions that define success and failure states. The environment immediately terminates with success when all eight pairs have been cleared, regardless of remaining steps. This termination condition rewards efficient play and provides a clear success signal for the learning process. Alternatively, episodes terminate when the step counter reaches zero, indicating that the 40-step budget has been exhausted. Upon termination under either condition, the environment automatically resets for the next episode with a fresh shuffle of the same 16 cards, maintaining consistent difficulty while providing new spatial arrangements for continued learning.
+
+**Special Features**
+
+The Memory Pair Matching Environment incorporates several distinctive mechanics that enhance its value as a learning testbed. The delayed matching mechanism creates temporal dependencies between actions, as cards remain revealed only until the next flip occurs, forcing agents to make strategic decisions about when to attempt matches versus when to gather more information. The environment guarantees learnability through consistent rule application across all episodes, ensuring that card-flipping mechanics and matching logic remain deterministic and predictable. The non-negative reward constraint eliminates punishment-based learning dynamics, focusing agent development on positive reinforcement patterns. The fixed 40-step budget creates meaningful resource constraints that prevent brute-force exploration strategies while remaining sufficient for optimal play. The environment maintains difficulty consistency across all episodes by using identical board dimensions, action semantics, and reward structures, with randomness limited only to the initial card shuffle, ensuring that learned strategies transfer effectively between episodes.

@@ -1,0 +1,57 @@
+Implementation Guide for Quantum Maze Escape Environment
+
+## File Structure:
+- `quantum_maze_env.py` - Main environment class (QuantumMazeEnv)
+- `quantum_observation.py` - Local quantum view observation policy  
+- `quantum_generator.py` - World generator for quantum maze instances
+
+## QuantumMazeEnv Class (extends SkinEnv):
+
+### _dsl_config():
+Load YAML config from worlds/{env_id}/config.yaml. Initialize quantum wall tracking dictionaries.
+
+### _generate_world(seed):
+Create QuantumMazeGenerator instance, generate maze with quantum probabilities for each cell, save to file with unique world_id, return world_id.
+
+### _load_world(world_id):
+Load maze state from worlds/{env_id}/{world_id}.yaml, restore quantum_walls, collapsed_walls, and wall_probabilities dictionaries.
+
+### reset(mode, world_id, seed):
+If mode=="load": call _load_world(world_id). If mode=="generate": call _generate_world(seed) then load result. Set agent to start_pos, reset timestep.
+
+### transition(action):
+For MOVE actions: get target position, collapse quantum state if unknown (Bernoulli trial with stored probability), move agent if empty or keep position if wall, store result in _last_action_result. For OBSERVE: collapse all 4 adjacent cells without moving. Always increment internal step counter.
+
+### reward(action):
+Return (1.0, ["reach_exit"], {}) if agent.pos == exit_pos, otherwise (0.0, [], {}). Only reward reaching exit.
+
+### observe_semantic():
+Call obs_policy with current state and timestep. Return dict with agent position, local 3x3 grid view, remaining steps.
+
+### render_skin(omega):
+Format local view as 3x3 ASCII grid. Show 'A' for agent, '?' for quantum/unknown, '#' for collapsed walls, '.' for empty, 'E' for exit. Include position info and remaining steps.
+
+### done():
+Check if agent reached exit OR if self._t >= max_steps. Note: if level overrides max_steps in its state, use level's value instead of config default.
+
+## QuantumObservationPolicy Class (extends ObservationPolicy):
+
+### __call__(env_state, t):
+Extract agent position, create 3x3 window centered on agent. For each cell: check if collapsed (use collapsed_walls dict), if collapsed show actual state, if not collapsed show "unknown". Handle grid boundaries. Return local view with agent coordinates and remaining steps.
+
+## QuantumMazeGenerator Class (extends WorldGenerator):
+
+### generate(seed, save_path):
+Set random seed, execute pipeline to create maze, save result, return world_id.
+
+### _execute_pipeline(base_state, seed):
+Step 1 - init_from_template: copy state_template as base. 
+Step 2 - generate_quantum_probabilities: for each grid cell, assign random probability between 0.2-0.5, store in wall_probabilities dict.
+Step 3 - setup_boundaries: ensure start and exit positions are valid, initialize empty quantum_walls and collapsed_walls dicts.
+
+Key Implementation Notes:
+- Quantum collapse uses Bernoulli trial: if random() < wall_probability then wall, else empty
+- Once collapsed, wall state is permanent for episode
+- Movement actions automatically collapse destination before attempting move
+- OBSERVE collapses all 4 orthogonal neighbors without position change  
+- max_steps: when reading from state, if level has overridden max_steps, use level's value instead of environment's default config

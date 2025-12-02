@@ -1,0 +1,50 @@
+[
+  {
+    "name": "MERGE",
+    "description": "Combine two sub-streams into one, averaging their properties and potentially increasing unity while risking reduced diversity.",
+    "parameters": {
+      "stream_a_id": "ID of the first sub-stream to merge",
+      "stream_b_id": "ID of the second sub-stream to merge"
+    }
+  },
+  {
+    "name": "SPLIT", 
+    "description": "Divide a sub-stream into two separate streams with differentiated properties, typically increasing diversity but potentially fragmenting unity.",
+    "parameters": {
+      "stream_id": "ID of the sub-stream to split",
+      "split_ratio": "Ratio between 0.2 and 0.8 determining the size split between the two resulting streams"
+    }
+  },
+  {
+    "name": "STIMULATE",
+    "description": "Invest cognitive energy into a sub-stream to boost its creative novelty and enhance its diversity contribution.",
+    "parameters": {
+      "stream_id": "ID of the sub-stream to stimulate",
+      "energy_amount": "Amount of cognitive energy to invest (must not exceed available energy)"
+    }
+  },
+  {
+    "name": "MEDITATE",
+    "description": "Channel cognitive energy into increasing a sub-stream's coherence, strengthening internal alignment and unity contribution.",
+    "parameters": {
+      "stream_id": "ID of the sub-stream to focus meditation on",
+      "energy_amount": "Amount of cognitive energy to invest (must not exceed available energy)"
+    }
+  },
+  {
+    "name": "ARCHIVE",
+    "description": "Convert accumulated insights from a sub-stream into permanent knowledge score while resetting that stream's novelty.",
+    "parameters": {
+      "stream_id": "ID of the sub-stream whose knowledge should be archived"
+    }
+  },
+  {
+    "name": "REDISTRIBUTE_CE",
+    "description": "Reallocate available cognitive energy across sub-streams to optimize their productivity in subsequent turns.",
+    "parameters": {
+      "energy_allocations": "Dictionary mapping sub-stream IDs to energy amounts (total must equal available energy)"
+    }
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "STIMULATE", "params": {"stream_id": 0, "energy_amount": 25}}

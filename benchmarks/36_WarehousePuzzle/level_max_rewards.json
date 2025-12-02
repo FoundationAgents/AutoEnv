@@ -1,0 +1,153 @@
+{
+  "environment_id": "20250918_202145_env_81_warehouse_logistics_puzzle",
+  "calculation_timestamp": "2025-09-20 12:00:00",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis",
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 1,
+      "max_steps": 60,
+      "difficulty": "easy",
+      "solvable": true
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis", 
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 1,
+      "max_steps": 60,
+      "difficulty": "easy",
+      "solvable": true
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis",
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 1,
+      "max_steps": 60,
+      "difficulty": "easy",
+      "solvable": true
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis",
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 1,
+      "max_steps": 60,
+      "difficulty": "easy",
+      "solvable": true
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis",
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 1,
+      "max_steps": 60,
+      "difficulty": "easy",
+      "solvable": true
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis",
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 2,
+      "max_steps": 60,
+      "difficulty": "medium",
+      "solvable": true
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis",
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 2,
+      "max_steps": 60,
+      "difficulty": "medium",
+      "solvable": true
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis",
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 2,
+      "max_steps": 60,
+      "difficulty": "medium",
+      "solvable": true
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis",
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 2,
+      "max_steps": 60,
+      "difficulty": "medium",
+      "solvable": true
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis",
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 2,
+      "max_steps": 60,
+      "difficulty": "medium",
+      "solvable": true
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis",
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 3,
+      "max_steps": 60,
+      "difficulty": "hard",
+      "solvable": true
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis",
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 3,
+      "max_steps": 60,
+      "difficulty": "hard",
+      "solvable": true
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis",
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 3,
+      "max_steps": 60,
+      "difficulty": "hard",
+      "solvable": true
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis",
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 3,
+      "max_steps": 60,
+      "difficulty": "hard",
+      "solvable": true
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "BFS_pathfinding_analysis",
+      "notes": "Binary reward system: 1.0 if solvable within 60 steps, 0.0 otherwise. Level is solvable.",
+      "total_boxes": 3,
+      "max_steps": 60,
+      "difficulty": "hard",
+      "solvable": true
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "solvable_levels": 15,
+    "unsolvable_levels": 0,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0,
+    "max_steps": 60,
+    "easy_levels": 5,
+    "medium_levels": 5,
+    "hard_levels": 5
+  }
+}

@@ -1,0 +1,101 @@
+meta:
+  id: "chaos_slide_puzzle"
+  name: "Chaos Slide Puzzle"
+  description: "Inverted 3x3 sliding puzzle where agents must reach a chaotic pattern while avoiding the ordered state"
+
+state_template:
+  globals:
+    max_steps: 30
+  board:
+    grid: [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
+    size: [3, 3]
+  agent:
+    steps_remaining: 30
+  targets:
+    chaos_pattern: [[2, 7, 5], [1, 0, 8], [4, 6, 3]]
+    forbidden_pattern: [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "scramble_board"
+      desc: "Apply 50-100 random valid moves from ordered state to create solvable starting position"
+      args:
+        min_moves: 50
+        max_moves: 100
+    - name: "validate_starting_state"
+      desc: "Ensure starting state is neither chaos pattern nor forbidden pattern"
+      args: {}
+    - name: "verify_solvability"
+      desc: "Confirm target chaos pattern is reachable within 30 steps using BFS"
+      args:
+        max_depth: 30
+  randomization:
+    seed_based: true
+    parameters:
+      scramble_moves: [50, 100]
+
+transition:
+  actions:
+    - name: "SLIDE_UP"
+      params: []
+    - name: "SLIDE_DOWN" 
+      params: []
+    - name: "SLIDE_LEFT"
+      params: []
+    - name: "SLIDE_RIGHT"
+      params: []
+
+reward:
+  events:
+    - trigger: "chaos_pattern_reached"
+      value: 1.0
+    - trigger: "forbidden_pattern_reached"
+      value: 0.0
+    - trigger: "step_taken"
+      value: 0.0
+
+observation:
+  policy: "full"
+  params: {}
+  expose:
+    - board.grid
+    - agent.steps_remaining
+    - targets.chaos_pattern
+    - t
+
+termination:
+  max_steps: 30
+  conditions:
+    - "board.grid == targets.chaos_pattern"
+    - "board.grid == targets.forbidden_pattern"
+    - "agent.steps_remaining <= 0"
+
+skin:
+  type: "text"
+  template: |
+    Step {t}/{max_steps} (Remaining: {steps_remaining})
+    
+    Current Board:
+    {board_display}
+    
+    Target Chaos Pattern:
+    {chaos_pattern_display}
+    
+    Available actions: SLIDE_UP, SLIDE_DOWN, SLIDE_LEFT, SLIDE_RIGHT
+    (0 = blank space that will move in the specified direction)
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

@@ -1,0 +1,106 @@
+meta:
+  id: "gear_ratio_opt"
+  name: "Gear Ratio Optimization Environment"
+  description: "Design linear gear trains to achieve target mechanical advantages within tolerance"
+
+state_template:
+  globals:
+    max_steps: 30
+    tolerance: 0.02
+  agent:
+    remaining_steps: 30
+  gear_system:
+    available_gears: []
+    gear_chain: []
+    current_ma: 1.0
+    target_ma: 1.0
+    episode_finished: false
+    success: false
+
+observation:
+  policy: "full"
+  params: {}
+  expose:
+    - gear_system.available_gears
+    - gear_system.gear_chain
+    - gear_system.current_ma
+    - gear_system.target_ma
+    - agent.remaining_steps
+    - globals.tolerance
+    - t
+
+reward:
+  events:
+    - trigger: "finish_success"
+      value: 1.0
+    - trigger: "finish_fail"
+      value: 0.0
+    - trigger: "step"
+      value: 0.0
+
+transition:
+  actions:
+    - name: "PlaceGear"
+      params: [gear_index]
+    - name: "RemoveLast"
+      params: []
+    - name: "Finish"
+      params: []
+    - name: "Skip"
+      params: []
+
+skin:
+  type: "text"
+  template: |
+    Step {t}/{max_steps} | Remaining: {agent_remaining_steps}
+    Target MA: {target_ma:.4f} (±{tolerance:.1%})
+    Current MA: {current_ma:.4f}
+    
+    Available Gears (tooth counts): {available_gears}
+    Current Chain: {gear_chain} -> MA = {current_ma:.4f}
+    
+    Actions: PlaceGear(i), RemoveLast(), Finish(), Skip()
+
+termination:
+  max_steps: 30
+  conditions:
+    - "gear_system.episode_finished"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_gear_library"
+      desc: "Generate 10 random gears with tooth counts between 6-60"
+      args:
+        num_gears: 10
+        min_teeth: 6
+        max_teeth: 60
+    - name: "generate_target_ma"
+      desc: "Generate random target mechanical advantage that is achievable"
+      args:
+        min_ratio: 0.1
+        max_ratio: 10.0
+    - name: "validate_solvability"
+      desc: "Ensure target MA is theoretically achievable with given gears"
+      args:
+        max_chain_length: 10
+  randomization:
+    seed_based: true
+    parameters:
+      gear_teeth_range: [6, 60]
+      target_ma_range: [0.1, 10.0]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

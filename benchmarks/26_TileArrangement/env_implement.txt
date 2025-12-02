@@ -1,0 +1,53 @@
+## File Structure
+- `mismatched_memory_env.py`: Main environment class
+- `memory_observation.py`: Partial visibility observation policy  
+- `memory_generator.py`: World generation with inverse pairing logic
+
+## MismatchedMemoryEnv Class (extends SkinEnv)
+
+**_dsl_config()**: Load YAML config from `worlds/{env_id}/config.yaml`, store in `self.configs`
+
+**_load_world(world_id)**: Load saved world YAML containing board layout, symbol_pairs mapping, and card_states matrix
+
+**_generate_world(seed)**: Create new MemoryWorldGenerator instance, call generate() with seed, return generated world_id
+
+**transition(action)**: 
+- If FLIP(x,y): Check if card at (x,y) is face-down (state=0), flip to face-up (state=1), reveal symbol
+- After any action: Check all face-up cards for valid pairs using symbol_pairs mapping
+- If valid pair found: Set both cards to solved state (state=2), increment discovered_pairs
+- Auto-flip remaining face-up unpaired cards back to face-down (state=0) 
+- Increment step_count, update self._state
+
+**reward(action)**: 
+- Return +1.0 if valid pair was just discovered (check state change in discovered_pairs)
+- Return +0.05 if FLIP revealed symbol not in seen_symbols list, add to seen_symbols
+- Return events list ["pair_discovered"] or ["new_symbol_seen"] for tracking
+- Update cumulative_reward in state
+
+**observe_semantic()**: Return dict with card_states matrix, visible symbols from face-up cards, step counts
+
+**render_skin(omega)**: Format board as 4x4 grid showing states (0/1/2), list visible symbols with positions, show score/progress
+
+**done()**: True if discovered_pairs >= total_pairs OR step_count >= max_steps (check level max_steps override first)
+
+## MemoryObservationPolicy Class
+
+**__call__(env_state, t)**: Extract current card_states matrix, find face-up positions, return their symbols as visible_symbols dict
+
+## MemoryWorldGenerator Class  
+
+**_execute_pipeline()**: 
+1. Create random permutation pairing of symbols A-H where each pairs with different symbol
+2. Generate list of 16 cards (each symbol appears exactly twice)  
+3. Randomly shuffle card positions on 4x4 grid
+4. Initialize card_states as 4x4 matrix of zeros (all face-down)
+5. Store symbol_pairs mapping for pair validation
+
+**generate()**: Execute pipeline with seed, save complete world state to YAML file, return world_id
+
+## Key Implementation Notes
+- symbol_pairs dict maps each symbol to its unique pair partner (inverse rule)
+- card_states tracks 0=face-down, 1=face-up, 2=solved for each grid position
+- Auto-flip mechanism returns unpaired face-up cards to face-down each step
+- max_steps override: Check if loaded world has custom max_steps, use instead of config default
+- Exploration bonus only triggers on first-time symbol observation per episode

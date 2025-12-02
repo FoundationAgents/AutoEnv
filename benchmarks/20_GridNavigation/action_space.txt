@@ -1,0 +1,39 @@
+[
+  {
+    "name": "MOVE_NORTH",
+    "description": "Move the agent one tile north (upward).",
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_SOUTH", 
+    "description": "Move the agent one tile south (downward).",
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_EAST",
+    "description": "Move the agent one tile east (rightward).",
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_WEST",
+    "description": "Move the agent one tile west (leftward).",
+    "parameters": {}
+  },
+  {
+    "name": "ROTATE_LEFT",
+    "description": "Rotate the agent's facing direction 90 degrees counterclockwise.",
+    "parameters": {}
+  },
+  {
+    "name": "ROTATE_RIGHT", 
+    "description": "Rotate the agent's facing direction 90 degrees clockwise.",
+    "parameters": {}
+  },
+  {
+    "name": "WAIT",
+    "description": "Stay in the current position without moving or rotating.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "MOVE_NORTH", "params": {}}

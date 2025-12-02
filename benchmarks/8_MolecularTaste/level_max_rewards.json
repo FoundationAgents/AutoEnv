@@ -1,0 +1,238 @@
+{
+  "environment_id": "20250907_110734_env_molecular_taste_",
+  "calculation_timestamp": "2025-09-07 11:21:24",
+  "reward_structure_analysis": {
+    "reward_events": [
+      {
+        "event": "goal_reached_first_time",
+        "value": 1.0,
+        "description": "Agent receives 1.0 reward when reaching goal position for the first time"
+      }
+    ],
+    "other_rewards": "None - only goal completion gives reward",
+    "penalties": "None - no negative rewards in this environment",
+    "maximum_possible_per_episode": 1.0
+  },
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal reachable in 12 steps (within 40 step limit)",
+      "shortest_path_length": 12,
+      "max_steps": 40,
+      "goal_reachable": true,
+      "start_position": [
+        0,
+        0
+      ],
+      "goal_position": [
+        7,
+        5
+      ]
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal reachable in 7 steps (within 40 step limit)",
+      "shortest_path_length": 7,
+      "max_steps": 40,
+      "goal_reachable": true,
+      "start_position": [
+        0,
+        0
+      ],
+      "goal_position": [
+        0,
+        5
+      ]
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal reachable in 1 steps (within 40 step limit)",
+      "shortest_path_length": 1,
+      "max_steps": 40,
+      "goal_reachable": true,
+      "start_position": [
+        0,
+        0
+      ],
+      "goal_position": [
+        0,
+        1
+      ]
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal reachable in 11 steps (within 40 step limit)",
+      "shortest_path_length": 11,
+      "max_steps": 40,
+      "goal_reachable": true,
+      "start_position": [
+        0,
+        0
+      ],
+      "goal_position": [
+        6,
+        5
+      ]
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal reachable in 12 steps (within 40 step limit)",
+      "shortest_path_length": 12,
+      "max_steps": 40,
+      "goal_reachable": true,
+      "start_position": [
+        0,
+        0
+      ],
+      "goal_position": [
+        4,
+        8
+      ]
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal reachable in 10 steps (within 40 step limit)",
+      "shortest_path_length": 10,
+      "max_steps": 40,
+      "goal_reachable": true,
+      "start_position": [
+        0,
+        0
+      ],
+      "goal_position": [
+        5,
+        5
+      ]
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal reachable in 10 steps (within 40 step limit)",
+      "shortest_path_length": 10,
+      "max_steps": 40,
+      "goal_reachable": true,
+      "start_position": [
+        0,
+        0
+      ],
+      "goal_position": [
+        6,
+        0
+      ]
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal reachable in 3 steps (within 40 step limit)",
+      "shortest_path_length": 3,
+      "max_steps": 40,
+      "goal_reachable": true,
+      "start_position": [
+        0,
+        0
+      ],
+      "goal_position": [
+        2,
+        1
+      ]
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal reachable in 11 steps (within 40 step limit)",
+      "shortest_path_length": 11,
+      "max_steps": 40,
+      "goal_reachable": true,
+      "start_position": [
+        0,
+        0
+      ],
+      "goal_position": [
+        5,
+        6
+      ]
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal reachable in 11 steps (within 40 step limit)",
+      "shortest_path_length": 11,
+      "max_steps": 40,
+      "goal_reachable": true,
+      "start_position": [
+        0,
+        0
+      ],
+      "goal_position": [
+        5,
+        4
+      ]
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal reachable in 11 steps (within 40 step limit)",
+      "shortest_path_length": 11,
+      "max_steps": 40,
+      "goal_reachable": true,
+      "start_position": [
+        0,
+        0
+      ],
+      "goal_position": [
+        6,
+        5
+      ]
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal reachable in 10 steps (within 40 step limit)",
+      "shortest_path_length": 10,
+      "max_steps": 40,
+      "goal_reachable": true,
+      "start_position": [
+        0,
+        0
+      ],
+      "goal_position": [
+        4,
+        6
+      ]
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Goal reachable in 1 steps (within 40 step limit)",
+      "shortest_path_length": 1,
+      "max_steps": 40,
+      "goal_reachable": true,
+      "start_position": [
+        0,
+        0
+      ],
+      "goal_position": [
+        0,
+        1
+      ]
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 0.8666666666666667,
+    "min_max_reward": 0.0,
+    "max_max_reward": 1.0,
+    "levels_with_max_reward_1.0": 13,
+    "levels_with_max_reward_0.0": 2,
+    "reward_distribution": {
+      "1.0": 13,
+      "0.0": 2
+    }
+  }
+}

@@ -1,0 +1,211 @@
+generator:
+  mode: procedural
+  output_format: yaml
+  pipeline:
+  - args: {}
+    desc: Initialize world with state_template as base
+    name: init_from_template
+  - args:
+      grid_size:
+      - 12
+      - 12
+      rooms:
+      - kitchen
+      - living_room
+      - bedroom
+      - bathroom
+      - corridor
+    desc: Create 5-room layout with walls and doors ensuring connectivity
+    name: generate_apartment_layout
+  - args:
+      bathroom_items:
+      - toilet
+      - shower
+      - sink
+      bedroom_items:
+      - bed
+      - dresser
+      - closet
+      kitchen_items:
+      - refrigerator
+      - sink
+      - counter
+      - stove
+      living_room_items:
+      - sofa
+      - tv
+      - table
+    desc: Add semantically appropriate furniture and appliances to each room
+    name: place_furniture_appliances
+  - args:
+      colors:
+      - red
+      - blue
+      - green
+      - yellow
+      - white
+      - black
+      object_types:
+      - food
+      - book
+      - clothes
+      - cleaning_supplies
+      - electronics
+      total_objects: 15
+    desc: Distribute movable objects with varied types and colors across rooms
+    name: populate_objects
+  - args:
+      difficulty_level: medium
+      templates:
+      - Move the {color} {object} to the {location}
+      - Turn {on/off} the {appliance} in the {room}
+      - Put the {object} in the {container}
+    desc: Create 3 random chore tasks using natural language templates
+    name: generate_chore_instructions
+  - args:
+      ensure_floor: true
+    desc: Spawn agent at random floor position with random facing direction
+    name: place_agent
+  randomization:
+    parameters:
+      chore_difficulty:
+      - 0.3
+      - 0.7
+      layout_variance:
+      - 0.1
+      - 0.3
+      object_distribution:
+      - 0.2
+      - 0.8
+    seed_based: true
+meta:
+  description: Embodied AI agent completing household chores in a realistic apartment
+    setting
+  id: smart_home_assistant
+  name: Smart Home Assistant Environment
+misc:
+  debug_mode: false
+  logging: true
+  semantic_validation: true
+  store_rollouts: true
+observation:
+  expose:
+  - agent.pos
+  - agent.facing
+  - agent.inventory
+  - visible_grid
+  - current_room
+  - visible_appliances
+  - chores.instructions
+  - chores.completed
+  - globals.max_steps
+  - t
+  params:
+    grid_size: 5
+    vision_radius: 2
+  policy: local_grid
+reward:
+  default_reward: 0.0
+  events:
+  - trigger: pickup_target_object
+    value: 0.3
+  - trigger: complete_chore
+    value: 0.7
+  - trigger: complete_final_chore
+    value: 1.0
+skin:
+  template: 'Step {t}/{max_steps} | Room: {current_room} | Facing: {facing}
+
+    Inventory: {inventory}
+
+
+    Chores:
+
+    {chores_display}
+
+
+    Vision Grid (5x5, A=Agent):
+
+    {vision_grid}
+
+
+    Visible Appliances: {visible_appliances}
+
+    Available Actions: MoveForward, TurnLeft, TurnRight, PickUp, Drop, ToggleAppliance,
+    OpenCloseContainer, Wait
+
+    '
+  type: text
+state_template:
+  agent:
+    facing: north
+    inventory: null
+    pos:
+    - 0
+    - 0
+  apartment:
+    doors: []
+    rooms:
+      bathroom:
+        appliances: []
+        bounds: []
+        furniture: []
+      bedroom:
+        appliances: []
+        bounds: []
+        furniture: []
+      corridor:
+        appliances: []
+        bounds: []
+        furniture: []
+      kitchen:
+        appliances: []
+        bounds: []
+        furniture: []
+      living_room:
+        appliances: []
+        bounds: []
+        furniture: []
+    walls: []
+  appliances: []
+  chores:
+    completed:
+    - false
+    - false
+    - false
+    instructions: []
+  containers: []
+  globals:
+    grid_size:
+    - 12
+    - 12
+    max_steps: 60
+    num_chores: 3
+  objects: []
+termination:
+  conditions:
+  - all(chores.completed)
+  max_steps: 60
+transition:
+  actions:
+  - name: MoveForward
+    params: []
+  - name: TurnLeft
+    params: []
+  - name: TurnRight
+    params: []
+  - name: PickUp
+    params: []
+  - name: Drop
+    params: []
+  - name: ToggleAppliance
+    params: []
+  - name: OpenCloseContainer
+    params: []
+  - name: Wait
+    params: []
+world_loading:
+  directory: worlds/{env_id}/
+  format: yaml
+  naming_convention: world_{world_id}.yaml
+  validation_schema: state_template

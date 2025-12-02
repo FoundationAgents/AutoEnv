@@ -1,0 +1,107 @@
+{
+  "environment_id": "20250918_153416_env_75_hydraulic_system_engineering",
+  "calculation_timestamp": "2025-09-18 15:47:57",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [150.00000000000003, 156.00000000000003, 144.0, 150.00000000000003] | Solution found: valve_states=[True, True, True, False, True, False, False, False, True]"
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [144.0, 144.0, 162.00000000000003, 150.00000000000003] | Solution found: valve_states=[False, True, True, True, False, False, True, True, False]"
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [138.0, 138.0, 150.00000000000003, 144.0] | Solution found: valve_states=[False, False, True, False, False, False, False, True, False]"
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [132.0, 138.0, 144.0, 132.0] | Solution found: valve_states=[True, True, True, True, False, True, True, False, False]"
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [144.0, 138.0, 150.00000000000003, 138.0] | Solution found: valve_states=[False, True, False, True, False, False, False, False, False]"
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [162.00000000000003, 162.00000000000003, 162.00000000000003, 156.00000000000003] | Solution found: valve_states=[True, True, True, False, True, True, False, True, False]"
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [162.00000000000003, 156.00000000000003, 162.00000000000003, 156.00000000000003] | Solution found: valve_states=[True, True, True, True, True, True, False, True, False]"
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [132.0, 138.0, 138.0, 138.0] | Solution found: valve_states=[True, False, True, True, True, True, True, False, False]"
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [156.00000000000003, 144.0, 156.00000000000003, 144.0] | Solution found: valve_states=[True, True, False, True, False, True, False, True, False]"
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [138.0, 144.0, 138.0, 132.0] | Solution found: valve_states=[True, True, True, False, False, True, False, False, True]"
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [138.0, 144.0, 144.0, 144.0] | Solution found: valve_states=[False, False, True, False, True, False, False, False, False]"
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [150.00000000000003, 156.00000000000003, 156.00000000000003, 144.0] | Solution found: valve_states=[False, True, True, False, True, True, False, False, False]"
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [138.0, 132.0, 150.00000000000003, 138.0] | Solution found: valve_states=[False, False, True, True, False, True, False, True, False]"
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [138.0, 138.0, 144.0, 138.0] | Solution found: valve_states=[True, True, True, True, False, False, False, False, False]"
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search_512_valve_combinations",
+      "solvable": true,
+      "notes": "Target pressures: [132.0, 132.0, 126.0, 132.0] | Solution found: valve_states=[True, False, False, False, False, False, False, False, True]"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "calculation_method": "exhaustive_valve_configuration_search",
+    "reward_structure": "binary_reward_1.0_for_exact_match_all_sensors",
+    "tolerance": "1e-6",
+    "solvable_levels": 15,
+    "unsolvable_levels": 0,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0
+  }
+}

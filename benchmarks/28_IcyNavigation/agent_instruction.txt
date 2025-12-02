@@ -1,0 +1,10 @@
+You are navigating a treacherous 8x8 icy terrain where appearances may be misleading. Your goal is to reach the Goal Flag (G) within 40 steps.
+
+Perception and movement:
+- You can see a 3x3 area around your current position.
+- Use movement actions (MoveNorth, MoveSouth, MoveEast, MoveWest) to travel, or Wait if needed.
+
+Guidance:
+- Visual cues may not reliably indicate safety; verify tiles cautiously before committing to a path.
+- Remember observed safe routes and avoid repeating risky mistakes.
+- Plan an efficient route to the goal while managing the step limit.

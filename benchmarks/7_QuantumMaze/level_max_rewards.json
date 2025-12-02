@@ -1,0 +1,117 @@
+{
+  "environment_id": "20250906_131528_env_quantum_maze_esc",
+  "calculation_timestamp": "2025-09-06 13:27:00",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.0012726275999481995,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.00022701650465727473,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.0007512989200032979,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.00040059756291039943,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.0003693366789323568,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.0008283550927296641,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.0013520676098667285,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.0015600980207875446,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.0006694409978526091,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.0011382831887527351,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.0010701346220504866,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.00030903118773389747,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.0006586826653880356,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.0006387240425425208,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "manhattan_distance": 18,
+      "optimal_path_probability": 0.0006803452773245557,
+      "calculation_method": "manhattan_distance_analysis",
+      "notes": "Exit reachable in 18 steps (optimal), max_steps=40"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0
+  }
+}

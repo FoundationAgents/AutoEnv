@@ -1,0 +1,41 @@
+## Implementation Guide for Binary Warehouse Box Sorting Environment
+
+### File Structure
+- `binary_warehouse_env.py` - Main environment class
+- `warehouse_generator.py` - Level generation logic  
+- `warehouse_observation.py` - Observation policy implementation
+
+### Key Classes and Methods
+
+#### BinaryWarehouseEnv(SkinEnv)
+- **_dsl_config()**: Load config from `worlds/binary_warehouse_sorting/config.yaml`
+- **reset(mode, world_id, seed)**: Load existing world or generate new one based on mode
+- **_load_world(world_id)**: Parse YAML world file, validate against state_template schema
+- **_generate_world(seed)**: Create WarehouseGenerator instance, call generate(), return world_id
+- **transition(action)**: Handle MoveNorth/South/East/West. Check target cell: if empty move agent, if box attempt push (move box if destination clear), if wall do nothing. Update agent.pos and objects.boxes positions. Set self._last_action_result for UI feedback
+- **reward(action)**: Return 1.0 if level_info.boxes_on_docks == level_info.total_boxes, else 0.0. Events list contains "task_completed" when condition met
+- **observe_semantic()**: Return dict with all exposed keys from config. Convert internal state to observation format
+- **render_skin(omega)**: Generate ASCII grid representation. Use legend: A=Agent, #=Wall, .=Floor, B=Box, D=Dock, X=BoxOnDock. Format using skin template
+- **done()**: Return True if t >= max_steps OR all boxes on docks. Note: When reading max_steps, if the level has changed max_steps, it should override the environment's self.configs["termination"]["max_steps"]
+
+#### WarehouseGenerator(WorldGenerator)  
+- **generate(seed, save_path)**: Execute full pipeline, save world file, return world_id
+- **_execute_pipeline(base_state, seed)**: Run pipeline steps in sequence:
+  1. init_from_template: Copy state_template as starting point
+  2. generate_warehouse_layout: Create 10x10 grid with walls forming corridors. Place walls around border, create internal corridors 2 tiles wide, add 3 storage alcoves
+  3. place_boxes_and_docks: Randomly select 3-5 boxes. Place boxes and docks on floor tiles with minimum 2-tile separation. Ensure equal counts
+  4. place_agent_start: Find valid floor position away from boxes and docks  
+  5. validate_level_solvability: Use A* pathfinding to verify all boxes can reach docks within 40 steps. Regenerate if unsolvable (max 10 attempts)
+- **_save_world(world_state, world_id)**: Write YAML to worlds/binary_warehouse_sorting/{world_id}.yaml
+- **_generate_world_id(seed)**: Create unique ID using timestamp and seed hash
+
+#### FullObservationPolicy(ObservationPolicy)
+- **__call__(env_state, t)**: Extract and return all keys listed in config.observation.expose. Convert tiles to grid format, calculate boxes_remaining = total_boxes - boxes_on_docks
+
+### Key Implementation Notes
+- Grid uses [row, col] indexing with [0,0] at top-left
+- Box pushing: agent moves into box cell, box moves one cell further in same direction if destination is floor/dock
+- Collision detection: prevent agent/box overlap, boxes cannot push other boxes
+- Deterministic mechanics: identical actions from identical states produce identical results
+- Binary reward: only +1 when final box placed on dock, 0 otherwise
+- Time pressure: exactly 40 steps maximum per episode regardless of completion

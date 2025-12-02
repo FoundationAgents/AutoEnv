@@ -1,0 +1,142 @@
+meta:
+  id: "light_spectrum_analysis"
+  name: "Light Spectrum Analysis Environment"
+  description: "AI agent operates as spectro-analyst to identify materials through strategic wavelength illumination"
+
+state_template:
+  globals:
+    max_steps: 40
+    num_materials: 10
+    num_wavelengths: 5
+  agent:
+    current_step: 0
+    has_declared: false
+    declared_material: -1
+  sample:
+    true_material_id: 0
+    illuminated_bands: [false, false, false, false, false]
+    observed_spectrum:
+      fluorescence: [0.0, 0.0, 0.0, 0.0, 0.0]
+      reflection: [0.0, 0.0, 0.0, 0.0, 0.0]
+  reference_library:
+    material_signatures: []
+
+observation:
+  policy: "full"
+  params: {}
+  expose:
+    - agent.current_step
+    - globals.max_steps
+    - sample.illuminated_bands
+    - sample.observed_spectrum
+    - reference_library.material_signatures
+    - t
+
+reward:
+  events:
+    - trigger: "correct_declaration"
+      value: 1.0
+    - trigger: "incorrect_declaration" 
+      value: 0.0
+    - trigger: "timeout"
+      value: 0.0
+
+transition:
+  actions:
+    - name: "EmitUV"
+      params: []
+    - name: "EmitBlue"
+      params: []
+    - name: "EmitGreen"
+      params: []
+    - name: "EmitRed"
+      params: []
+    - name: "EmitIR"
+      params: []
+    - name: "Declare_0"
+      params: []
+    - name: "Declare_1"
+      params: []
+    - name: "Declare_2"
+      params: []
+    - name: "Declare_3"
+      params: []
+    - name: "Declare_4"
+      params: []
+    - name: "Declare_5"
+      params: []
+    - name: "Declare_6"
+      params: []
+    - name: "Declare_7"
+      params: []
+    - name: "Declare_8"
+      params: []
+    - name: "Declare_9"
+      params: []
+
+skin:
+  type: "text"
+  template: |
+    === Light Spectrum Analysis Lab ===
+    Step: {t}/{max_steps}
+    
+    Illuminated Bands: UV={illuminated_uv} Blue={illuminated_blue} Green={illuminated_green} Red={illuminated_red} IR={illuminated_ir}
+    
+    Observed Spectrum:
+    Fluorescence: UV={fluor_uv:.3f} Blue={fluor_blue:.3f} Green={fluor_green:.3f} Red={fluor_red:.3f} IR={fluor_ir:.3f}
+    Reflection:   UV={refl_uv:.3f} Blue={refl_blue:.3f} Green={refl_green:.3f} Red={refl_red:.3f} IR={refl_ir:.3f}
+    
+    Available Actions:
+    Illumination: EmitUV, EmitBlue, EmitGreen, EmitRed, EmitIR
+    Declaration: Declare_0 through Declare_9
+    
+    Reference Library Available: 10 material signatures with full spectral data
+
+termination:
+  max_steps: 40
+  conditions:
+    - "agent.has_declared == true"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_reference_library"
+      desc: "Create 10 material signatures with realistic spectral properties following physical rules"
+      args:
+        materials:
+          - "water_gel"
+          - "crystalline_silica" 
+          - "metallic_copper"
+          - "organic_dye_red"
+          - "organic_dye_blue"
+          - "polymer_plastic"
+          - "calcium_carbonate"
+          - "titanium_oxide"
+          - "carbon_black"
+          - "liquid_mercury"
+    - name: "select_target_material"
+      desc: "Randomly select one of the 10 materials as the unknown sample for this episode"
+      args: {}
+    - name: "validate_spectral_consistency"
+      desc: "Ensure all material signatures follow physical rules and semantic consistency"
+      args: {}
+
+  randomization:
+    seed_based: true
+    parameters:
+      target_material_variance: [0.0, 0.1]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

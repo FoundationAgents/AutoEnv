@@ -1,0 +1,44 @@
+[
+  {
+    "name": "PROPOSE_TRADE",
+    "description": "Execute a cross-dimensional trade by selling items in one dimension and purchasing with currency from another dimension.",
+    "parameters": {
+      "item_category": "the type of item to trade from your inventory",
+      "source_dimension": "the dimension where you want to sell the item ('mass', 'entropy', or 'historical')",
+      "target_dimension": "the dimension whose currency you want to use for the purchase ('mass', 'entropy', or 'historical')",
+      "quantity": "number of items to trade (must not exceed current inventory)"
+    }
+  },
+  {
+    "name": "CONVERT_CREDITS",
+    "description": "Exchange currency directly between two dimensions using current market rates.",
+    "parameters": {
+      "source_currency": "the dimension currency to convert from ('mass', 'entropy', or 'historical')",
+      "target_currency": "the dimension currency to convert to ('mass', 'entropy', or 'historical')",
+      "amount": "amount of source currency to convert (must not exceed current balance)"
+    }
+  },
+  {
+    "name": "HEDGE",
+    "description": "Pay a fee to temporarily stabilize exchange rate fluctuations for one dimension over the next 5 steps.",
+    "parameters": {
+      "dimension": "the dimension to hedge against rate changes ('mass', 'entropy', or 'historical')"
+    }
+  },
+  {
+    "name": "RESEARCH",
+    "description": "Spend a turn to improve the accuracy of exchange rate observations for a randomly selected currency pair.",
+    "parameters": {}
+  },
+  {
+    "name": "DONATE",
+    "description": "Gift items to a specific dimension without compensation to improve diplomatic relations and reduce embargo risk.",
+    "parameters": {
+      "item_category": "the type of item to donate from your inventory",
+      "target_dimension": "the dimension to receive the donation ('mass', 'entropy', or 'historical')",
+      "quantity": "number of items to donate (must not exceed current inventory)"
+    }
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

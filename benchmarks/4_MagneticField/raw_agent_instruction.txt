@@ -1,0 +1,32 @@
+🎯 SIMPLIFIED MAGNETIC FIELD DECODING TASK 🎯
+
+You are solving a greatly simplified pattern recognition task. Each episode shows you a 9×9 grid with magnetic field patterns (0=empty, 1=lines, 2=intersections).
+
+🎉 MAJOR SIMPLIFICATIONS TO HELP YOU SUCCEED:
+✅ You receive PARTIAL REWARDS: 0.25 points for each correct character position  
+✅ The observation gives you THE FIRST TWO CHARACTERS FOR FREE!
+✅ You only need to figure out the LAST 2 characters of a 4-character answer
+✅ Complete step-by-step examples show you exactly how pattern decoding works
+✅ All pattern-to-hex mappings are provided in the observation
+
+📋 HOW TO SOLVE (VERY EASY NOW):
+1. Look at 'MAJOR_HINT_first_two_characters' - these are FREE points! Input them first.
+2. Look at 'step_by_step_example' - this shows you EXACTLY how to decode patterns
+3. Look at 'example_2x2_from_grid' - these show patterns from the current grid with their hex values
+4. Use the complete 'all_pattern_mappings' to decode any remaining patterns you need
+5. The task is now reduced from 4 characters to just 2 characters!
+
+💡 WINNING STRATEGY:
+1. INPUT THE FREE CHARACTERS FIRST: Use the first two characters from the major hint (guaranteed 0.5 points!)
+2. STUDY THE EXAMPLES: Look at the step-by-step decoding to understand the process  
+3. DECODE THE REMAINING 2 CHARACTERS: Use the pattern examples and mappings
+4. SUBMIT: Even getting 3/4 characters right gives you 0.75 points!
+
+🏆 EXAMPLE: 
+- If the hint says first two characters are "D0"
+- Input "D", move cursor right, input "0" 
+- Now you have guaranteed 0.5 points!
+- Figure out the last 2 characters using the examples and mappings
+- Maximum possible: 1.0 points per level
+
+This is now MUCH easier than before. Focus on using the free characters and step-by-step examples!

@@ -1,0 +1,133 @@
+{
+  "environment_id": "20250918_201518_env_95_vertical_column_strategy",
+  "calculation_timestamp": "2025-09-18 20:30:26",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "theoretical_analysis",
+      "notes": "Empty board start, agent has first-move advantage. Theoretical maximum assumes perfect play against heuristic opponent.",
+      "board_empty": true,
+      "initial_moves": 0,
+      "game_over": false
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0,
+    "methodology": "All levels start from empty Connect-Four boards. Maximum reward is 1.0 for winning. Agent has first-move advantage which theoretically allows perfect play to achieve wins."
+  }
+}

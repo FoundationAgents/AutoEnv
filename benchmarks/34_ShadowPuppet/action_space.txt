@@ -1,0 +1,34 @@
+[
+  {
+    "name": "MOVE_SHADOW",
+    "description": "Move the shadow to a new position on the grid.",
+    "parameters": {
+      "dx": "horizontal displacement for shadow movement (-1, 0, or 1)",
+      "dy": "vertical displacement for shadow movement (-1, 0, or 1)"
+    }
+  },
+  {
+    "name": "CYCLE_SHAPE", 
+    "description": "Change the shadow to a different shape.",
+    "parameters": {
+      "shape": "desired shadow shape (square, circle, triangle, or cross)"
+    }
+  },
+  {
+    "name": "TOGGLE_SHADOW",
+    "description": "Turn the shadow projection on or off.",
+    "parameters": {}
+  },
+  {
+    "name": "WIND_PULSE",
+    "description": "Create a wind effect that pushes Light objects away from the shadow center.",
+    "parameters": {}
+  },
+  {
+    "name": "WAIT",
+    "description": "Take no action this turn, allowing physics to continue.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "MOVE_SHADOW", "params": {"dx": 1, "dy": 0}}

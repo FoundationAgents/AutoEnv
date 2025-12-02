@@ -1,0 +1,55 @@
+## Implementation Guide for Light Spectrum Analysis Environment
+
+### File Structure
+- `light_spectrum_env.py`: Main environment class inheriting from SkinEnv
+- `spectrum_observation.py`: ObservationPolicy implementation  
+- `spectrum_generator.py`: WorldGenerator for creating material libraries
+- `spectrum_utils.py`: Helper functions for spectral calculations
+
+### Core Classes
+
+**LightSpectrumEnv(SkinEnv)**
+- `_dsl_config()`: Load YAML config from `worlds/light_spectrum_analysis/config.yaml`
+- `reset()`: Load existing world or generate new one with material library
+- `_load_world()`: Load world file containing reference library and target material
+- `_generate_world()`: Create new world with fresh material selection using generator
+- `transition()`: Handle emission actions (update illuminated_bands, recalculate spectrum using max aggregation) and declaration actions (set has_declared=True, declared_material=action_id)
+- `reward()`: Return 1.0 if declared_material matches true_material_id, else 0.0
+- `observe_semantic()`: Return full state visibility as specified in observation.expose
+- `render_skin()`: Format spectral data and lab status into readable text using skin template
+- `done()`: Return True if has_declared or current_step >= max_steps
+
+**SpectrumObservationPolicy(ObservationPolicy)**
+- `__call__()`: Extract exposed fields from state, compute derived values like remaining_steps
+
+**SpectrumWorldGenerator(WorldGenerator)**
+- `generate()`: Execute pipeline to create complete world with material library and target
+- `_execute_pipeline()`: 
+  1. init_from_template: Copy state_template as base
+  2. generate_reference_library: Create 10x10 matrix where each row is material signature (5 fluorescence + 5 reflection values). Ensure physical realism: water_gel has high IR absorption/blue fluorescence, metallic_copper has strong visible reflection/minimal fluorescence, organic_dyes have UV-activated fluorescence
+  3. select_target_material: Random choice from [0-9] materials
+  4. validate_spectral_consistency: Check all signatures follow physical rules
+- `_save_world()`: Save complete state including reference library to YAML file
+- `_generate_world_id()`: Create unique ID using timestamp and seed
+
+### Key Implementation Details
+
+**Spectral Accumulation Logic**: When emission action activates wavelength band i, update observed_spectrum using element-wise maximum: `observed_spectrum[j] = max(observed_spectrum[j], reference_library[true_material_id][j])` where j spans both fluorescence and reflection arrays.
+
+**Action Mapping**: Map action names to indices: EmitUV=0, EmitBlue=1, EmitGreen=2, EmitRed=3, EmitIR=4. Declaration actions extract material_id from action name suffix.
+
+**Termination Logic**: Episode ends immediately on any Declare_X action OR when step count reaches max_steps. When reading max_steps, if the level has changed max_steps, it should override the environment's self.configs["termination"]["max_steps"].
+
+**Reference Library Format**: 10x10 matrix where row i represents material i, columns 0-4 are fluorescence responses under individual wavelength illumination, columns 5-9 are reflection responses.
+
+**Physical Consistency Rules**: Water-based materials (high IR absorption, blue fluorescence), metals (strong visible reflection, low fluorescence), organics (UV fluorescence activation), crystals (structured reflection patterns).
+
+### Generator Pipeline Logic
+The generator creates physically consistent material libraries by:
+1. Starting with base spectral templates for each material class
+2. Applying small random variations while maintaining physical constraints  
+3. Ensuring semantic consistency (e.g., copper always has metallic properties)
+4. Normalizing all values to [0,1] range for consistent observation format
+5. Randomly selecting episode target from generated library
+
+Each generated world contains a complete reference library and randomly selected target material, ensuring fair difficulty distribution across episodes while maintaining deterministic spectral responses within each episode.

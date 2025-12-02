@@ -1,0 +1,329 @@
+{
+  "environment_id": "20250919_122826_env_102_pattern_memory_matching",
+  "calculation_timestamp": "2025-09-19 13:37:38",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    },
+    "level_02.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    },
+    "level_03.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    },
+    "level_04.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    },
+    "level_05.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    },
+    "level_06.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    },
+    "level_07.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    },
+    "level_08.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    },
+    "level_09.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    },
+    "level_10.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    },
+    "level_11.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    },
+    "level_12.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    },
+    "level_13.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    },
+    "level_14.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    },
+    "level_15.yaml": {
+      "max_reward": 4.4,
+      "breakdown": {
+        "pair_rewards": 4.0,
+        "exploration_rewards": 0.4,
+        "total_pairs": 4,
+        "unique_symbols": 8,
+        "symbol_list": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Assumes perfect execution: all pairs found + all symbols explored"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "successful_calculations": 15,
+    "average_max_reward": 4.4,
+    "min_max_reward": 4.4,
+    "max_max_reward": 4.4,
+    "total_max_reward_all_levels": 66.0
+  }
+}

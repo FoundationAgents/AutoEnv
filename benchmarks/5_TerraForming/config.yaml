@@ -1,0 +1,172 @@
+generator:
+  mode: procedural
+  output_format: yaml
+  pipeline:
+  - args: {}
+    desc: Initialize world with state_template as base
+    name: init_from_template
+  - args:
+      atmosphere_variance: 0.1
+      geology_variance: 0.15
+      resources_variance: 0.2
+    desc: Apply seed-based variations to atmospheric and geological starting conditions
+      within realistic ranges
+    name: randomize_initial_conditions
+  - args:
+      feedback_strength:
+      - 0.8
+      - 1.2
+      stability_threshold:
+      - 0.7
+      - 1.0
+    desc: Configure planet-specific constants that affect system interactions and
+      feedback loops
+    name: set_planet_parameters
+  - args:
+      check_habitability_path: true
+    desc: Ensure generated planet has consistent physics and solvable configuration
+    name: validate_initial_state
+  randomization:
+    parameters:
+      difficulty:
+      - 0.3
+      - 1.0
+      energy_budget:
+      - 800.0
+      - 1200.0
+      initial_instability:
+      - 10.0
+      - 25.0
+    seed_based: true
+meta:
+  description: Manage planetary transformation from hostile world to habitable ecosystem
+  id: terraforming_mgmt
+  name: Terraforming Project Management
+misc:
+  debug_mode: false
+  logging: true
+  store_rollouts: true
+  system_feedback_enabled: true
+observation:
+  expose:
+  - atmosphere.oxygen_pct
+  - atmosphere.co2_pct
+  - atmosphere.pressure
+  - atmosphere.temperature
+  - hydrosphere.surface_water_pct
+  - hydrosphere.subsurface_ice_pct
+  - hydrosphere.ph_level
+  - lithosphere.soil_fertility
+  - lithosphere.tectonic_stress
+  - biosphere_seeds.dormant_microbes
+  - biosphere_seeds.dormant_flora
+  - infrastructure.terraforming_stations
+  - infrastructure.station_upgrade_level
+  - infrastructure.energy_reserves
+  - global_metrics.habitability_index
+  - global_metrics.instability_index
+  - globals.max_steps
+  - t
+  params: {}
+  policy: full_planetary_state
+reward:
+  atmosphere_rewards:
+    per_oxygen_point: 0.05
+  completion_rewards:
+    mission_success: 20.0
+  events:
+  - trigger: stability_maintained
+    value_key: stability_rewards
+  - trigger: atmospheric_progress
+    value_key: atmosphere_rewards
+  - trigger: hydrological_progress
+    value_key: hydro_rewards
+  - trigger: habitability_increase
+    value_key: habitability_rewards
+  - trigger: mission_completed
+    value_key: completion_rewards
+  - trigger: instability_penalty
+    value_key: instability_penalties
+  - trigger: catastrophic_failure
+    value_key: failure_penalties
+  failure_penalties:
+    planetary_collapse: -40.0
+  habitability_rewards:
+    per_habitability_point: 0.2
+  hydro_rewards:
+    per_water_point: 0.1
+  instability_penalties:
+    per_excess_point: -0.2
+  stability_rewards:
+    low_instability: 0.1
+skin:
+  template: "=== TERRAFORMING MISSION CONTROL - STEP {t}/{max_steps} ===\n\nATMOSPHERIC\
+    \ STATUS:\nO\u2082: {atmosphere.oxygen_pct:.1f}% | CO\u2082: {atmosphere.co2_pct:.1f}%\
+    \ \nPressure: {atmosphere.pressure:.2f} atm | Temp: {atmosphere.temperature:.1f}\xB0\
+    C\n\nHYDROSPHERE STATUS:\nSurface Water: {hydrosphere.surface_water_pct:.1f}%\
+    \ | Ice Reserves: {hydrosphere.subsurface_ice_pct:.1f}%\npH Level: {hydrosphere.ph_level:.1f}\n\
+    \nGEOLOGICAL & BIOLOGICAL STATUS:\nSoil Fertility: {lithosphere.soil_fertility:.1f}\
+    \ | Tectonic Stress: {lithosphere.tectonic_stress:.1f}\nDormant Microbes: {biosphere_seeds.dormant_microbes:.0f}\
+    \ | Dormant Flora: {biosphere_seeds.dormant_flora:.0f}\n\nINFRASTRUCTURE:\nStations:\
+    \ {infrastructure.terraforming_stations} (Level {infrastructure.station_upgrade_level})\n\
+    Energy Reserves: {infrastructure.energy_reserves:.0f}\n\n=== MISSION METRICS ===\n\
+    Habitability Index: {global_metrics.habitability_index:.1f}% / 100%\nInstability\
+    \ Index: {global_metrics.instability_index:.1f}% (CRITICAL at 100%)\n\nAVAILABLE\
+    \ ACTIONS:\n1. DEPLOY_ATMOSPHERIC_PROCESSOR - Modify atmospheric composition\n\
+    2. RELEASE_WATER_CATALYSTS - Activate water systems  \n3. SEED_MICROBIAL_LIFE\
+    \ - Introduce biological processes\n4. STABILIZE_TECTONICS - Reduce geological\
+    \ instability\n5. CONSTRUCT_UPGRADE_STATION - Build/upgrade terraforming infrastructure\n\
+    6. DIVERT_ENERGY_TO_SHIELDS - Emergency instability reduction\n7. PASSIVE_OBSERVATION\
+    \ - Monitor natural system evolution\n"
+  type: text
+state_template:
+  atmosphere:
+    co2_pct: 65.0
+    oxygen_pct: 0.0
+    pressure: 0.3
+    temperature: -40.0
+  biosphere_seeds:
+    dormant_flora: 70.0
+    dormant_microbes: 180.0
+  global_metrics:
+    habitability_index: 0.0
+    instability_index: 8.0
+  globals:
+    max_steps: 40
+  hydrosphere:
+    ph_level: 3.5
+    subsurface_ice_pct: 45.0
+    surface_water_pct: 8.0
+  infrastructure:
+    energy_reserves: 2000.0
+    station_upgrade_level: 0
+    terraforming_stations: 1
+  lithosphere:
+    soil_fertility: 0.0
+    tectonic_stress: 60.0
+termination:
+  conditions:
+  - global_metrics.habitability_index >= 100.0
+  - global_metrics.instability_index >= 100.0
+  max_steps: 40
+transition:
+  actions:
+  - name: DEPLOY_ATMOSPHERIC_PROCESSOR
+    params: []
+  - name: RELEASE_WATER_CATALYSTS
+    params: []
+  - name: SEED_MICROBIAL_LIFE
+    params: []
+  - name: STABILIZE_TECTONICS
+    params: []
+  - name: CONSTRUCT_UPGRADE_STATION
+    params: []
+  - name: DIVERT_ENERGY_TO_SHIELDS
+    params: []
+  - name: PASSIVE_OBSERVATION
+    params: []
+world_loading:
+  directory: worlds/{env_id}/
+  format: yaml
+  naming_convention: '{world_id}.yaml'
+  validation_schema: state_template

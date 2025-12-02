@@ -1,0 +1,47 @@
+agent:
+  current_room: 5
+  has_key: false
+  wait_used_in_room: false
+episode:
+  start_room: 5
+globals:
+  difficulty: Easy
+  max_steps: 40
+world:
+  connections:
+    0:
+      blue: 5
+      green: 5
+      red: 1
+    1:
+      blue: 0
+      green: 2
+    2:
+      blue: 1
+      red: 3
+    3:
+      blue: 1
+      green: 4
+      red: 2
+    4:
+      blue: 1
+      green: 3
+      red: 5
+    5:
+      green: 4
+      red: 0
+  key_location: 2
+  portal_room: 5
+  rooms:
+    0:
+      type: Time-Slow
+    1:
+      type: Time-Slow
+    2:
+      type: Normal
+    3:
+      type: Normal
+    4:
+      type: Normal
+    5:
+      type: Normal

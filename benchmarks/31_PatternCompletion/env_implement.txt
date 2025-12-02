@@ -1,0 +1,81 @@
+# Implementation Guidance for Masked Pixel Art Completion Environment
+
+## File Structure
+- `masked_pixel_art_env.py` - Main environment class
+- `pixel_art_generator.py` - World generator 
+- `cursor_observation.py` - Custom observation policy
+- `art_library/` - Directory with 50 pre-made 10x10 pixel art templates
+
+## Core Classes
+
+### MaskedPixelArtEnv(SkinEnv)
+Inherits from SkinEnv and implements the pixel art restoration environment.
+
+**Key Methods:**
+
+`_dsl_config()`: Load YAML config from worlds/masked_pixel_art/config.yaml
+
+`reset(mode, world_id, seed)`: 
+- If mode="load": Load existing world file with given world_id
+- If mode="generate": Create new world using PixelArtGenerator with seed
+
+`transition(action)`: 
+- Movement actions: Update cursor_pos within [0,9] bounds, invalid moves stay in place
+- WriteColor actions: Extract color index from action name, place at cursor position
+- Skip action: No state change, just advance time
+- Store action result in _last_action_result for UI feedback
+
+`reward(action)`: 
+- Check if WriteColor/Skip action correctly restored a masked pixel
+- Compare canvas[cursor_pos] with ground_truth[cursor_pos] 
+- Award +1.0 only if position was originally masked AND now correct
+- Return (reward_value, [event_name], {reward_details})
+
+`observe_semantic()`: 
+- Get cursor position and local 3x3 neighborhood around cursor
+- Replace masked positions with special token in neighborhood view
+- Generate visible_colors_mask: boolean array showing which of 16 colors appear in visible canvas
+- Return dict with cursor_pos, local_neighborhood, visible_colors_mask
+
+`render_skin(omega)`: 
+- Format local 3x3 grid as ASCII with cursor marked as 'A'
+- Show step counter, cursor coordinates
+- List available colors that have been seen
+- Return formatted text observation string
+
+`done()`: Return True if t >= max_steps OR all masked positions filled with any color
+
+### PixelArtGenerator(WorldGenerator)
+Generates complete pixel art restoration scenarios.
+
+`generate(seed, save_path)`: 
+- Execute pipeline to create world state
+- Save to file using world_loading config
+- Return world_id for loading
+
+`_execute_pipeline(base_state, seed)`:
+- init_from_template: Copy state_template as starting point  
+- select_ground_truth: Choose random art from library using seed, set ground_truth array
+- apply_masking: Randomly select 20-30 positions, store in masked_positions, set canvas pixels to "unknown"
+- initialize_canvas: Copy ground_truth to canvas except for masked positions
+- Return complete world state dict
+
+**Generator Logic**: The library contains 50 pre-designed 10x10 pixel arts with semantic consistency (same color index always means same concept). Masking ensures sufficient context remains visible while creating meaningful challenges. The generator maintains deterministic behavior when given the same seed.
+
+### CursorObservationPolicy(ObservationPolicy)  
+Custom observation policy for local neighborhood viewing.
+
+`__call__(env_state, t)`:
+- Extract 3x3 area centered on cursor from canvas
+- Handle boundary cases by padding with background color
+- Mark masked positions with special "□" token
+- Calculate which colors are visible anywhere on current canvas
+- Return observation dict matching expose config
+
+## Important Notes
+- max_steps is set in termination section (40 steps). When reading max_step from levels, if the level has changed max_steps, it should override the environment's self.configs["termination"]["max_steps"]
+- Maintain 16-color semantic consistency across all episodes
+- Canvas coordinates: (0,0) = top-left, (9,9) = bottom-right
+- Reward only for correctly restoring originally masked pixels
+- Movement beyond boundaries maintains position but consumes step
+- Episode ends when all masked cells filled OR 40 steps reached

@@ -1,0 +1,94 @@
+agent:
+  pos:
+  - 1
+  - 1
+globals:
+  max_steps: 40
+grid:
+  layout:
+  - - E
+    - E
+    - E
+    - E
+    - E
+    - E
+    - E
+    - E
+  - - E
+    - A
+    - A
+    - A
+    - A
+    - A
+    - A
+    - E
+  - - E
+    - A
+    - A
+    - A
+    - A
+    - A
+    - A
+    - E
+  - - E
+    - A
+    - A
+    - A
+    - A
+    - A
+    - A
+    - E
+  - - E
+    - A
+    - A
+    - A
+    - A
+    - A
+    - A
+    - E
+  - - E
+    - A
+    - A
+    - A
+    - A
+    - A
+    - A
+    - E
+  - - E
+    - A
+    - A
+    - A
+    - A
+    - A
+    - A
+    - E
+  - - E
+    - E
+    - E
+    - E
+    - E
+    - E
+    - E
+    - E
+  size:
+  - 8
+  - 8
+objects:
+  covered_tiles: []
+  crates:
+  - - 3
+    - 2
+  - - 3
+    - 3
+  - - 3
+    - 4
+  exit_pos:
+  - 6
+  - 6
+  storage_tiles:
+  - - 4
+    - 2
+  - - 4
+    - 3
+  - - 4
+    - 4

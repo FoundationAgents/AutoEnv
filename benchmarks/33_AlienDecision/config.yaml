@@ -1,0 +1,158 @@
+meta:
+  id: "alien_colony"
+  name: "AlienColonyManager"
+  description: "Manage an alien colony by discovering true resource effects despite misleading names"
+
+state_template:
+  globals:
+    max_steps: 50
+    target_population: 50
+    min_population: 5
+  colony:
+    population: 10
+    happiness: 60
+    area_exploration: 1
+  resources:
+    toxic_waste: 15
+    rotten_food: 12
+    contaminated_water: 8
+    broken_machinery: 5
+  buildings:
+    - type: "decay_chamber"
+      location: [2, 2]
+      operational: true
+    - type: "poison_distributor"
+      location: [3, 3]
+      operational: true
+  environment:
+    season: "harsh_season"
+    weather: "corrosive_weather"
+    effectiveness_modifiers:
+      resource_multiplier: 1.0
+      building_efficiency: 1.0
+  discovery:
+    resource_effects_found: []
+    building_effects_found: []
+  grid:
+    size: [5, 5]
+    occupied: [[2, 2], [3, 3]]
+
+observation:
+  policy: "full_colony_status"
+  params: {}
+  expose:
+    - colony.population
+    - colony.happiness
+    - colony.area_exploration
+    - resources
+    - buildings
+    - environment.season
+    - environment.weather
+    - discovery.resource_effects_found
+    - discovery.building_effects_found
+    - globals.target_population
+    - t
+
+reward:
+  events:
+    - trigger: "resource_discovery"
+      value_key: "discovery_rewards"
+    - trigger: "goal_achievement"
+      value_key: "goal_rewards"
+  discovery_rewards:
+    resource_effect: 0.05
+    building_effect: 0.05
+  goal_rewards:
+    population_target: 1.5
+
+transition:
+  actions:
+    - name: "gather_resource"
+      params: [resource_type, amount]
+    - name: "build_structure"
+      params: [building_type, x, y]
+    - name: "allocate_resource"
+      params: [resource_type, allocation_amount, target_system]
+    - name: "manage_environment"
+      params: [intervention_type, intensity]
+    - name: "explore_area"
+      params: [direction, investment_level]
+
+skin:
+  type: "text"
+  template: |
+    === ALIEN COLONY STATUS - Step {t}/{max_steps} ===
+    Population: {population} (Target: {target_population})
+    Happiness: {happiness}/100
+    Area Exploration Level: {area_exploration}
+    
+    Resources:
+    {resources_display}
+    
+    Buildings:
+    {buildings_display}
+    
+    Environment: {season} with {weather}
+    
+    Discovered Effects:
+    Resources: {resource_discoveries}
+    Buildings: {building_discoveries}
+    
+    Available Actions:
+    - gather_resource(resource_type, amount): Collect 1-10 units of a resource
+    - build_structure(building_type, x, y): Construct building at grid position
+    - allocate_resource(resource_type, amount, target): Distribute resources to colony systems
+    - manage_environment(intervention_type, intensity): Influence weather/season (intensity 1-5)
+    - explore_area(direction, investment): Expand territory in cardinal directions
+
+termination:
+  max_steps: 50
+  conditions:
+    - "colony.population >= globals.target_population"
+    - "colony.population < globals.min_population"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "setup_resource_semantics"
+      desc: "Create hidden mapping where misleading resource names map to beneficial effects (toxic_waste->nutrition, rotten_food->health, etc.)"
+      args:
+        inversion_seed: "consistent_global"
+    - name: "setup_building_semantics"
+      desc: "Create hidden mapping where negative building names have positive functions (decay_chamber->growth_accelerator, poison_distributor->happiness_hub)"
+      args:
+        inversion_seed: "consistent_global"
+    - name: "initialize_environment_cycles"
+      desc: "Set up seasonal and weather patterns that affect resource/building effectiveness in discoverable patterns"
+      args:
+        cycle_complexity: "medium"
+    - name: "place_discoverable_resources"
+      desc: "Add 2-4 additional resource types in unexplored areas to reward exploration"
+      args:
+        resource_count_range: [2, 4]
+    - name: "setup_difficulty_scaling"
+      desc: "Adjust initial conditions and available options based on difficulty level while maintaining semantic consistency"
+      args:
+        maintain_inversion_logic: true
+
+  randomization:
+    seed_based: true
+    parameters:
+      difficulty: [0.3, 1.0]
+      initial_resources_variance: [0.8, 1.2]
+      weather_volatility: [0.5, 1.5]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

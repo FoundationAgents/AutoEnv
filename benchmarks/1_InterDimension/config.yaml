@@ -1,0 +1,202 @@
+meta:
+  id: "interdimensional_market"
+  name: "Interdimensional Market Trading"
+  description: "Multi-dimensional arbitrage trading with diplomatic constraints and hidden exchange patterns"
+
+state_template:
+  globals:
+    max_steps: 40
+    dimensions: ["mass", "entropy", "historical"]
+    item_categories: ["crystals", "artifacts", "energy_cells", "time_shards", "void_essence", "quantum_dust", "neural_matrices", "plasma_cores", "dark_matter", "singularity_fragments"]
+  agent:
+    inventory:
+      crystals: 0
+      artifacts: 0
+      energy_cells: 0
+      time_shards: 0
+      void_essence: 0
+      quantum_dust: 0
+      neural_matrices: 0
+      plasma_cores: 0
+      dark_matter: 0
+      singularity_fragments: 0
+    ledgers:
+      mass: 0.0
+      entropy: 0.0
+      historical: 0.0
+    total_profit: 0.0
+    accumulated_rewards: 0.0
+  market:
+    exchange_matrices:
+      true_rates:
+        mass_entropy: 1.0
+        mass_historical: 1.0
+        entropy_mass: 1.0
+        entropy_historical: 1.0
+        historical_mass: 1.0
+        historical_entropy: 1.0
+      observed_rates:
+        mass_entropy: 1.0
+        mass_historical: 1.0
+        entropy_mass: 1.0
+        entropy_historical: 1.0
+        historical_mass: 1.0
+        historical_entropy: 1.0
+      drift_params:
+        mass_entropy: [0.0, 0.0, 0.0]
+        mass_historical: [0.0, 0.0, 0.0]
+        entropy_mass: [0.0, 0.0, 0.0]
+        entropy_historical: [0.0, 0.0, 0.0]
+        historical_mass: [0.0, 0.0, 0.0]
+        historical_entropy: [0.0, 0.0, 0.0]
+      noise_reduction:
+        mass_entropy: 1.0
+        mass_historical: 1.0
+        entropy_mass: 1.0
+        entropy_historical: 1.0
+        historical_mass: 1.0
+        historical_entropy: 1.0
+    embargo_risks:
+      mass: 30.0
+      entropy: 30.0
+      historical: 30.0
+    hedge_status:
+      mass: 0
+      entropy: 0
+      historical: 0
+  timestep: 0
+  episode_complete: false
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "randomize_inventory"
+      desc: "Generate 3-7 item categories with 5-15 units each"
+      args:
+        min_categories: 3
+        max_categories: 7
+        min_units: 5
+        max_units: 15
+    - name: "initialize_ledgers"
+      desc: "Set starting balances 10-30 credits per dimension"
+      args:
+        min_balance: 10.0
+        max_balance: 30.0
+    - name: "generate_exchange_patterns"
+      desc: "Create sinusoidal drift patterns with random phases"
+      args:
+        base_rate_range: [0.8, 1.2]
+        amplitude_range: [0.1, 0.3]
+        frequency_range: [0.05, 0.15]
+        noise_std: 0.05
+    - name: "set_embargo_risks"
+      desc: "Initialize embargo tensions 20-40 per dimension"
+      args:
+        min_risk: 20.0
+        max_risk: 40.0
+  randomization:
+    seed_based: true
+    parameters:
+      market_volatility: [0.5, 1.5]
+      diplomatic_tension: [0.8, 1.2]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+observation:
+  policy: "full_market"
+  params:
+    include_true_rates: false
+    noise_level: 1.0
+  expose:
+    - agent.inventory
+    - agent.ledgers
+    - agent.total_profit
+    - market.observed_rates
+    - market.embargo_risks
+    - globals.max_steps
+    - timestep
+    - remaining_steps
+
+reward:
+  events:
+    - trigger: "profit_gained"
+      value_key: "profit_rewards"
+    - trigger: "stability_bonus"
+      value_key: "stability_rewards"
+    - trigger: "fairness_bonus"
+      value_key: "fairness_rewards"
+    - trigger: "research_discovery"
+      value_key: "research_rewards"
+    - trigger: "goal_achieved"
+      value_key: "goal_rewards"
+  profit_rewards:
+    per_credit: 1.0
+  stability_rewards:
+    per_step: 0.2
+  fairness_rewards:
+    all_positive: 5.0
+  research_rewards:
+    discovery: 3.0
+  goal_rewards:
+    target_reached: 50.0
+
+transition:
+  actions:
+    - name: "PROPOSE_TRADE"
+      params: [item_category, source_dimension, target_dimension, quantity]
+    - name: "CONVERT_CREDITS"
+      params: [source_currency, target_currency, amount]
+    - name: "HEDGE"
+      params: [dimension]
+    - name: "RESEARCH"
+      params: []
+    - name: "DONATE"
+      params: [item_category, target_dimension, quantity]
+
+termination:
+  max_steps: 40
+  conditions:
+    - "any(market.embargo_risks.values()) >= 100.0"
+    - "any(agent.inventory.values()) < 0"
+    - "any(agent.ledgers.values()) < 0.0"
+
+skin:
+  type: "text"
+  template: |
+    === Interdimensional Trading Terminal - Step {timestep}/{max_steps} ===
+    
+    AGENT STATUS:
+    Inventory: {inventory_display}
+    Ledgers: Mass={mass_balance:.2f} | Entropy={entropy_balance:.2f} | Historical={historical_balance:.2f}
+    Total Profit: {total_profit:.2f} credits
+    
+    MARKET CONDITIONS:
+    Exchange Rates (Observed):
+    {exchange_rates_display}
+    
+    DIPLOMATIC STATUS:
+    Embargo Risks: Mass={mass_risk:.1f}% | Entropy={entropy_risk:.1f}% | Historical={historical_risk:.1f}%
+    
+    AVAILABLE ACTIONS:
+    - PROPOSE_TRADE(item, source_dim, target_dim, qty)
+    - CONVERT_CREDITS(from_currency, to_currency, amount)  
+    - HEDGE(dimension) - Fee: 5 credits
+    - RESEARCH() - Improve rate accuracy
+    - DONATE(item, target_dim, qty) - Reduce embargo risk
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false
+  hedge_fee: 5.0
+  hedge_duration: 5
+  embargo_threshold: 100.0
+  profit_target: 100.0

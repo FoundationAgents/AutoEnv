@@ -1,0 +1,47 @@
+agent:
+  steps_remaining: 40
+game:
+  card_states:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  cards:
+  - 1
+  - 2
+  - 0
+  - 6
+  - 6
+  - 5
+  - 4
+  - 7
+  - 1
+  - 5
+  - 0
+  - 2
+  - 3
+  - 4
+  - 7
+  - 3
+  cleared_pairs: 0
+  current_revealed_symbol: -1
+  explored_positions: []
+  revealed_positions: []
+globals:
+  grid_size:
+  - 4
+  - 4
+  max_steps: 40
+  total_pairs: 8

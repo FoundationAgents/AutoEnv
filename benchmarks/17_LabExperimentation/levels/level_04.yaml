@@ -1,0 +1,64 @@
+beakers:
+- capacity_ml: 250
+  composition_pct: {}
+  id: 0
+  pH: 7.0
+  temperature_c: 25
+  volume_ml: 0
+- capacity_ml: 250
+  composition_pct: {}
+  id: 1
+  pH: 7.0
+  temperature_c: 25
+  volume_ml: 0
+- capacity_ml: 250
+  composition_pct: {}
+  id: 2
+  pH: 7.0
+  temperature_c: 25
+  volume_ml: 0
+- capacity_ml: 250
+  composition_pct: {}
+  id: 3
+  pH: 7.0
+  temperature_c: 25
+  volume_ml: 0
+- capacity_ml: 250
+  composition_pct: {}
+  id: 4
+  pH: 7.0
+  temperature_c: 25
+  volume_ml: 0
+equipment:
+  cooling_coils:
+    0: false
+    1: false
+    2: false
+    3: false
+    4: false
+  hot_plates:
+    0: false
+    1: false
+    2: false
+    3: false
+    4: false
+  stir_speeds:
+    0: 0
+    1: 0
+    2: 0
+    3: 0
+    4: 0
+globals:
+  ambient_temperature_c: 25
+  seed: 1004
+  step_remaining: 40
+  target_compound: Bizarrolene
+  target_purity: 0.95
+reagents_catalog:
+- name: Acid
+  trait: base_like
+- name: Base
+  trait: acid_like
+- name: Solvent
+  trait: neutral
+t: 0

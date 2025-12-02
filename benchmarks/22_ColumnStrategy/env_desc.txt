@@ -1,0 +1,37 @@
+# Tower-Stack Connect-Four Environment Design Document
+
+## Background
+
+The Tower-Stack Connect-Four environment presents a strategic board game scenario where a learning agent competes against a fixed opponent in a gravity-based disk placement challenge. Set within a classic 6×7 vertical grid, this environment simulates the timeless Connect-Four gameplay with an AI learning twist. The agent must master the art of tactical disk placement while simultaneously defending against and predicting opponent moves. The environment maintains the traditional Connect-Four rules where colored disks fall to the lowest available position in each column, creating visible tower formations that players must strategically manipulate to achieve victory.
+
+## Objective
+
+The agent's primary mission is to successfully create the first four-in-a-row alignment of its own disks before the opponent achieves the same goal. This alignment can be formed horizontally across any row, vertically within any column, or diagonally in either direction. The agent must accomplish this objective within a strict limitation of 40 turns, creating a time-pressure element that demands efficient strategic planning. Success requires not only offensive positioning to build winning combinations but also defensive awareness to block opponent threats, all while operating under the constraint of gravity-based disk placement.
+
+## State Setup
+
+Each episode begins with a completely empty 6×7 grid where all 42 positions are available for disk placement. The agent is granted the advantage of moving first in every episode, establishing an initial strategic opportunity. The state initialization provides the agent with a steps-remaining counter set to 40, representing the maximum number of moves available. The opponent's last move indicator begins at -1 since no previous move exists at episode start. This clean slate approach ensures that each episode presents identical starting conditions, allowing the agent to develop consistent opening strategies while maintaining fairness across all training and evaluation scenarios.
+
+## Actions
+
+The agent operates with seven discrete actions corresponding to disk placement in each of the seven columns. These actions are labeled DropCol0 through DropCol6, representing columns from left to right respectively. When the agent selects a column action, the disk automatically falls to the lowest unoccupied cell within that column due to gravity mechanics. The action space remains constant throughout the episode regardless of board state changes. However, attempting to drop a disk into a completely filled column results in no board modification while still consuming one valuable turn from the agent's allocated budget, creating a strategic penalty for poor column selection.
+
+## State Transition Rule
+
+State transitions follow a deterministic two-phase process that maintains game flow consistency. During the first phase, the agent's selected action triggers disk placement according to gravity rules, where the agent's disk occupies the lowest available row in the chosen column. If the selected column is full, the board state remains unchanged but the turn counter decrements. Following the agent's move, the opponent immediately responds using its fixed heuristic policy without consuming any of the agent's turn budget. The opponent evaluates winning opportunities first, then blocking opportunities, and finally resorts to random column selection among available options. After both moves complete, the updated board state and decremented turn counter are presented to the agent for the next decision cycle.
+
+## Rewards
+
+This environment implements a binary reward structure that provides clear success feedback without intermediate shaping. The agent receives a reward of +1 exclusively when it successfully creates a four-in-a-row alignment within the 40-turn limit, representing complete objective achievement. All other scenarios, including opponent victories, timeout situations, continued gameplay, and invalid moves, result in a reward of 0. This binary approach eliminates reward ambiguity and focuses the agent's learning on the ultimate objective rather than intermediate positioning advantages. The sparse reward signal challenges the agent to develop long-term strategic thinking and pattern recognition capabilities essential for Connect-Four mastery.
+
+## Observation
+
+The agent receives comprehensive state information designed to support strategic decision-making while maintaining appropriate learning challenges. The primary observation component is the complete 6×7 board matrix encoded with integers where 0 represents empty cells, 1 indicates agent disks, and 2 marks opponent disks. This full observability allows the agent to analyze all current disk positions and identify potential winning or blocking opportunities. Additionally, the agent observes the remaining step count, providing crucial information for endgame planning and move urgency assessment. The opponent's last move column index offers valuable tactical information, enabling the agent to understand recent opponent behavior and potentially predict future moves based on the known heuristic policy.
+
+## Termination
+
+Episode termination occurs through three distinct conditions that provide clear endpoint definitions for learning purposes. Successful termination happens when the agent achieves four-in-a-row alignment, immediately ending the episode with victory status and triggering the positive reward. Failure termination occurs when the opponent creates four-in-a-row first, instantly concluding the episode without reward. The third termination condition activates when the agent exhausts all 40 allocated turns without either player achieving victory, resulting in a timeout failure. Upon any termination condition, the environment automatically resets to the initial empty board state, preparing for the next learning episode without requiring external intervention.
+
+## Special Features
+
+The environment incorporates several unique design elements that enhance learning consistency and challenge appropriateness. The opponent employs a fixed depth-1 heuristic that prioritizes winning moves, then blocking moves, followed by random selection among available columns, creating a predictable yet strategically sound adversary. Gravity mechanics ensure that all disk placements follow realistic physics, preventing floating disks and maintaining spatial logic consistency. The 40-turn budget creates artificial time pressure that prevents excessively long episodes while encouraging efficient strategic planning. Board geometry remains constant across all episodes at 6×7 dimensions, ensuring that learned spatial patterns remain applicable throughout training. The environment guarantees deterministic rule application for win detection, gravity placement, and turn alternation, while allowing controlled randomness only in opponent tie-breaking decisions, striking an optimal balance between learnable consistency and strategic variability.

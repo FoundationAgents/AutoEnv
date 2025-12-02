@@ -1,0 +1,205 @@
+{
+  "environment_id": "20250918_153416_env_77_mechanical_gear_optimization",
+  "calculation_timestamp": "2025-09-18 15:44:10",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 0.1509, Best achievable: 0.1491, Error: 1.2%",
+      "optimal_solution": {
+        "gear_chain": [
+          11,
+          56,
+          41,
+          54
+        ],
+        "achieved_ma": 0.14914021164021166
+      }
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 0.4980, Best achievable: 0.5000, Error: 0.4%",
+      "optimal_solution": {
+        "gear_chain": [
+          23,
+          46
+        ],
+        "achieved_ma": 0.5
+      }
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 1.6188, Best achievable: 1.6068, Error: 0.7%",
+      "optimal_solution": {
+        "gear_chain": [
+          41,
+          37,
+          29,
+          20
+        ],
+        "achieved_ma": 1.6067567567567567
+      }
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 0.4070, Best achievable: 0.4000, Error: 1.7%",
+      "optimal_solution": {
+        "gear_chain": [
+          18,
+          45
+        ],
+        "achieved_ma": 0.4
+      }
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 0.4306, Best achievable: 0.4332, Error: 0.6%",
+      "optimal_solution": {
+        "gear_chain": [
+          36,
+          56,
+          31,
+          46
+        ],
+        "achieved_ma": 0.4332298136645963
+      }
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 2.3611, Best achievable: 2.4000, Error: 1.6%",
+      "optimal_solution": {
+        "gear_chain": [
+          48,
+          20
+        ],
+        "achieved_ma": 2.4
+      }
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 1.0000, Best achievable: 1.0169, Error: 1.7%",
+      "optimal_solution": {
+        "gear_chain": [
+          60,
+          59
+        ],
+        "achieved_ma": 1.0169491525423728
+      }
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 3.2465, Best achievable: 3.2500, Error: 0.1%",
+      "optimal_solution": {
+        "gear_chain": [
+          39,
+          12
+        ],
+        "achieved_ma": 3.25
+      }
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 0.2774, Best achievable: 0.2778, Error: 0.1%",
+      "optimal_solution": {
+        "gear_chain": [
+          10,
+          36
+        ],
+        "achieved_ma": 0.2777777777777778
+      }
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 6.5909, Best achievable: 6.5909, Error: 0.0%",
+      "optimal_solution": {
+        "gear_chain": [
+          60,
+          48,
+          58,
+          11
+        ],
+        "achieved_ma": 6.590909090909091
+      }
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 0.5372, Best achievable: 0.5312, Error: 1.1%",
+      "optimal_solution": {
+        "gear_chain": [
+          17,
+          32
+        ],
+        "achieved_ma": 0.53125
+      }
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 0.2114, Best achievable: 0.2089, Error: 1.2%",
+      "optimal_solution": {
+        "gear_chain": [
+          27,
+          44,
+          16,
+          47
+        ],
+        "achieved_ma": 0.20889748549323017
+      }
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 1.4595, Best achievable: 1.4595, Error: 0.0%",
+      "optimal_solution": {
+        "gear_chain": [
+          54,
+          37
+        ],
+        "achieved_ma": 1.4594594594594594
+      }
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 1.0000, Best achievable: 1.0000, Error: 0.0%",
+      "optimal_solution": {
+        "gear_chain": [
+          33,
+          33
+        ],
+        "achieved_ma": 1.0
+      }
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "exhaustive_search",
+      "notes": "Target MA: 0.2232, Best achievable: 0.2222, Error: 0.4%",
+      "optimal_solution": {
+        "gear_chain": [
+          12,
+          54
+        ],
+        "achieved_ma": 0.2222222222222222
+      }
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "solvable_levels": 15,
+    "unsolvable_levels": 0,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0,
+    "total_possible_reward": 15.0
+  }
+}

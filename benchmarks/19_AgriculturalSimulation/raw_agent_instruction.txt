@@ -1,0 +1,11 @@
+You are managing a farm in Backwards Valley, where natural laws work in reverse. Your goal is to maximize Farm Value over 40 steps by understanding and exploiting these inverted mechanics.
+
+Key mechanics to remember:
+- Crops grow when neglected and reset to seed stage when watered or fertilized
+- Animals become healthier when left alone and weaken when fed or cleaned  
+- Villagers become friendlier when insulted and more hostile when complimented
+- You earn Farm Value by harvesting ripe crops, getting animals to thriving state, and making villagers friendly
+
+Your objective is to reach the highest possible Farm Value by the end of 40 steps. Success requires learning to neglect crops and animals while strategically insulting villagers, contrary to normal farming intuition.
+
+The farm has crop fields, animal pens, and village houses separated by fences. You can move around and interact with entities directly in front of you. Plan your route and timing carefully to maximize the counter-intuitive benefits of neglect and harsh treatment.

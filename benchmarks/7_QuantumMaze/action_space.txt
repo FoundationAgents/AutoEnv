@@ -1,0 +1,29 @@
+[
+  {
+    "name": "MOVE_NORTH",
+    "description": "Move the agent one cell north (up). Automatically observes the target cell, collapsing its quantum state before attempting movement.",
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_SOUTH", 
+    "description": "Move the agent one cell south (down). Automatically observes the target cell, collapsing its quantum state before attempting movement.",
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_EAST",
+    "description": "Move the agent one cell east (right). Automatically observes the target cell, collapsing its quantum state before attempting movement.", 
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_WEST",
+    "description": "Move the agent one cell west (left). Automatically observes the target cell, collapsing its quantum state before attempting movement.",
+    "parameters": {}
+  },
+  {
+    "name": "OBSERVE",
+    "description": "Observe all four orthogonally adjacent cells without moving, collapsing their quantum states to reveal walls or empty spaces.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

@@ -1,0 +1,44 @@
+[
+  {
+    "name": "inject_energy",
+    "description": "Add energy units to the shared entropy tokens reservoir by targeting a specific domain.",
+    "parameters": {
+      "target_domain": "domain to target for energy injection (thermal_grid, data_archive, crystal_lattice, bio_habitat)",
+      "amount": "amount of energy to inject (10, 20, or 30)"
+    }
+  },
+  {
+    "name": "reverse_entropy",
+    "description": "Spend entropy tokens to directly increase order in a target domain.",
+    "parameters": {
+      "target_domain": "domain to increase order in (thermal_grid, data_archive, crystal_lattice, bio_habitat)",
+      "tokens": "number of entropy tokens to spend (5, 10, or 15)"
+    }
+  },
+  {
+    "name": "redistribute_order",
+    "description": "Transfer order units from one domain to another domain.",
+    "parameters": {
+      "source_domain": "domain to transfer order from (thermal_grid, data_archive, crystal_lattice, bio_habitat)",
+      "target_domain": "domain to transfer order to (thermal_grid, data_archive, crystal_lattice, bio_habitat)",
+      "amount": "amount of order to transfer (5 or 10)"
+    }
+  },
+  {
+    "name": "vent_chaos",
+    "description": "Reduce chaos levels in a target domain by expending entropy tokens.",
+    "parameters": {
+      "target_domain": "domain to reduce chaos in (thermal_grid, data_archive, crystal_lattice, bio_habitat)",
+      "amount": "amount of chaos to reduce (5, 10, or 15)"
+    }
+  },
+  {
+    "name": "lockdown",
+    "description": "Temporarily isolate a domain from cross-system coupling effects for one step.",
+    "parameters": {
+      "target_domain": "domain to lock down (thermal_grid, data_archive, crystal_lattice, bio_habitat)"
+    }
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

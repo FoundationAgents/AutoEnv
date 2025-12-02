@@ -1,0 +1,13 @@
+You are managing a farm in Backwards Valley, a place where interactions may not follow ordinary intuition. Your goal is to maximize Farm Value over 40 steps by observing how the environment responds and adapting your strategy accordingly.
+
+What to expect:
+- Some actions may have counterintuitive effects compared to conventional farming.
+- Crops, animals, and villagers respond to your interactions in consistent but non-obvious ways.
+- Farm Value reflects overall progress across agriculture, animal care, and social relations.
+
+General guidance:
+- Explore the farm layout (fields, pens, and houses) and interact with nearby entities.
+- Run small, controlled experiments to infer how different actions influence state.
+- Adjust your plan as you learn the environment’s consistent response patterns.
+
+Plan routes and timing carefully to make the most of limited steps, and use your observations to discover effective behaviors.

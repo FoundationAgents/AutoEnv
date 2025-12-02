@@ -1,0 +1,156 @@
+{
+  "environment_id": "20250919_122655_env_101_pattern_memory_matching",
+  "calculation_timestamp": "2025-09-19 12:35:06",
+  "reward_structure": {
+    "pair_cleared": 1.0,
+    "first_exploration": 0.05,
+    "total_pairs": 8,
+    "total_positions": 16
+  },
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    },
+    "level_02.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    },
+    "level_03.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    },
+    "level_04.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    },
+    "level_05.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    },
+    "level_06.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    },
+    "level_07.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    },
+    "level_08.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    },
+    "level_09.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    },
+    "level_10.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    },
+    "level_11.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    },
+    "level_12.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    },
+    "level_13.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    },
+    "level_14.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    },
+    "level_15.yaml": {
+      "max_reward": 8.8,
+      "breakdown": {
+        "pair_clearing": 8.0,
+        "exploration": 0.8
+      },
+      "calculation_method": "optimal_strategy_analysis",
+      "notes": "Assumes optimal play: all pairs found + all positions explored once"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "successfully_analyzed": 15,
+    "average_max_reward": 8.8,
+    "min_max_reward": 8.8,
+    "max_max_reward": 8.8,
+    "theoretical_maximum": 8.8,
+    "all_levels_same_max": true
+  }
+}

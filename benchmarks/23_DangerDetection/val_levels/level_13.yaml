@@ -1,0 +1,85 @@
+agent:
+  pos:
+  - 0
+  - 0
+globals:
+  grid_size:
+  - 8
+  - 8
+  max_steps: 30
+grid:
+  icons:
+    0,0: empty
+    0,1: empty
+    0,2: empty
+    0,3: empty
+    0,4: empty
+    0,5: empty
+    0,6: flower
+    0,7: empty
+    1,0: flower
+    1,1: empty
+    1,2: flower
+    1,3: empty
+    1,4: empty
+    1,5: empty
+    1,6: empty
+    1,7: flower
+    2,0: empty
+    2,1: empty
+    2,2: flower
+    2,3: empty
+    2,4: empty
+    2,5: empty
+    2,6: empty
+    2,7: flower
+    3,0: empty
+    3,1: empty
+    3,2: empty
+    3,3: empty
+    3,4: empty
+    3,5: empty
+    3,6: empty
+    3,7: empty
+    4,0: empty
+    4,1: empty
+    4,2: flower
+    4,3: flower
+    4,4: empty
+    4,5: empty
+    4,6: empty
+    4,7: empty
+    5,0: flower
+    5,1: empty
+    5,2: empty
+    5,3: empty
+    5,4: flower
+    5,5: empty
+    5,6: empty
+    5,7: empty
+    6,0: empty
+    6,1: empty
+    6,2: empty
+    6,3: empty
+    6,4: empty
+    6,5: empty
+    6,6: empty
+    6,7: empty
+    7,0: empty
+    7,1: bomb
+    7,2: empty
+    7,3: empty
+    7,4: empty
+    7,5: empty
+    7,6: empty
+    7,7: empty
+  revealed: {}
+tiles:
+  default_type: unrevealed
+  icons:
+    bomb_count: 1
+    empty_count: 53
+    flower_count: 10
+  size:
+  - 8
+  - 8

@@ -1,0 +1,47 @@
+agent:
+  last_response: []
+globals:
+  colors:
+  - blue
+  - green
+  - purple
+  - white
+  durations:
+  - short
+  - long
+  intensities:
+  - low
+  - high
+  max_steps: 40
+  protocol_families:
+  - color_mirroring
+  - duration_inversion
+  - intensity_parity
+  - sequence_fibonacci
+history:
+  exchanges: []
+  max_history: 5
+session:
+  active_protocol: intensity_parity
+  current_incoming_pattern:
+  - color: blue
+    duration: short
+    intensity: high
+  - color: green
+    duration: short
+    intensity: high
+  - color: purple
+    duration: long
+    intensity: low
+  - color: blue
+    duration: long
+    intensity: low
+  - color: blue
+    duration: short
+    intensity: low
+  energy: 100
+  handshakes_completed: 0
+  protocol_params:
+  - 5
+  - 8
+  session_active: true

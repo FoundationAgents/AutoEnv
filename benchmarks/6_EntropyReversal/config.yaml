@@ -1,0 +1,138 @@
+meta:
+  id: "entropy_reversal"
+  name: "Entropy Reversal Engineering"
+  description: "Manipulate order and chaos across interconnected domains to achieve global optimization while maintaining system stability"
+
+state_template:
+  globals:
+    step: 0
+    global_order_score: 0
+    entropy_tokens: 200
+  domains:
+    thermal_grid:
+      order: 50
+      energy: 100
+      chaos: 30
+      locked: false
+    data_archive:
+      order: 50
+      energy: 100
+      chaos: 30
+      locked: false
+    crystal_lattice:
+      order: 50
+      energy: 100
+      chaos: 30
+      locked: false
+    bio_habitat:
+      order: 50
+      energy: 100
+      chaos: 30
+      locked: false
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "randomize_domain_states"
+      desc: "Set random initial order (40-60), energy (80-120), chaos (20-40) for each domain"
+      args:
+        order_range: [40, 60]
+        energy_range: [80, 120]
+        chaos_range: [20, 40]
+    - name: "calculate_global_order"
+      desc: "Calculate initial global order score as sum of domain orders minus baseline 200"
+      args:
+        baseline: 200
+    - name: "validate_constraints"
+      desc: "Ensure all domains start with chaos <= 70 and valid state ranges"
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      difficulty: [0.1, 1.0]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+observation:
+  policy: "full"
+  params: {}
+  expose:
+    - globals.global_order_score
+    - globals.entropy_tokens
+    - globals.step
+    - domains.thermal_grid
+    - domains.data_archive
+    - domains.crystal_lattice
+    - domains.bio_habitat
+    - t
+
+reward:
+  events:
+    - trigger: "order_increase"
+      value_key: "order_rewards"
+    - trigger: "stability_maintained"
+      value_key: "stability_rewards"
+    - trigger: "efficient_reversal"
+      value_key: "efficiency_rewards"
+    - trigger: "chaos_spike"
+      value_key: "chaos_penalties"
+    - trigger: "domain_collapse"
+      value_key: "collapse_penalties"
+    - trigger: "goal_achieved"
+      value_key: "achievement_rewards"
+  order_rewards:
+    per_unit: 2.0
+  stability_rewards:
+    all_stable: 1.0
+  efficiency_rewards:
+    clean_reversal: 0.5
+  chaos_penalties:
+    spike_penalty: -3.0
+  collapse_penalties:
+    domain_collapse: -25.0
+  achievement_rewards:
+    goal_complete: 50.0
+
+transition:
+  actions:
+    - name: "inject_energy"
+      params: [target_domain, amount]
+    - name: "reverse_entropy"
+      params: [target_domain, tokens]
+    - name: "redistribute_order"
+      params: [source_domain, target_domain, amount]
+    - name: "vent_chaos"
+      params: [target_domain, amount]
+    - name: "lockdown"
+      params: [target_domain]
+
+termination:
+  max_steps: 40
+  conditions:
+    - "globals.global_order_score >= 100"
+    - "any(domain.chaos > 90 for domain in domains.values())"
+
+skin:
+  type: "text"
+  template: |
+    === Entropy Reversal Engineering Status ===
+    Step: {t}/{max_steps}
+    Global Order Score: {global_order_score}/100
+    Entropy Tokens: {entropy_tokens}
+    
+    Domain Status:
+    Thermal Grid  - Order: {thermal_grid_order:3d} | Energy: {thermal_grid_energy:3d} | Chaos: {thermal_grid_chaos:3d} {thermal_locked}
+    Data Archive  - Order: {data_archive_order:3d} | Energy: {data_archive_energy:3d} | Chaos: {data_archive_chaos:3d} {data_locked}
+    Crystal Latt. - Order: {crystal_lattice_order:3d} | Energy: {crystal_lattice_energy:3d} | Chaos: {crystal_lattice_chaos:3d} {crystal_locked}
+    Bio Habitat   - Order: {bio_habitat_order:3d} | Energy: {bio_habitat_energy:3d} | Chaos: {bio_habitat_chaos:3d} {bio_locked}
+    
+    Actions: inject_energy(domain,amount), reverse_entropy(domain,tokens), 
+             redistribute_order(source,target,amount), vent_chaos(domain,amount), lockdown(domain)

@@ -1,0 +1,375 @@
+enemy_camps:
+- discovered: false
+  id: 0
+  pos:
+  - 7
+  - 6
+  strength: 3
+- discovered: false
+  id: 1
+  pos:
+  - 9
+  - 9
+  strength: 4
+globals:
+  eliminated_camps: 0
+  grid_size:
+  - 15
+  - 15
+  max_steps: 40
+  total_enemy_camps: 2
+squads:
+- active: true
+  id: 0
+  pos:
+  - 1
+  - 1
+  strength: 1
+- active: true
+  id: 1
+  pos:
+  - 2
+  - 1
+  strength: 4
+- active: true
+  id: 2
+  pos:
+  - 1
+  - 2
+  strength: 3
+terrain:
+  default_type: open
+  forests:
+  - - 14
+    - 12
+  - - 9
+    - 4
+  - - 9
+    - 13
+  - - 7
+    - 5
+  - - 11
+    - 11
+  - - 8
+    - 13
+  - - 9
+    - 10
+  - - 3
+    - 9
+  - - 5
+    - 8
+  - - 5
+    - 6
+  - - 12
+    - 8
+  - - 11
+    - 7
+  - - 14
+    - 0
+  - - 13
+    - 5
+  - - 10
+    - 7
+  - - 0
+    - 4
+  - - 10
+    - 13
+  - - 4
+    - 2
+  - - 8
+    - 6
+  - - 12
+    - 7
+  size:
+  - 15
+  - 15
+  walls:
+  - - 6
+    - 7
+  - - 6
+    - 1
+  - - 6
+    - 14
+  - - 14
+    - 8
+  - - 2
+    - 8
+  - - 7
+    - 4
+  - - 7
+    - 2
+  - - 4
+    - 3
+  - - 11
+    - 13
+  - - 8
+    - 10
+  - - 2
+    - 5
+  - - 3
+    - 6
+  - - 8
+    - 14
+  - - 5
+    - 7
+  - - 14
+    - 2
+  - - 8
+    - 5
+  - - 1
+    - 4
+  - - 12
+    - 3
+  - - 3
+    - 11
+  - - 6
+    - 2
+  - - 2
+    - 9
+  - - 14
+    - 5
+  - - 13
+    - 6
+  - - 10
+    - 3
+  - - 4
+    - 1
+  - - 13
+    - 14
+  - - 7
+    - 10
+  - - 7
+    - 14
+  - - 6
+    - 10
+  - - 1
+    - 7
+  - - 14
+    - 6
+visibility_map:
+  explored:
+  - - true
+    - true
+    - true
+    - true
+    - true
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - true
+    - true
+    - true
+    - true
+    - true
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - true
+    - true
+    - true
+    - true
+    - true
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - true
+    - true
+    - true
+    - true
+    - true
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - true
+    - true
+    - true
+    - true
+    - true
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - true
+    - true
+    - true
+    - true
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  - - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false

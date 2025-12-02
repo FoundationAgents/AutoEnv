@@ -1,0 +1,79 @@
+[
+  {
+    "name": "EmitUV",
+    "description": "Illuminate the sample with ultraviolet light to reveal UV-specific fluorescence and reflection properties.",
+    "parameters": {}
+  },
+  {
+    "name": "EmitBlue", 
+    "description": "Illuminate the sample with blue light to reveal blue-specific fluorescence and reflection properties.",
+    "parameters": {}
+  },
+  {
+    "name": "EmitGreen",
+    "description": "Illuminate the sample with green light to reveal green-specific fluorescence and reflection properties.", 
+    "parameters": {}
+  },
+  {
+    "name": "EmitRed",
+    "description": "Illuminate the sample with red light to reveal red-specific fluorescence and reflection properties.",
+    "parameters": {}
+  },
+  {
+    "name": "EmitIR",
+    "description": "Illuminate the sample with infrared light to reveal IR-specific fluorescence and reflection properties.",
+    "parameters": {}
+  },
+  {
+    "name": "Declare_0",
+    "description": "Declare that the unknown sample is material class 0 (water_gel).",
+    "parameters": {}
+  },
+  {
+    "name": "Declare_1", 
+    "description": "Declare that the unknown sample is material class 1 (crystalline_silica).",
+    "parameters": {}
+  },
+  {
+    "name": "Declare_2",
+    "description": "Declare that the unknown sample is material class 2 (metallic_copper).",
+    "parameters": {}
+  },
+  {
+    "name": "Declare_3",
+    "description": "Declare that the unknown sample is material class 3 (organic_dye_red).",
+    "parameters": {}
+  },
+  {
+    "name": "Declare_4",
+    "description": "Declare that the unknown sample is material class 4 (organic_dye_blue).",
+    "parameters": {}
+  },
+  {
+    "name": "Declare_5",
+    "description": "Declare that the unknown sample is material class 5 (polymer_plastic).",
+    "parameters": {}
+  },
+  {
+    "name": "Declare_6",
+    "description": "Declare that the unknown sample is material class 6 (calcium_carbonate).",
+    "parameters": {}
+  },
+  {
+    "name": "Declare_7",
+    "description": "Declare that the unknown sample is material class 7 (titanium_oxide).",
+    "parameters": {}
+  },
+  {
+    "name": "Declare_8",
+    "description": "Declare that the unknown sample is material class 8 (carbon_black).",
+    "parameters": {}
+  },
+  {
+    "name": "Declare_9",
+    "description": "Declare that the unknown sample is material class 9 (liquid_mercury).",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

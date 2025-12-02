@@ -1,0 +1,48 @@
+agent:
+  pos: &id001
+  - 6
+  - 0
+  start_pos: *id001
+globals:
+  grid_size:
+  - 8
+  - 8
+  max_steps: 40
+objects:
+  goal_flag:
+    collected: false
+    pos:
+    - 6
+    - 2
+  hole_tiles: []
+  ice_tiles:
+  - pos:
+    - 0
+    - 7
+  - pos:
+    - 2
+    - 4
+  - pos:
+    - 4
+    - 0
+  - pos:
+    - 1
+    - 1
+  - pos:
+    - 0
+    - 3
+  - pos:
+    - 0
+    - 6
+  - pos:
+    - 2
+    - 3
+  - pos:
+    - 3
+    - 3
+tiles:
+  default_type: hole
+  grid: []
+  size:
+  - 8
+  - 8

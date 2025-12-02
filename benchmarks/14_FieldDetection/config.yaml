@@ -1,0 +1,116 @@
+meta:
+  id: "electromagnetic_anomaly_mapping"
+  name: "Electromagnetic Field Anomaly Mapping"
+  description: "Agent must locate hidden metallic vulnerabilities by interpreting electromagnetic field distortions in a laboratory setting"
+
+state_template:
+  globals:
+    max_steps: 30
+  agent:
+    pos: [7, 7]
+    facing: "north"
+  grid:
+    size: [15, 15]
+    default_type: "free"
+  walls: []
+  vulnerability_node:
+    pos: [0, 0]
+  em_field:
+    values: []
+  steps_remaining: 30
+
+observation:
+  policy: "local_em_field"
+  params:
+    window_size: 3
+  expose:
+    - agent.facing
+    - steps_remaining
+    - local_em_field
+    - t
+
+reward:
+  events:
+    - trigger: "mark_success"
+      value_key: "mark_outcomes"
+    - trigger: "mark_failure"
+      value_key: "mark_outcomes"
+  mark_outcomes:
+    success: 1.0
+    failure: 0.0
+
+transition:
+  actions:
+    - name: "move_north"
+      params: []
+    - name: "move_south"
+      params: []
+    - name: "move_east"
+      params: []
+    - name: "move_west"
+      params: []
+    - name: "rotate_left"
+      params: []
+    - name: "rotate_right"
+      params: []
+    - name: "mark"
+      params: []
+
+skin:
+  type: "text"
+  template: |
+    Step {t}/{max_steps} - Steps Remaining: {steps_remaining}
+    Facing: {agent_facing}
+    
+    Electromagnetic Field Readings (3x3 around you):
+    {em_field_display}
+    
+    Legend: 0=No Field, 1=Weak, 2=Moderate, 3=Strong
+    Actions: move_north, move_south, move_east, move_west, rotate_left, rotate_right, mark
+
+termination:
+  max_steps: 30
+  conditions:
+    - "mark_action_executed"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_walls"
+      desc: "Place insulating walls on approximately 20% of tiles while ensuring connectivity"
+      args:
+        wall_density: 0.2
+        ensure_connectivity: true
+    - name: "place_vulnerability_node"
+      desc: "Randomly position the vulnerability node on a free tile"
+      args: {}
+    - name: "calculate_em_field"
+      desc: "Calculate electromagnetic field values using decay formula with Faraday shielding"
+      args:
+        base_strength: 3
+        decay_formula: "max(0, 3 - manhattan_distance)"
+        faraday_shielding: true
+    - name: "spawn_agent"
+      desc: "Place agent at random free location with random facing direction"
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      wall_layout: [0, 1]
+      node_position: [0, 1]
+      agent_spawn: [0, 1]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

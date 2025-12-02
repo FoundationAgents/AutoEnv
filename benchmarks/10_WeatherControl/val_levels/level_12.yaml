@@ -1,0 +1,29 @@
+agent:
+  energy_budget: 45
+  step_counter: 0
+atmosphere:
+  atmospheric_pressure: 0.8832928437160613
+  climate_stability_index: 44.932895876343764
+  cloud_coverage: 21.786830579209035
+  humidity: 35.79265576703299
+  solar_flux: 1140.1948226441452
+  storm_energy: 20.25563915097292
+  temperature: 267.6952051497346
+globals:
+  max_steps: 30
+physics:
+  action_effects_queue: []
+  drift_directions:
+    atmospheric_pressure: 1
+    cloud_coverage: 1
+    humidity: -1
+    solar_flux: 1
+    storm_energy: -1
+    temperature: -1
+  drift_rates:
+    atmospheric_pressure: 0.01
+    cloud_coverage: 0.025
+    humidity: 0.015
+    solar_flux: 0.02
+    storm_energy: 0.03
+    temperature: 0.02

@@ -1,0 +1,102 @@
+# ============================================================
+# DSL TEMPLATE FOR AGENTIC ENVIRONMENTS (v2.0)
+# Purpose: Let an agent fill this YAML to define a new env
+# ============================================================
+
+meta:                         # REQUIRED: basic infos
+  id: ""
+  name: "<env_name>"          # e.g., "FarmMaxPlus"
+  description: "<one-line summary>"
+
+state_template:               # REQUIRED: complete state schema and default values
+  globals:                    # OPTIONAL: you can set some global variables here.
+  agent:
+    pos: [0, 0]               # REQUIRED: starting position (example for grid env)
+    # If inventory exists:
+    inventory:                # OPTIONAL
+      seeds: {corn: 4, rice: 2, wheat: 3}
+      # or any domain-specific items
+  tiles:                      # OPTIONAL (grid-like envs)
+    size: [6, 6]              # height x width
+    default_type: "soil"      # default tile type when generated
+    # Additional default fields allowed (fertility, water, etc.)
+  # OTHER ENTITY FIELDS
+  # e.g., objects, key positions, etc. Use a clean structure:
+  objects: []                 # OPTIONAL: list or dict of objects in world
+
+observation:                  # REQUIRED: what/how to expose to agent
+  policy: "<name of observation method>"  # "full" | "radius" | "los" | "random_mask" | ...
+  params:                     # policy-specific params
+    radius: 2                 # example of params
+  expose:                     # keys or tokens to export into Omega
+    - agent.pos               # example of expose
+    - agent.inventory.seeds
+    - globals.max_steps
+    - visible_tiles           # reserved keyword for computed tile subset
+    - t                       # current timestep (auto-injected)
+
+reward:                       # REQUIRED: reward rules
+  events:                     # EVENT-BASED reward entries
+    - trigger: "<the name of event>"
+      value_key: "<the name of value key>"   # look up crop_type -> numeric reward
+  <the name of value key>:    # domain-specific numeric map
+    <the name of value>: <the value of value>
+  # OR condition-based list (optional):
+  # example conditions:
+  #   - if: "agent.pos == goal_pos and agent.has_key"
+  #     value: 5.0
+
+transition:                   # REQUIRED: action space & how T works
+  actions:
+    - name: "<the name of action>"
+      params: [dx, dy]        # example of parameterized actions
+    - name: "<the name of action>"
+      params: [x, y, crop_type] # example of parameterized actions
+    # - name: "PICK_KEY"
+    #   params: []
+  # NOTE: Implementation of T is in Python; DSL can hint rules here if needed.
+
+skin:                         # REQUIRED: final rendering config
+  type: "text"                # e.g., "text", "ascii", "image"
+  template: |                 # Example of skin template
+    Step {t}/{max_steps}
+    You are at {agent_pos}. Inventory: {inventory}
+    Visible tiles (A=agent, #=wall, .=soil, etc.):
+    {tiles_ascii}
+    Available actions: MOVE(dx,dy), PLANT(x,y,crop_type)
+
+termination:                  # REQUIRED: when to end episode
+  max_steps: 20               # mirrored with globals.max_steps for convenience
+  conditions: []              # e.g., "agent.has_key and agent.pos == goal_pos"
+
+generator:                    # REQUIRED: how to generate complete world instances
+  mode: "procedural"          # REQUIRED
+  output_format: "yaml"       # REQUIRED
+  pipeline:                   # REQUIRED: list of steps to build complete world
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "<the name of process you want>"      
+      desc: "<explain the logic of this generate>"
+      args: {}               
+    - name: "<more process>"
+      desc: "<more explanation>"
+      args: {}
+  
+  randomization:              # OPTIONAL: control randomness in generation
+    seed_based: true          # whether to use seed for reproducibility
+    parameters:               # parameters that can be randomized
+      difficulty: [0.1, 1.0]  # example: difficulty range
+      # Add other randomizable parameters
+
+world_loading:                # REQUIRED: configuration for loading generated worlds
+  directory: "worlds/{env_id}/"  # path pattern for generated world files
+  format: "yaml"              # file format: "yaml" | "json" | "pickle"
+  validation_schema: "state_template"  # validate loaded worlds against this schema
+  naming_convention: "{world_id}.yaml"  # file naming pattern
+
+# OPTIONAL: extra config the engine/agent might need
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false           # enable additional debugging output

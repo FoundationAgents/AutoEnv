@@ -1,0 +1,66 @@
+Files / Classes:
+1. valley_farm/config.yaml          – the DSL above, saved exactly.
+2. valley_farm/env.py               – class ValleyFarmEnv(SkinEnv)
+3. valley_farm/generator.py         – class ValleyFarmGenerator(WorldGenerator)
+4. valley_farm/observation.py       – class FiveByFiveObs(ObservationPolicy)
+
+Key methods:
+
+ValleyFarmEnv._dsl_config():
+  • Load valley_farm/config.yaml with yaml.safe_load into self.configs.
+
+ValleyFarmEnv.reset(mode, world_id, seed):
+  • If mode=="load": call _load_world(world_id) to self._state.
+  • Else: world_id = self._generate_world(seed); then _load_world(world_id).
+  • Ensure self._t=0 and copy max_steps from loaded state's "termination" if present.
+
+ValleyFarmEnv._generate_world(seed):
+  • Instantiate ValleyFarmGenerator with self.configs["generator"].
+  • Call generate(seed); return produced world_id.
+
+ValleyFarmGenerator.generate(seed, save_path):
+  • Create base_state = deepcopy(state_template)
+  • Run _execute_pipeline(base_state, seed) to fill objects lists.
+  • Save using _save_world(world_state, world_id) and return id.
+
+ValleyFarmGenerator._execute_pipeline(base_state, seed):
+  • Step 1: place_static_structures
+    - Use RNG(seed) to draw unique coordinates for required structures.
+  • Step 2: populate_entities
+    - Assign animals (cow, sheep, chicken) to barns.
+    - Create villager dicts: {id, home_pos, relationship, mood:"neutral"}.
+  • Return finalized dict.
+
+ValleyFarmEnv.transition(action):
+  • Parse action["action"]; update agent pos, inventory, crops, animals, villagers.
+  • Apply deterministic rules from description (growth stages, hunger timers, etc.).
+  • Record any events for reward() via self._last_action_result.
+
+ValleyFarmEnv.reward(action):
+  • Initialize r=0, events=[].
+  • For each event generated in transition, look up value_key in configs["reward"].
+    • HarvestCrop: r+=0.1 per unit.
+    • CollectProduct: r+=0.2 per unit.
+    • RelationshipGain: r+=0.5 * delta.
+    • MarketSale: r+=0.1 * coins_earned.
+  • Return r, events, {"details":…}.
+
+FiveByFiveObs.__call__(state, t):
+  • Slice 5x5 window around agent; include tile types + central entity flags.
+  • Round villager relationships to nearest 5.
+  • Return dict with keys listed in expose plus t_remaining=50 - t.
+
+ValleyFarmEnv.observe_semantic():
+  • return self.obs_policy(self._state, self._t).
+
+ValleyFarmEnv.render_skin(omega):
+  • Convert visible_tiles to ascii, substitute into template using str.format.
+
+SkinEnv.done():
+  • Return self._t >= self.configs["termination"]["max_steps"].
+
+Additional notes:
+• Illegal actions perform no state changes but still increment step count.
+• Use an Animal class to track hunger (bool), timer (int 0–10) and product_count.
+• Crop tiles store stage "empty|seedling|growing|mature" and waterings.
+• Maintain a world-level RNG seeded per episode for deterministic replay.

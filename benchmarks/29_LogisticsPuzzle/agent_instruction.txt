@@ -1,0 +1,11 @@
+You are an agent trapped in dangerous puzzle rooms that must be escaped within 40 steps. Your goal is to neutralize all hazardous storage tiles by pushing lethal crates onto them, then reach the exit to escape safely.
+
+In this environment, crates (B) and uncovered storage tiles (C) are deadly - touching them will kill you instantly. You must push crates from a safe distance to cover the dangerous storage tiles, transforming them into safe floor space. Once all storage tiles are covered by crates, you can safely navigate to the exit tile (D) to complete your escape.
+
+Key elements to remember:
+- Walls (E) block your movement and crate pushes
+- Safe floor (A) can be traversed freely
+- Your position is marked with (P)
+- You can only push crates, not pull them
+- Plan carefully as you have limited steps and crates are lethal obstacles
+- Success requires covering ALL storage tiles before reaching the exit

@@ -1,0 +1,147 @@
+generator:
+  mode: procedural
+  output_format: yaml
+  pipeline:
+  - args: {}
+    desc: Deep copy state_template into working state
+    name: init_from_template
+  - args:
+      compound_pool:
+      - Xylene
+      - Bizarrolene
+      - InvertedAcetate
+    desc: Select target compound and write to globals.target_compound
+    name: assign_target_compound
+  - args: {}
+    desc: Record seed for reproducibility
+    name: set_random_seed
+  randomization:
+    parameters:
+      target_compound_choice:
+      - 0
+      - 2
+    seed_based: true
+meta:
+  description: "Synthesize the specified inverted-chemistry compound at \u226595 %\
+    \ purity within 40 steps."
+  id: bizarro_lab_v1
+  name: BizarroLabExperiments
+observation:
+  expose:
+  - beakers
+  - equipment
+  - globals
+  - t
+  params: {}
+  policy: full
+reward:
+  dense_type: max_purity_increment
+  min_reward: 0.0
+  success_bonus: 1.0
+  time_efficiency_factor: 0.5
+skin:
+  template: "Step {t}/{termination[max_steps]}\nTarget: {globals[target_compound]}\
+    \ \u2265 {target_purity_percent:.1f}% purity\nSteps left: {globals[step_remaining]}\n\
+    Beakers: {beakers}\nHot plates: {equipment[hot_plates]}\nCooling coils: {equipment[cooling_coils]}\n\
+    Stir speeds: {equipment[stir_speeds]}\nActions: AddReagent, ToggleHotPlate, ToggleCoolingCoil,\
+    \ SetStirSpeed, Transfer, Discard, SubmitForAnalysis, Wait"
+  type: text
+state_template:
+  beakers:
+  - capacity_ml: 250
+    composition_pct: {}
+    id: 0
+    pH: 7.0
+    temperature_c: 25
+    volume_ml: 0
+  - capacity_ml: 250
+    composition_pct: {}
+    id: 1
+    pH: 7.0
+    temperature_c: 25
+    volume_ml: 0
+  - capacity_ml: 250
+    composition_pct: {}
+    id: 2
+    pH: 7.0
+    temperature_c: 25
+    volume_ml: 0
+  - capacity_ml: 250
+    composition_pct: {}
+    id: 3
+    pH: 7.0
+    temperature_c: 25
+    volume_ml: 0
+  - capacity_ml: 250
+    composition_pct: {}
+    id: 4
+    pH: 7.0
+    temperature_c: 25
+    volume_ml: 0
+  equipment:
+    cooling_coils:
+      0: false
+      1: false
+      2: false
+      3: false
+      4: false
+    hot_plates:
+      0: false
+      1: false
+      2: false
+      3: false
+      4: false
+    stir_speeds:
+      0: 0
+      1: 0
+      2: 0
+      3: 0
+      4: 0
+  globals:
+    ambient_temperature_c: 25
+    step_remaining: 40
+    target_compound: null
+    target_purity: 0.95
+  reagents_catalog:
+  - name: Acid
+    trait: base_like
+  - name: Base
+    trait: acid_like
+  - name: Solvent
+    trait: neutral
+  t: 0
+termination:
+  conditions:
+  - submitted
+  - timeout
+  max_steps: 40
+transition:
+  actions:
+  - name: AddReagent
+    params:
+    - beaker_id
+    - reagent_name
+    - volume_ml
+  - name: ToggleHotPlate
+    params:
+    - beaker_id
+  - name: ToggleCoolingCoil
+    params:
+    - beaker_id
+  - name: SetStirSpeed
+    params:
+    - beaker_id
+    - speed
+  - name: Transfer
+    params:
+    - from_beaker_id
+    - to_beaker_id
+    - volume_ml
+  - name: Discard
+    params:
+    - beaker_id
+  - name: SubmitForAnalysis
+    params:
+    - beaker_id
+  - name: Wait
+    params: []

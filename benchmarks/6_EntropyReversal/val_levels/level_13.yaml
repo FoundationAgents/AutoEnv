@@ -1,0 +1,25 @@
+domains:
+  bio_habitat:
+    chaos: 36
+    energy: 119
+    locked: false
+    order: 53
+  crystal_lattice:
+    chaos: 35
+    energy: 120
+    locked: false
+    order: 55
+  data_archive:
+    chaos: 20
+    energy: 107
+    locked: false
+    order: 40
+  thermal_grid:
+    chaos: 37
+    energy: 99
+    locked: false
+    order: 45
+globals:
+  entropy_tokens: 200
+  global_order_score: -7
+  step: 0

@@ -1,0 +1,97 @@
+meta:
+  id: "quantum_maze"
+  name: "Quantum Maze Escape"
+  description: "Navigate a 10x10 maze where walls exist in quantum superposition until observed"
+
+state_template:
+  globals:
+    grid_size: [10, 10]
+    start_pos: [0, 0]
+    exit_pos: [9, 9]
+  agent:
+    pos: [0, 0]
+  maze:
+    size: [10, 10]
+    quantum_walls: {}
+    collapsed_walls: {}
+    wall_probabilities: {}
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_quantum_probabilities"
+      desc: "Assign random wall probabilities between 0.2-0.5 for each grid cell"
+      args:
+        min_prob: 0.2
+        max_prob: 0.5
+    - name: "setup_boundaries"
+      desc: "Set grid boundaries and ensure start/exit positions are accessible"
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      wall_probability_range: [0.2, 0.5]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+observation:
+  policy: "local_quantum_view"
+  params:
+    view_size: 3
+    center_on_agent: true
+  expose:
+    - agent.pos
+    - local_view
+    - remaining_steps
+    - t
+
+reward:
+  events:
+    - trigger: "reach_exit"
+      value: 1.0
+  sparse_reward: true
+
+transition:
+  actions:
+    - name: "MOVE_NORTH"
+      params: []
+    - name: "MOVE_SOUTH"
+      params: []
+    - name: "MOVE_EAST"
+      params: []
+    - name: "MOVE_WEST"
+      params: []
+    - name: "OBSERVE"
+      params: []
+
+termination:
+  max_steps: 40
+  conditions:
+    - "agent.pos == globals.exit_pos"
+
+skin:
+  type: "text"
+  template: |
+    Step {t}/{max_steps} - Quantum Maze Escape
+    Position: {agent_pos} | Target: {exit_pos}
+    
+    Local View (3x3 around agent):
+    {local_view_display}
+    
+    Legend: A=Agent, ?=Unknown(Quantum), #=Wall, .=Empty, E=Exit
+    
+    Available Actions: MOVE_NORTH, MOVE_SOUTH, MOVE_EAST, MOVE_WEST, OBSERVE
+    Remaining Steps: {remaining_steps}
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

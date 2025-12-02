@@ -1,0 +1,11 @@
+[
+  {
+    "name": "flip",
+    "description": "Flip a card at the specified grid position to reveal its symbol.",
+    "parameters": {
+      "position": "integer from 0-15 indicating the grid position to flip (0=top-left, 15=bottom-right, row-major order)"
+    }
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "flip", "params": {"position": 5}}

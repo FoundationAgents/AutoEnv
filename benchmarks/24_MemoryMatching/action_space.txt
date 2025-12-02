@@ -1,0 +1,24 @@
+[
+  {
+    "name": "SLIDE_UP",
+    "description": "Move the blank space upward by one row, causing the tile below it to slide into the blank's current position.",
+    "parameters": {}
+  },
+  {
+    "name": "SLIDE_DOWN", 
+    "description": "Move the blank space downward by one row, causing the tile above it to slide into the blank's current position.",
+    "parameters": {}
+  },
+  {
+    "name": "SLIDE_LEFT",
+    "description": "Move the blank space left by one column, causing the tile to its right to slide into the blank's current position.", 
+    "parameters": {}
+  },
+  {
+    "name": "SLIDE_RIGHT",
+    "description": "Move the blank space right by one column, causing the tile to its left to slide into the blank's current position.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

@@ -1,0 +1,185 @@
+meta:
+  id: "subterranean_megacity"
+  name: "Subterranean Megacity"
+  description: "Underground city planning with anomalous physics and cyclical environmental changes"
+
+state_template:
+  globals:
+    max_steps: 40
+    airflow_cycle_length: 8
+  agent:
+    districts_built: 0
+    power_storage: 50
+    available_materials:
+      - "basic_support"
+      - "rock_excavator"
+      - "air_pump"
+  grid:
+    size: [5, 5]
+    cells:
+      rock_stress: []
+      airflow_vector: []
+      structure_type: "rock"
+      has_support: false
+      excavated: false
+      district_core: false
+      power_conduit: false
+      ventilation_shaft: false
+  metrics:
+    structural_integrity: 100
+    breathable_air_index: 85
+    total_power_usage: 0
+  research:
+    gravity_mechanics_unlocked: false
+    airflow_patterns_unlocked: false
+    advanced_materials_unlocked: false
+  physics_state:
+    current_airflow_phase: "normal"
+    stress_redistribution_pending: []
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_rock_stress_map"
+      desc: "Create realistic geological stress patterns with mineral veins and fault lines"
+      args:
+        stress_range: [10, 90]
+        mineral_vein_probability: 0.3
+        fault_line_count: 2
+    - name: "generate_airflow_field"
+      desc: "Establish initial air current directions and magnitudes across grid"
+      args:
+        base_flow_strength: [0.2, 0.8]
+        predominant_direction_bias: 0.6
+    - name: "place_starting_infrastructure"
+      desc: "Add minimal initial excavation and basic power systems"
+      args:
+        starting_excavated_cells: 2
+        initial_power_conduits: 1
+    - name: "calculate_initial_physics"
+      desc: "Compute starting structural and airflow metrics based on generated terrain"
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      geological_complexity: [0.3, 0.9]
+      airflow_intensity: [0.4, 0.8]
+      starting_stress_variance: [0.2, 0.6]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+observation:
+  policy: "full_underground"
+  params:
+    include_physics_hints: false
+    show_stress_gradients: true
+    show_airflow_vectors: true
+  expose:
+    - agent.districts_built
+    - agent.power_storage
+    - agent.available_materials
+    - metrics.structural_integrity
+    - metrics.breathable_air_index
+    - metrics.total_power_usage
+    - grid.cells
+    - research
+    - physics_state.current_airflow_phase
+    - globals.max_steps
+    - t
+
+reward:
+  events:
+    - trigger: "structural_improvement"
+      value_key: "integrity_bonus"
+    - trigger: "air_improvement"
+      value_key: "air_bonus"
+    - trigger: "district_completed"
+      value_key: "district_bonus"
+    - trigger: "research_breakthrough"
+      value_key: "research_bonus"
+    - trigger: "power_milestone"
+      value_key: "power_bonus"
+    - trigger: "continuous_operation"
+      value_key: "operation_bonus"
+    - trigger: "mission_complete"
+      value_key: "completion_bonus"
+    - trigger: "integrity_penalty"
+      value_key: "integrity_malus"
+    - trigger: "air_penalty"
+      value_key: "air_malus"
+    - trigger: "catastrophic_failure"
+      value_key: "failure_penalty"
+  integrity_bonus: 2.0
+  air_bonus: 1.0
+  district_bonus: 5.0
+  research_bonus: 4.0
+  power_bonus: 3.0
+  operation_bonus: 0.5
+  completion_bonus: 40.0
+  integrity_malus: -2.0
+  air_malus: -1.0
+  failure_penalty: -40.0
+
+transition:
+  actions:
+    - name: "excavate_cell"
+      params: [x, y]
+    - name: "place_support_column"
+      params: [x, y, material_type]
+    - name: "dig_ventilation_shaft"
+      params: [x, y, direction]
+    - name: "install_power_conduit"
+      params: [path_cells]
+    - name: "build_district_core"
+      params: [x, y]
+    - name: "research_anomaly"
+      params: [research_type]
+    - name: "diagnostic_scan"
+      params: [x, y]
+
+termination:
+  max_steps: 40
+  conditions:
+    - "metrics.structural_integrity <= 0"
+    - "metrics.breathable_air_index <= 0"
+
+skin:
+  type: "text"
+  template: |
+    === SUBTERRANEAN MEGACITY CONTROL CENTER ===
+    Step {t}/{max_steps} | Districts: {districts_built}/6 | Power: {power_storage}
+    
+    VITAL SYSTEMS:
+    Structural Integrity: {structural_integrity}% | Air Quality: {breathable_air_index}%
+    Airflow Phase: {current_airflow_phase} | Power Usage: {total_power_usage}
+    
+    UNDERGROUND GRID (5x5):
+    {grid_display}
+    
+    RESEARCH STATUS:
+    Gravity Mechanics: {gravity_research} | Airflow Patterns: {airflow_research}
+    Advanced Materials: {materials_research}
+    
+    AVAILABLE ACTIONS:
+    - excavate_cell(x,y): Remove rock and trigger stress redistribution
+    - place_support_column(x,y,material): Install structural support
+    - dig_ventilation_shaft(x,y,direction): Create air circulation
+    - install_power_conduit(path): Establish energy distribution 
+    - build_district_core(x,y): Convert space to habitable district
+    - research_anomaly(type): Unlock physics understanding
+    - diagnostic_scan(x,y): Analyze local conditions
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false
+  physics_simulation_depth: "full"
+  allow_experimental_actions: false

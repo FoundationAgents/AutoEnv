@@ -1,0 +1,237 @@
+{
+  "environment_id": "20250918_150246_env_88_laboratory_experimentation",
+  "calculation_timestamp": "2025-09-18 15:20:23",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of Xylene to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "Xylene",
+      "target_purity": 0.95
+    },
+    "level_02.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of InvertedAcetate to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "InvertedAcetate",
+      "target_purity": 0.95
+    },
+    "level_03.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of Bizarrolene to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "Bizarrolene",
+      "target_purity": 0.95
+    },
+    "level_04.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of Bizarrolene to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "Bizarrolene",
+      "target_purity": 0.95
+    },
+    "level_05.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of Bizarrolene to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "Bizarrolene",
+      "target_purity": 0.95
+    },
+    "level_06.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of Bizarrolene to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "Bizarrolene",
+      "target_purity": 0.95
+    },
+    "level_07.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of Xylene to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "Xylene",
+      "target_purity": 0.95
+    },
+    "level_08.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of InvertedAcetate to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "InvertedAcetate",
+      "target_purity": 0.95
+    },
+    "level_09.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of Xylene to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "Xylene",
+      "target_purity": 0.95
+    },
+    "level_10.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of InvertedAcetate to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "InvertedAcetate",
+      "target_purity": 0.95
+    },
+    "level_11.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of Bizarrolene to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "Bizarrolene",
+      "target_purity": 0.95
+    },
+    "level_12.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of Bizarrolene to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "Bizarrolene",
+      "target_purity": 0.95
+    },
+    "level_13.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of Bizarrolene to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "Bizarrolene",
+      "target_purity": 0.95
+    },
+    "level_14.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of InvertedAcetate to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "InvertedAcetate",
+      "target_purity": 0.95
+    },
+    "level_15.yaml": {
+      "max_reward": 2.325,
+      "calculation_method": "optimal_synthesis_analysis",
+      "components": {
+        "max_dense_reward": 0.95,
+        "max_success_bonus": 1.375
+      },
+      "assumptions": [
+        "Perfect synthesis of Xylene to 95.0% purity",
+        "Optimal completion in 10 steps",
+        "No action failures or inefficiencies"
+      ],
+      "target_compound": "Xylene",
+      "target_purity": 0.95
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 2.325,
+    "min_max_reward": 2.325,
+    "max_max_reward": 2.325
+  }
+}

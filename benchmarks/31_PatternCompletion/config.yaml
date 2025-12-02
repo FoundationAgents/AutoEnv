@@ -1,0 +1,136 @@
+meta:
+  id: "masked_pixel_art"
+  name: "Masked Pixel Art Completion"
+  description: "Restore corrupted 10x10 pixel art by filling masked pixels with correct colors"
+
+state_template:
+  globals:
+    max_steps: 50
+  agent:
+    cursor_pos: [0, 0]
+  canvas:
+    size: [10, 10]
+    pixels: []
+    ground_truth: []
+    masked_positions: []
+    mask_count: 0
+  palette:
+    size: 16
+    colors: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+  episode:
+    correct_restorations: 0
+
+observation:
+  policy: "cursor_local"
+  params:
+    neighborhood_size: 3
+  expose:
+    - agent.cursor_pos
+    - local_neighborhood
+    - visible_colors_mask
+    - globals.max_steps
+    - t
+
+reward:
+  events:
+    - trigger: "correct_restoration"
+      value: 1.0
+    - trigger: "incorrect_action"
+      value: 0.0
+
+transition:
+  actions:
+    - name: "MoveNorth"
+      params: []
+    - name: "MoveSouth"
+      params: []
+    - name: "MoveEast"
+      params: []
+    - name: "MoveWest"
+      params: []
+    - name: "WriteColor0"
+      params: []
+    - name: "WriteColor1"
+      params: []
+    - name: "WriteColor2"
+      params: []
+    - name: "WriteColor3"
+      params: []
+    - name: "WriteColor4"
+      params: []
+    - name: "WriteColor5"
+      params: []
+    - name: "WriteColor6"
+      params: []
+    - name: "WriteColor7"
+      params: []
+    - name: "WriteColor8"
+      params: []
+    - name: "WriteColor9"
+      params: []
+    - name: "WriteColor10"
+      params: []
+    - name: "WriteColor11"
+      params: []
+    - name: "WriteColor12"
+      params: []
+    - name: "WriteColor13"
+      params: []
+    - name: "WriteColor14"
+      params: []
+    - name: "WriteColor15"
+      params: []
+    - name: "Skip"
+      params: []
+
+skin:
+  type: "text"
+  template: |
+    Step {t}/{max_steps} | Cursor: {cursor_pos}
+    Local 3x3 view (□=masked, A=agent):
+    {local_grid}
+    Visible colors: {visible_colors}
+    Actions: MoveNorth/South/East/West, WriteColor0-15, Skip
+
+termination:
+  max_steps: 50
+  conditions:
+    - "all_masked_filled"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "select_ground_truth"
+      desc: "Select random pixel art from curated library of 10x10 icons"
+      args:
+        library_size: 50
+        semantic_categories: ["animals", "objects", "symbols", "letters"]
+    - name: "apply_masking"
+      desc: "Randomly mask 20-30 pixels with unknown tokens"
+      args:
+        min_masked: 15
+        max_masked: 20
+        mask_token: "unknown"
+    - name: "initialize_canvas"
+      desc: "Set up visible canvas with masked positions hidden"
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      mask_count: [20, 30]
+      ground_truth_id: [0, 49]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

@@ -1,0 +1,63 @@
+## Implementation Guide for Inverted-Symbol Treasure Hunt
+
+### Core Files Structure:
+- `inverted_treasure_env.py` - Main environment class
+- `treasure_observation.py` - Observation policy implementation  
+- `treasure_generator.py` - World generator class
+
+### InvertedTreasureEnv Class (extends SkinEnv):
+
+**Key State Components:**
+- `self._state["grid"]["icons"]` - Dict mapping (x,y) -> "bomb"/"flower"/"empty"
+- `self._state["grid"]["revealed"]` - Dict mapping (x,y) -> True/False  
+- `self._state["agent"]["pos"]` - Current [x, y] coordinates
+
+**transition(action) Method:**
+- Handle 6 actions: MOVE_NORTH/SOUTH/EAST/WEST, REVEAL, WAIT
+- Movement: Update agent.pos if within [0,7] bounds, else stay in place
+- Auto-reveal when moving to unrevealed tile BEFORE position update
+- REVEAL: Set revealed[(x,y)] = True for current position
+- Check termination after each action (flower step = instant death)
+- Always increment self._t by 1
+
+**reward(action) Method:**
+- Return (1.0, ["treasure_found"], {}) if stepped on bomb tile
+- Return (0.0, [], {}) for all other cases (death, timeout, normal moves)
+- Check self._state["agent"]["pos"] against bomb location after movement
+
+**done(s_next) Method:**
+- True if: stepped on flower, stepped on bomb, or self._t >= 30
+- Note: max_step is set in termination section. When reading max_step, if level has 
+  changed max_steps, it should override environment's self.configs["termination"]["max_steps"]
+
+### TreasureObservationPolicy Class:
+
+**__call__(env_state, t) Method:**
+- Extract 5×5 window centered on agent position  
+- Include tiles from (agent_x-2, agent_y-2) to (agent_x+2, agent_y+2)
+- For each tile: if revealed, show actual icon; else show "unrevealed"
+- Return dict with agent_pos, remaining_steps, visible_tiles grid
+
+### TreasureWorldGenerator Class:
+
+**generate(seed) Method:**
+- Use seed for random.seed() to ensure reproducibility
+- Call _execute_pipeline() with base state from state_template
+- Save complete world state to YAML file using world_id = f"world_{seed}"
+- Return world_id for loading
+
+**_execute_pipeline(base_state, seed) Method:**
+- Step 1: Copy state_template as starting state
+- Step 2: Generate list of all 64 coordinates (0,0) to (7,7)  
+- Step 3: Randomly shuffle coordinates using seeded random
+- Step 4: Assign first coordinate to bomb, next 10 to flowers, remaining 53 to empty
+- Step 5: Populate state["grid"]["icons"] with assignments
+- Step 6: Initialize state["grid"]["revealed"] = {} (all unrevealed)
+- Return complete state ready for gameplay
+
+### Key Implementation Notes:
+- Semantic inversion: "bomb" icons are treasure (reward=1), "flower" icons are traps (death)
+- Auto-revelation: moving to unrevealed tile reveals it before checking consequences
+- Sparse rewards: only +1 for treasure collection, 0 for everything else
+- Boundary handling: out-of-bounds moves consume step but don't change position
+- Episode ends immediately on flower contact or treasure collection

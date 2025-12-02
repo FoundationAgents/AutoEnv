@@ -1,0 +1,73 @@
+IMPLEMENTATION GUIDANCE FOR SMART HOME ASSISTANT ENVIRONMENT
+
+## Core Files Structure
+- `smart_home_env.py` - Main environment class (SmartHomeEnv)
+- `smart_home_generator.py` - World generator class (SmartHomeGenerator) 
+- `smart_home_observation.py` - Observation policy class (LocalGridObservation)
+
+## SmartHomeEnv Class (extends SkinEnv)
+
+### _dsl_config()
+Load YAML config from `worlds/smart_home_assistant/config.yaml`. Parse all sections into self.configs dict.
+
+### _load_world(world_id)
+Load world state from `worlds/smart_home_assistant/world_{world_id}.yaml`. Validate against state_template schema. Return complete state dict with apartment layout, object positions, chore instructions.
+
+### _generate_world(seed)
+Instantiate SmartHomeGenerator, call generate(seed), return generated world_id.
+
+### transition(action)
+Execute 8 action types:
+- MoveForward: Update agent.pos if no wall collision, preserve facing direction
+- TurnLeft/TurnRight: Rotate agent.facing (north->west->south->east->north)
+- PickUp: Move adjacent object to agent.inventory if empty, remove from objects list
+- Drop: Place inventory item at front position or in container, clear inventory
+- ToggleAppliance: Switch appliance state (on/off) if agent adjacent
+- OpenCloseContainer: Toggle container accessibility
+- Wait: No state change
+Update current room based on agent position. Return modified state.
+
+### reward(action)
+Check events using current and previous states:
+- pickup_target_object: +0.3 if picked object needed for any incomplete chore
+- complete_chore: +0.7 when chore condition satisfied, set completed flag
+- complete_final_chore: +1.0 bonus when all 3 chores done
+Return (total_reward, event_list, reward_breakdown_dict).
+
+### observe_semantic()
+Use LocalGridObservation policy to extract 5x5 vision grid centered on agent. Include agent pos, facing, inventory, current room name, visible appliances with states, chore instructions with completion status.
+
+### render_skin(omega)
+Format text display showing step counter, room, facing direction, inventory, chores list with checkmarks, ASCII vision grid (A=agent, #=wall, letters for objects/furniture), visible appliances, available actions.
+
+### done()
+Return True if all chores completed OR t >= max_steps (40). Read max_steps from termination config, but if loaded world has different max_steps, use world's value to override.
+
+## SmartHomeGenerator Class (extends WorldGenerator)
+
+### _execute_pipeline(base_state, seed)
+Run 5 pipeline steps sequentially:
+1. init_from_template: Copy state_template as starting point
+2. generate_apartment_layout: Place walls to create 5 connected rooms, add doors
+3. place_furniture_appliances: Add semantic furniture (bed only in bedroom, fridge only in kitchen)
+4. populate_objects: Scatter 15 movable objects with random types/colors across rooms
+5. generate_chore_instructions: Pick 3 random task templates, fill with available objects/locations
+6. place_agent: Set random floor position and facing direction
+Return complete world state dict.
+
+### generate(seed, save_path)
+Set random seed, execute pipeline, generate unique world_id, save to file using world_loading config, return world_id.
+
+## LocalGridObservation Class (extends ObservationPolicy)
+
+### __call__(env_state, t)
+Extract 5x5 grid around agent position. Mark out-of-bounds as "unknown". Include walls, floors, doors, objects, furniture, appliances. Identify current room by checking which room bounds contain agent position. Find visible appliances within grid and include their on/off states. Return structured observation dict matching expose configuration.
+
+## Key Implementation Notes
+- Maintain semantic consistency: food objects only work with kitchen appliances, clothes only in bedroom containers
+- Ensure all rooms connected by doorways during generation
+- Chore templates must reference actually placed objects/appliances
+- Grid coordinates use (y,x) indexing with (0,0) at top-left
+- Facing directions: north=-y, south=+y, east=+x, west=-x
+- Action legality checking prevents impossible moves but still consumes time steps
+- World files use deterministic naming for reproducible episode loading

@@ -1,0 +1,297 @@
+{
+  "environment_id": "20250904_235235_env_interdimensional",
+  "calculation_timestamp": "2025-09-05 00:19:06",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1103.58,
+      "reward_breakdown": {
+        "profit_rewards": 843.1849295435244,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 843.1849295435244,
+        "inventory_value": 800,
+        "initial_capital": 49.763412224940964,
+        "arbitrage_multiplier": 1.8678048311542528,
+        "arbitrage_profit": 43.18492954352437
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    },
+    "level_02.yaml": {
+      "max_reward": 771.17,
+      "reward_breakdown": {
+        "profit_rewards": 510.7657994827381,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 510.7657994827381,
+        "inventory_value": 460,
+        "initial_capital": 58.81969323832842,
+        "arbitrage_multiplier": 1.8630748765901046,
+        "arbitrage_profit": 50.76579948273811
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    },
+    "level_03.yaml": {
+      "max_reward": 776.32,
+      "reward_breakdown": {
+        "profit_rewards": 515.9160630756592,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 515.9160630756592,
+        "inventory_value": 450,
+        "initial_capital": 73.25376229033506,
+        "arbitrage_multiplier": 1.8998317767544342,
+        "arbitrage_profit": 65.91606307565917
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    },
+    "level_04.yaml": {
+      "max_reward": 632.44,
+      "reward_breakdown": {
+        "profit_rewards": 372.0427352392718,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 372.0427352392718,
+        "inventory_value": 340,
+        "initial_capital": 55.505158746216125,
+        "arbitrage_multiplier": 1.577292921290063,
+        "arbitrage_profit": 32.0427352392718
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    },
+    "level_05.yaml": {
+      "max_reward": 921.95,
+      "reward_breakdown": {
+        "profit_rewards": 661.5540873718871,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 661.5540873718871,
+        "inventory_value": 630,
+        "initial_capital": 46.99225469710831,
+        "arbitrage_multiplier": 1.671474215810054,
+        "arbitrage_profit": 31.554087371887125
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    },
+    "level_06.yaml": {
+      "max_reward": 906.15,
+      "reward_breakdown": {
+        "profit_rewards": 645.7524928097364,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 645.7524928097364,
+        "inventory_value": 600,
+        "initial_capital": 68.07804471898201,
+        "arbitrage_multiplier": 1.6720594429319633,
+        "arbitrage_profit": 45.75249280973634
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    },
+    "level_07.yaml": {
+      "max_reward": 1040.32,
+      "reward_breakdown": {
+        "profit_rewards": 779.9203621880897,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 779.9203621880897,
+        "inventory_value": 750,
+        "initial_capital": 53.15239047157168,
+        "arbitrage_multiplier": 1.562916586114644,
+        "arbitrage_profit": 29.920362188089655
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    },
+    "level_08.yaml": {
+      "max_reward": 740.68,
+      "reward_breakdown": {
+        "profit_rewards": 480.2823401048798,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 480.2823401048798,
+        "inventory_value": 430,
+        "initial_capital": 60.339810579762805,
+        "arbitrage_multiplier": 1.8333194887712134,
+        "arbitrage_profit": 50.28234010487979
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    },
+    "level_09.yaml": {
+      "max_reward": 620.43,
+      "reward_breakdown": {
+        "profit_rewards": 360.0299155583619,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 360.0299155583619,
+        "inventory_value": 320,
+        "initial_capital": 62.89094249133461,
+        "arbitrage_multiplier": 1.6364973074441904,
+        "arbitrage_profit": 40.02991555836191
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    },
+    "level_10.yaml": {
+      "max_reward": 582.22,
+      "reward_breakdown": {
+        "profit_rewards": 321.8152531421217,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 321.8152531421217,
+        "inventory_value": 300,
+        "initial_capital": 46.96884231272651,
+        "arbitrage_multiplier": 1.4644622278929522,
+        "arbitrage_profit": 21.815253142121716
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    },
+    "level_11.yaml": {
+      "max_reward": 1036.06,
+      "reward_breakdown": {
+        "profit_rewards": 775.6624938781966,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 775.6624938781966,
+        "inventory_value": 750,
+        "initial_capital": 56.36324488110037,
+        "arbitrage_multiplier": 1.4553054731382538,
+        "arbitrage_profit": 25.662493878196663
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    },
+    "level_12.yaml": {
+      "max_reward": 785.3,
+      "reward_breakdown": {
+        "profit_rewards": 524.8978027071025,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 524.8978027071025,
+        "inventory_value": 490,
+        "initial_capital": 53.15979768527451,
+        "arbitrage_multiplier": 1.6564698179197432,
+        "arbitrage_profit": 34.89780270710255
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    },
+    "level_13.yaml": {
+      "max_reward": 815.04,
+      "reward_breakdown": {
+        "profit_rewards": 554.6428361229299,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 554.6428361229299,
+        "inventory_value": 510,
+        "initial_capital": 53.97895054218377,
+        "arbitrage_multiplier": 1.8270415722151205,
+        "arbitrage_profit": 44.64283612292989
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    },
+    "level_14.yaml": {
+      "max_reward": 524.99,
+      "reward_breakdown": {
+        "profit_rewards": 264.5866174682411,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 264.5866174682411,
+        "inventory_value": 230,
+        "initial_capital": 54.67430141226336,
+        "arbitrage_multiplier": 1.6325936788372641,
+        "arbitrage_profit": 34.58661746824111
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    },
+    "level_15.yaml": {
+      "max_reward": 703.75,
+      "reward_breakdown": {
+        "profit_rewards": 443.3512437055531,
+        "goal_rewards": 50.0,
+        "stability_rewards": 6.4,
+        "fairness_rewards": 180.0,
+        "research_rewards": 24.0
+      },
+      "trading_analysis": {
+        "max_profit": 443.3512437055531,
+        "inventory_value": 410,
+        "initial_capital": 45.671663351590325,
+        "arbitrage_multiplier": 1.7302393050327078,
+        "arbitrage_profit": 33.35124370555311
+      },
+      "calculation_method": "optimal_path_analysis_with_heuristics",
+      "notes": "Conservative estimate assuming optimal play with 80% stability and 90% fairness bonus achievement"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 797.36,
+    "min_max_reward": 524.99,
+    "max_max_reward": 1103.58
+  }
+}

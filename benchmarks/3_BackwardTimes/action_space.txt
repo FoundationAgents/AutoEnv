@@ -1,0 +1,49 @@
+[
+  {
+    "name": "ExamineScene",
+    "description": "Investigate a specific location during the time period immediately before your current position to uncover physical evidence, environmental clues, or traces of activity.",
+    "parameters": {
+      "location": "name of the location to examine (e.g., 'office', 'warehouse', 'parking_lot')"
+    }
+  },
+  {
+    "name": "InterrogatePerson",
+    "description": "Question an individual about their activities, knowledge, and movements during the earlier time period to learn about their actions and awareness of other participants.",
+    "parameters": {
+      "person": "name or identifier of the person to interrogate (e.g., 'person_1', 'suspect_name')"
+    }
+  },
+  {
+    "name": "TraceObject",
+    "description": "Follow the ownership history and movement patterns of a specific item, document, or tool backwards through time to understand how it reached its observed position.",
+    "parameters": {
+      "object": "name or type of object to trace (e.g., 'document', 'key', 'computer')"
+    }
+  },
+  {
+    "name": "ConnectClues",
+    "description": "Propose a causal relationship between two pieces of discovered evidence to test whether they are logically connected in the timeline.",
+    "parameters": {
+      "clueA": "identifier of the first clue to connect",
+      "clueB": "identifier of the second clue to connect"
+    }
+  },
+  {
+    "name": "JumpEarlier",
+    "description": "Move backwards through the timeline by a specified number of time indices without performing investigative actions, useful for quickly reaching potentially more productive investigation periods.",
+    "parameters": {
+      "steps": "number of time indices to jump backwards (1-3)"
+    }
+  },
+  {
+    "name": "IdentifyRootCause",
+    "description": "Submit your final identification of the original crime trigger that started the entire sequence of events. This action ends the investigation episode.",
+    "parameters": {
+      "time_index": "exact time index when the triggering event occurred",
+      "perpetrator": "name of the person who initiated the sequence",
+      "action": "specific action that was performed to trigger the sequence"
+    }
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ExamineScene", "params": {"location": "office"}}

@@ -1,0 +1,42 @@
+## Implementation Guide for Reverse Lake Navigation Environment
+
+### File Structure
+- `reverse_lake_nav_env.py` - Main environment class
+- `reverse_lake_observation.py` - Local window observation policy
+- `reverse_lake_generator.py` - World generator implementation
+
+### Core Classes to Implement
+
+**ReverseLA keNavEnv(SkinEnv)**
+- `_dsl_config()`: Load YAML config from worlds/{env_id}/config.yaml
+- `reset(mode, world_id, seed)`: Load existing world or generate new one based on mode
+- `_load_world(world_id)`: Load world state from YAML file using world_loading config
+- `_generate_world(seed)`: Create WorldGenerator instance, call generate(), return world_id
+- `transition(action)`: Handle 5 actions (4 directional moves + Wait). Update agent.pos if valid move within bounds. Set termination flag if stepped on ice. Consume 1 step regardless.
+- `reward(action)`: Return 1.0 if agent reached goal flag, 0.0 otherwise. Return events list and reward_info dict.
+- `observe_semantic()`: Call obs_policy to get local 3x3 window, add remaining_steps and current position
+- `render_skin(omega)`: Format observation using skin template, convert local_grid to ASCII display
+- `done()`: Check if goal collected, stepped on ice, or max_steps exceeded
+
+**LocalWindowObservation(ObservationPolicy)**
+- `__call__(env_state, t)`: Extract 3x3 grid centered on agent position. Mark cells as 'H'(hole), 'I'(ice), 'G'(goal), '#'(boundary). Add agent marker 'A' at center. Return dict with local_grid and remaining_steps.
+
+**ReverseLakeGenerator(WorldGenerator)**
+- `generate(seed, save_path)`: Execute pipeline, save to file, return world_id
+- `_execute_pipeline(base_state, seed)`: Run 5-step generation:
+  1. init_from_template: Copy state_template as base
+  2. place_ice_tiles: Randomly place 8-12 ice tiles, store positions
+  3. place_goal_flag: Choose random safe (hole) tile for goal
+  4. place_agent_start: Choose random safe tile for agent start
+  5. validate_reachability: Use BFS to ensure path exists from start to goal
+- Pipeline should retry generation if reachability fails
+- Save final state using world_loading format/path configuration
+
+### Key Implementation Notes
+- Ice tiles cause immediate termination when stepped on
+- Holes are safe terrain for movement
+- Goal flag is safe and ends episode successfully when reached
+- Boundary violations keep agent in place but consume step
+- Max steps (40) should override if level config specifies different value
+- Generator must guarantee solvable maps through reachability validation
+- Local observation window handles boundary cases by showing '#' symbols

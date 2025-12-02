@@ -1,0 +1,149 @@
+meta:
+  id: "hive_mind_consensus"
+  name: "Hive Mind Consensus Environment"
+  description: "Govern collective intelligence civilization by balancing unity and diversity while growing knowledge"
+
+state_template:
+  globals:
+    unity: 75.0
+    diversity: 55.0
+    knowledge_score: 0
+    cognitive_energy: 100
+    step_count: 0
+  sub_streams:
+    - id: 0
+      size: 25.0
+      coherence: 55.0
+      novelty: 45.0
+      knowledge_per_turn: 0.0
+    - id: 1
+      size: 25.0
+      coherence: 50.0
+      novelty: 50.0
+      knowledge_per_turn: 0.0
+    - id: 2
+      size: 25.0
+      coherence: 60.0
+      novelty: 40.0
+      knowledge_per_turn: 0.0
+    - id: 3
+      size: 25.0
+      coherence: 55.0
+      novelty: 45.0
+      knowledge_per_turn: 0.0
+  milestones:
+    knowledge_50: false
+    knowledge_100: false
+    knowledge_150: false
+    knowledge_200: false
+  warnings:
+    unity_critical: false
+    diversity_critical: false
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "randomize_sub_streams"
+      desc: "Add variation to sub-stream properties within balanced ranges"
+      args:
+        coherence_range: [50, 60]
+        novelty_range: [40, 50]
+        size_variation: 5.0
+    - name: "validate_initial_conditions"
+      desc: "Ensure starting state meets minimum thresholds and balances"
+      args:
+        min_unity: 70.0
+        min_diversity: 50.0
+  randomization:
+    seed_based: true
+    parameters:
+      initial_coherence_variance: [0.0, 10.0]
+      initial_novelty_variance: [0.0, 10.0]
+      size_distribution_noise: [0.0, 5.0]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+observation:
+  policy: "full_hive_state"
+  params: {}
+  expose:
+    - globals.unity
+    - globals.diversity
+    - globals.knowledge_score
+    - globals.cognitive_energy
+    - globals.step_count
+    - sub_streams
+    - milestones
+    - warnings
+    - t
+
+reward:
+  events:
+    - trigger: "knowledge_milestone"
+      value_key: "milestone_rewards"
+    - trigger: "synergy_bonus"
+      value_key: "synergy_value"
+    - trigger: "completion_bonus"
+      value_key: "completion_value"
+  milestone_rewards:
+    knowledge_50: 10.0
+    knowledge_100: 10.0
+    knowledge_150: 10.0
+    knowledge_200: 10.0
+  synergy_value:
+    high_balance: 20.0
+  completion_value:
+    target_reached: 50.0
+  continuous:
+    unity_factor: 0.05
+    diversity_factor: 0.05
+    knowledge_production_factor: 0.2
+
+transition:
+  actions:
+    - name: "MERGE"
+      params: [stream_a_id, stream_b_id]
+    - name: "SPLIT"
+      params: [stream_id, split_ratio]
+    - name: "STIMULATE"
+      params: [stream_id, energy_amount]
+    - name: "MEDITATE"
+      params: [stream_id, energy_amount]
+    - name: "ARCHIVE"
+      params: [stream_id]
+    - name: "REDISTRIBUTE_CE"
+      params: [energy_allocations]
+
+termination:
+  max_steps: 40
+  conditions:
+    - unity_collapse: "globals.unity < 20.0"
+    - intellectual_stagnation: "globals.diversity < 20.0"
+
+skin:
+  type: "text"
+  template: |
+    === Hive Mind Governance Dashboard ===
+    Step: {t}/{max_steps}
+    
+    Global Metrics:
+    Unity: {unity:.1f}% {'⚠️ CRITICAL' if unity < 50 else '❌ DANGER' if unity < 70 else '✅'}
+    Diversity: {diversity:.1f}% {'⚠️ CRITICAL' if diversity < 35 else '❌ DANGER' if diversity < 50 else '✅'}
+    Knowledge Score: {knowledge_score} / 200 {'🎯 TARGET REACHED!' if knowledge_score >= 200 else ''}
+    Cognitive Energy: {cognitive_energy} units
+    
+    Sub-Streams:
+    {sub_streams_display}
+    
+    Available Actions: MERGE(a,b), SPLIT(id,ratio), STIMULATE(id,energy), 
+                      MEDITATE(id,energy), ARCHIVE(id), REDISTRIBUTE_CE(allocations)
+    
+    Recent Milestones: {milestone_status}

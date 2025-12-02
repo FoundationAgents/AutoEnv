@@ -1,0 +1,109 @@
+meta:
+  id: "pressure_valve_engineering"
+  name: "Pressure Valve Engineering"
+  description: "Industrial pipeline control system with 9 valves targeting precise 4-sensor pressure management"
+
+state_template:
+  globals:
+    max_steps: 40
+    num_valves: 9
+    num_sensors: 4
+    num_pipe_sections: 12
+  agent:
+    step_count: 40
+  valves:
+    states: [false, false, false, false, false, false, false, false, false]
+  hydraulics:
+    pipe_pressures: [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0]
+    sensor_readings: [0.0, 0.0, 0.0, 0.0]
+    target_pressures: [0.0, 0.0, 0.0, 0.0]
+    pump_speed: 1500.0
+    reservoir_pressure: 100.0
+
+observation:
+  policy: "full"
+  params: {}
+  expose:
+    - valves.states
+    - hydraulics.pipe_pressures
+    - hydraulics.sensor_readings
+    - hydraulics.target_pressures
+    - agent.step_count
+    - t
+
+reward:
+  events:
+    - trigger: "pressure_target_achieved"
+      value: 1.0
+  conditions:
+    - if: "all_sensors_match_targets"
+      value: 1.0
+
+transition:
+  actions:
+    - name: "NO_OP"
+      params: []
+    - name: "TOGGLE_VALVE"
+      params: [valve_id]
+
+termination:
+  max_steps: 40
+  conditions:
+    - "all_sensors_match_targets"
+
+skin:
+  type: "text"
+  template: |
+    === Pressure Valve Control System ===
+    Step: {t}/{max_steps} | Remaining: {step_count}
+    
+    Valve States: {valve_states}
+    
+    Sensor Readings vs Targets:
+    Sensor 1: {sensor_1_reading:.2f} kPa (target: {target_1:.2f} kPa)
+    Sensor 2: {sensor_2_reading:.2f} kPa (target: {target_2:.2f} kPa)
+    Sensor 3: {sensor_3_reading:.2f} kPa (target: {target_3:.2f} kPa)
+    Sensor 4: {sensor_4_reading:.2f} kPa (target: {target_4:.2f} kPa)
+    
+    Pipe Section Pressures: {pipe_pressures}
+    
+    Available Actions: NO_OP(), TOGGLE_VALVE(valve_id: 0-8)
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_solvable_targets"
+      desc: "Sample from known solvable valve configurations to create feasible target pressure profiles"
+      args:
+        sample_configurations: 1000
+        pressure_range: [50.0, 200.0]
+    - name: "randomize_initial_valves"
+      desc: "Set random initial valve states different from target configuration"
+      args:
+        ensure_different: true
+        min_different_valves: 2
+    - name: "simulate_initial_pressures"
+      desc: "Calculate steady-state hydraulic pressures based on initial valve configuration"
+      args:
+        convergence_tolerance: 0.01
+        max_iterations: 100
+  randomization:
+    seed_based: true
+    parameters:
+      target_difficulty: [0.3, 0.9]
+      valve_randomization: [0.2, 0.8]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

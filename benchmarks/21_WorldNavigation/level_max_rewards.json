@@ -1,0 +1,299 @@
+{
+  "environment_id": "20250918_152710_env_92_grid_world_navigation",
+  "calculation_timestamp": "2025-09-18 15:39:34",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [5, 2] is reachable from start [0, 4] in 7 steps (\u226430 limit)",
+      "agent_start": [
+        0,
+        4
+      ],
+      "goal_position": [
+        5,
+        2
+      ],
+      "manhattan_distance": 7,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [3, 7] is reachable from start [8, 3] in 9 steps (\u226430 limit)",
+      "agent_start": [
+        8,
+        3
+      ],
+      "goal_position": [
+        3,
+        7
+      ],
+      "manhattan_distance": 9,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [3, 3] is reachable from start [5, 7] in 6 steps (\u226430 limit)",
+      "agent_start": [
+        5,
+        7
+      ],
+      "goal_position": [
+        3,
+        3
+      ],
+      "manhattan_distance": 6,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [7, 7] is reachable from start [4, 7] in 3 steps (\u226430 limit)",
+      "agent_start": [
+        4,
+        7
+      ],
+      "goal_position": [
+        7,
+        7
+      ],
+      "manhattan_distance": 3,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [7, 5] is reachable from start [7, 7] in 2 steps (\u226430 limit)",
+      "agent_start": [
+        7,
+        7
+      ],
+      "goal_position": [
+        7,
+        5
+      ],
+      "manhattan_distance": 2,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [8, 1] is reachable from start [4, 3] in 6 steps (\u226430 limit)",
+      "agent_start": [
+        4,
+        3
+      ],
+      "goal_position": [
+        8,
+        1
+      ],
+      "manhattan_distance": 6,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [9, 0] is reachable from start [8, 9] in 10 steps (\u226430 limit)",
+      "agent_start": [
+        8,
+        9
+      ],
+      "goal_position": [
+        9,
+        0
+      ],
+      "manhattan_distance": 10,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [0, 0] is reachable from start [7, 7] in 14 steps (\u226430 limit)",
+      "agent_start": [
+        7,
+        7
+      ],
+      "goal_position": [
+        0,
+        0
+      ],
+      "manhattan_distance": 14,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [7, 8] is reachable from start [8, 6] in 3 steps (\u226430 limit)",
+      "agent_start": [
+        8,
+        6
+      ],
+      "goal_position": [
+        7,
+        8
+      ],
+      "manhattan_distance": 3,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [5, 6] is reachable from start [0, 0] in 11 steps (\u226430 limit)",
+      "agent_start": [
+        0,
+        0
+      ],
+      "goal_position": [
+        5,
+        6
+      ],
+      "manhattan_distance": 11,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [9, 1] is reachable from start [5, 1] in 4 steps (\u226430 limit)",
+      "agent_start": [
+        5,
+        1
+      ],
+      "goal_position": [
+        9,
+        1
+      ],
+      "manhattan_distance": 4,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [6, 8] is reachable from start [4, 9] in 3 steps (\u226430 limit)",
+      "agent_start": [
+        4,
+        9
+      ],
+      "goal_position": [
+        6,
+        8
+      ],
+      "manhattan_distance": 3,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [0, 1] is reachable from start [9, 5] in 13 steps (\u226430 limit)",
+      "agent_start": [
+        9,
+        5
+      ],
+      "goal_position": [
+        0,
+        1
+      ],
+      "manhattan_distance": 13,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [8, 4] is reachable from start [4, 8] in 8 steps (\u226430 limit)",
+      "agent_start": [
+        4,
+        8
+      ],
+      "goal_position": [
+        8,
+        4
+      ],
+      "manhattan_distance": 8,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "goal_reachable_analysis",
+      "notes": "Goal at [1, 3] is reachable from start [1, 4] in 1 steps (\u226430 limit)",
+      "agent_start": [
+        1,
+        4
+      ],
+      "goal_position": [
+        1,
+        3
+      ],
+      "manhattan_distance": 1,
+      "step_limit": 30,
+      "grid_size": [
+        10,
+        10
+      ]
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0,
+    "reachable_levels": 15,
+    "unreachable_levels": 0
+  }
+}

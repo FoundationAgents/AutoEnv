@@ -1,0 +1,29 @@
+[
+  {
+    "name": "ENTER_RED_DOOR",
+    "description": "Move through the red door to the connected room, if available in current room.",
+    "parameters": {}
+  },
+  {
+    "name": "ENTER_BLUE_DOOR", 
+    "description": "Move through the blue door to the connected room, if available in current room.",
+    "parameters": {}
+  },
+  {
+    "name": "ENTER_GREEN_DOOR",
+    "description": "Move through the green door to the connected room, if available in current room.", 
+    "parameters": {}
+  },
+  {
+    "name": "PICK_UP_KEY",
+    "description": "Collect the dream key if present in the current room.",
+    "parameters": {}
+  },
+  {
+    "name": "WAIT",
+    "description": "Stay in the current room for one turn, required before using doors in Time-Slow rooms.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

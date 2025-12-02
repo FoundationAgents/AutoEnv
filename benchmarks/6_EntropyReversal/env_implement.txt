@@ -1,0 +1,55 @@
+## Implementation Guide for Entropy Reversal Engineering Environment
+
+### File Structure
+- `entropy_reversal_env.py`: Main environment class (EntropyReversalEnv)
+- `entropy_observation.py`: Observation policy class (FullObservation) 
+- `entropy_generator.py`: World generator class (EntropyWorldGenerator)
+
+### EntropyReversalEnv Class Methods
+
+**_dsl_config()**: Load YAML config from `worlds/{env_id}/config.yaml`, set self.configs
+
+**_load_world(world_id)**: Load YAML world state from `worlds/{env_id}/{world_id}.yaml`
+
+**_generate_world(seed)**: Use EntropyWorldGenerator to create new world, save with unique ID, return world_id
+
+**reset(mode, world_id, seed)**: If mode="load" call _load_world, if mode="generate" call _generate_world then load. Reset step counter and history.
+
+**transition(action)**: Handle 5 action types:
+- inject_energy: Add amount to entropy_tokens, increase target domain chaos by amount/10 (rounded up)
+- reverse_entropy: If sufficient tokens, decrease tokens by amount, increase target order by amount, increase other domains' chaos by amount/2 (rounded up)
+- redistribute_order: Transfer order amount from source to target domain (check source has enough)
+- vent_chaos: If sufficient tokens, decrease tokens and target chaos by amount. If insufficient tokens, double chaos increase in target
+- lockdown: If sufficient tokens (10), set target domain locked=true for one step, decrease tokens by 10
+
+Apply end-step coupling: for each unlocked domain, increase chaos by average chaos of other domains / 4. Update global_order_score as sum of all domain orders minus 200. Append previous state to history.
+
+**reward(action)**: Calculate rewards based on:
+- Order increase: 2 points per net increase in global_order_score
+- Stability: 1 point if all domains have chaos <= 50
+- Efficiency: 0.5 points if entropy reversal succeeded without any domain chaos > 60
+- Chaos spike: -3 points if any domain chaos > 70
+- Domain collapse: -25 points if any domain chaos > 90
+- Goal achievement: 50 points if global_order_score >= 100
+Return (total_reward, event_list, reward_breakdown_dict)
+
+**observe_semantic()**: Return complete state dictionary with all domain states, globals, and current step
+
+**render_skin(omega)**: Format state into text display showing step progress, global metrics, and all domain status with lock indicators. When reading max_steps from termination config, if the loaded world has changed max_steps in its state, that should override the environment's self.configs["termination"]["max_steps"].
+
+**done()**: Return True if step >= max_steps OR global_order_score >= 100 OR any domain chaos > 90
+
+### FullObservation Class
+**__call__(env_state, t)**: Return env_state directly (full observability)
+
+### EntropyWorldGenerator Class  
+**generate(seed, save_path)**: Execute pipeline to create world, save to file, return world_id
+
+**_execute_pipeline(base_state, seed)**: 
+1. Start with state_template
+2. For each domain, randomize order (40-60), energy (80-120), chaos (20-40) using seed
+3. Calculate global_order_score as sum of domain orders minus 200
+4. Validate all constraints (chaos <= 70, valid ranges)
+5. Return complete world state
+
+The generator ensures balanced starting conditions where global_order_score starts near 0 but domains have operational headroom. Each domain gets independent randomization within specified ranges while maintaining the coupling relationships defined in the transition rules.

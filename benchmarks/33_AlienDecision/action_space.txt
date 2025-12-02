@@ -1,0 +1,46 @@
+[
+  {
+    "name": "gather_resource",
+    "description": "Collect units of a specific resource from the environment. The amount gathered may be affected by current environmental conditions.",
+    "parameters": {
+      "resource_type": "the type of resource to gather (e.g., toxic_waste, rotten_food, contaminated_water, broken_machinery)",
+      "amount": "number of units to gather (1-10)"
+    }
+  },
+  {
+    "name": "build_structure",
+    "description": "Construct a new building at a specified location on the colony grid. Buildings may have ongoing effects on colony operations.",
+    "parameters": {
+      "building_type": "the type of building to construct (e.g., decay_chamber, poison_distributor, waste_processor)",
+      "x": "horizontal grid coordinate for building placement (0-4)",
+      "y": "vertical grid coordinate for building placement (0-4)"
+    }
+  },
+  {
+    "name": "allocate_resource",
+    "description": "Distribute gathered resources to different colony systems. This consumes resources but may benefit the colony in various ways.",
+    "parameters": {
+      "resource_type": "the type of resource to allocate",
+      "allocation_amount": "number of units to allocate (limited by available quantity)",
+      "target_system": "the colony system to receive the resources (e.g., colony, infrastructure, research)"
+    }
+  },
+  {
+    "name": "manage_environment",
+    "description": "Attempt to influence the planet's environmental conditions such as weather patterns or seasonal cycles.",
+    "parameters": {
+      "intervention_type": "the type of environmental intervention to perform (e.g., weather_change, season_change)",
+      "intensity": "the strength of the intervention attempt (1-5)"
+    }
+  },
+  {
+    "name": "explore_area",
+    "description": "Send expeditions to explore new territories around the colony, potentially discovering additional resources or opportunities.",
+    "parameters": {
+      "direction": "the direction to explore (north, south, east, west)",
+      "investment_level": "amount of resources to invest in the exploration effort (1-10)"
+    }
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

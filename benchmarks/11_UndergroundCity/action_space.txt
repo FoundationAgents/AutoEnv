@@ -1,0 +1,60 @@
+[
+  {
+    "name": "excavate_cell",
+    "description": "Remove rock material from a grid cell, potentially triggering stress redistribution effects throughout the underground area.",
+    "parameters": {
+      "x": "horizontal coordinate of cell to excavate (0-4)",
+      "y": "vertical coordinate of cell to excavate (0-4)"
+    }
+  },
+  {
+    "name": "place_support_column",
+    "description": "Install a structural support column in an excavated cell using specified materials.",
+    "parameters": {
+      "x": "horizontal coordinate for support placement (0-4)",
+      "y": "vertical coordinate for support placement (0-4)",
+      "material_type": "type of support material from available materials list"
+    }
+  },
+  {
+    "name": "dig_ventilation_shaft",
+    "description": "Create an air circulation shaft in an excavated cell with directional airflow enhancement.",
+    "parameters": {
+      "x": "horizontal coordinate for ventilation shaft (0-4)",
+      "y": "vertical coordinate for ventilation shaft (0-4)",
+      "direction": "airflow direction enhancement ('north', 'south', 'east', 'west')"
+    }
+  },
+  {
+    "name": "install_power_conduit",
+    "description": "Establish energy distribution pathways along a series of connected excavated cells.",
+    "parameters": {
+      "path_cells": "list of coordinate pairs [[x1,y1], [x2,y2], ...] defining conduit path (max 3 cells)"
+    }
+  },
+  {
+    "name": "build_district_core",
+    "description": "Convert a prepared excavated cell into a habitable district center for population.",
+    "parameters": {
+      "x": "horizontal coordinate for district core (0-4)",
+      "y": "vertical coordinate for district core (0-4)"
+    }
+  },
+  {
+    "name": "research_anomaly",
+    "description": "Study the underground physics to unlock advanced materials and construction techniques.",
+    "parameters": {
+      "research_type": "area of research ('gravity_mechanics', 'airflow_patterns', 'advanced_materials')"
+    }
+  },
+  {
+    "name": "diagnostic_scan",
+    "description": "Perform detailed analysis of a specific grid cell to reveal hidden stress sources and conditions.",
+    "parameters": {
+      "x": "horizontal coordinate to scan (0-4)",
+      "y": "vertical coordinate to scan (0-4)"
+    }
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "excavate_cell", "params": {"x": 2, "y": 3}}

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "INPUT_HEX",
+    "description": "Enter a hexadecimal digit (0-15) into the currently selected answer slot.",
+    "parameters": {
+      "hex_value": "integer from 0-15 representing hex digits 0-9 and A-F"
+    }
+  },
+  {
+    "name": "MOVE_CURSOR_RIGHT", 
+    "description": "Move the cursor to the next answer slot to the right (wraps around from slot 3 to slot 0).",
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_CURSOR_LEFT",
+    "description": "Move the cursor to the next answer slot to the left (wraps around from slot 0 to slot 3).", 
+    "parameters": {}
+  },
+  {
+    "name": "SUBMIT_ANSWER",
+    "description": "Submit the current 4-character sequence as your final answer and end the episode.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "INPUT_HEX", "params": {"hex_value": 10}}

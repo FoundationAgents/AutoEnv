@@ -1,0 +1,107 @@
+meta:
+  id: "mismatched_memory"
+  name: "Mismatched Memory Game"
+  description: "4x4 memory card game where visually different symbols form pairs, testing counter-intuitive pattern discovery"
+
+state_template:
+  globals:
+    max_steps: 40
+    total_pairs: 4
+    grid_size: 4
+  board:
+    size: [4, 4]
+    cards: []
+    card_states: []
+  game:
+    symbol_pairs: {}
+    discovered_pairs: 0
+    seen_symbols: []
+    step_count: 0
+    cumulative_reward: 0.0
+
+observation:
+  policy: "partial_card_visibility"
+  params:
+    show_face_up_only: true
+  expose:
+    - board.card_states
+    - game.step_count
+    - globals.max_steps
+    - visible_symbols
+    - t
+
+reward:
+  events:
+    - trigger: "pair_discovered"
+      value_key: "pair_rewards"
+    - trigger: "new_symbol_seen"
+      value_key: "exploration_rewards"
+  pair_rewards:
+    valid_pair: 1.0
+  exploration_rewards:
+    first_time_symbol: 0.05
+
+transition:
+  actions:
+    - name: "FLIP"
+      params: [x, y]
+    - name: "WAIT"
+      params: []
+
+skin:
+  type: "text"
+  template: |
+    Step {step_count}/{max_steps} | Pairs Found: {discovered_pairs}/{total_pairs} | Score: {cumulative_reward:.2f}
+    
+    Board State (0=face-down, 1=face-up, 2=solved):
+    {board_mask}
+    
+    Currently Visible Symbols:
+    {visible_symbols_display}
+    
+    Available Actions: FLIP(x,y) where x,y in [0,3], WAIT()
+
+termination:
+  max_steps: 40
+  conditions:
+    - "game.discovered_pairs >= globals.total_pairs"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_symbol_pairs"
+      desc: "Create 8 inverse pairing relationships where each symbol A-H pairs with exactly one different symbol"
+      args:
+        symbols: ["A", "B", "C", "D", "E", "F", "G", "H"]
+        pairing_rule: "inverse"
+    - name: "populate_board"
+      desc: "Place each symbol exactly twice on 4x4 grid using random shuffle, initialize all cards as face-down"
+      args:
+        grid_size: 4
+        shuffle_positions: true
+    - name: "initialize_tracking"
+      desc: "Set up card state tracking matrix and game variables for episode start"
+      args:
+        initial_card_state: 0
+        initial_pairs_found: 0
+
+  randomization:
+    seed_based: true
+    parameters:
+      symbol_pairing_permutation: [0, 1]
+      board_layout_shuffle: [0, 1]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

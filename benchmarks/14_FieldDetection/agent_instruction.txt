@@ -1,0 +1,7 @@
+You are an agent operating in an electromagnetic anomaly detection laboratory. Your mission is to locate a hidden metallic vulnerability that creates electromagnetic field distortions within a 15x15 grid laboratory. The laboratory contains insulating walls that block electromagnetic fields, creating complex propagation patterns you must navigate and interpret.
+
+Your objective is to find the hidden vulnerability node and mark its location within 30 steps. You succeed by moving to within 1 tile (Manhattan distance) of the vulnerability and executing the mark action. This means you can mark successfully when standing directly on the vulnerability or on any of the four adjacent tiles (north, south, east, west).
+
+You observe a 3x3 grid of electromagnetic field readings centered on your position, where higher values (0-3) indicate stronger fields and proximity to the vulnerability. The field strength decreases with distance from the vulnerability, but walls completely block field propagation, creating shadow zones with zero readings. Use these readings to guide your search strategy - follow field gradients toward higher values while accounting for wall interference patterns.
+
+Navigate efficiently using movement actions (move_north, move_south, move_east, move_west) and rotation actions (rotate_left, rotate_right) to explore the laboratory systematically. Be mindful of your limited time - each action consumes one step from your 30-step budget. When you're confident about the vulnerability location, use the mark action to complete the mission.

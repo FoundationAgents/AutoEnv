@@ -1,0 +1,59 @@
+[
+  {
+    "name": "MoveN",
+    "description": "Move the agent one tile north (up) if the destination is not blocked by fences or boundaries.",
+    "parameters": {}
+  },
+  {
+    "name": "MoveS", 
+    "description": "Move the agent one tile south (down) if the destination is not blocked by fences or boundaries.",
+    "parameters": {}
+  },
+  {
+    "name": "MoveE",
+    "description": "Move the agent one tile east (right) if the destination is not blocked by fences or boundaries.", 
+    "parameters": {}
+  },
+  {
+    "name": "MoveW",
+    "description": "Move the agent one tile west (left) if the destination is not blocked by fences or boundaries.",
+    "parameters": {}
+  },
+  {
+    "name": "Wait",
+    "description": "Skip the current turn without performing any action, allowing time to pass.",
+    "parameters": {}
+  },
+  {
+    "name": "UseWateringCan", 
+    "description": "Water the crop directly in front of the agent (if any crop is present).",
+    "parameters": {}
+  },
+  {
+    "name": "SpreadFertilizer",
+    "description": "Apply fertilizer to the crop directly in front of the agent (if any crop is present).",
+    "parameters": {}
+  },
+  {
+    "name": "Feed",
+    "description": "Feed the animal in the pen directly in front of the agent (if any animal is present).",
+    "parameters": {}
+  },
+  {
+    "name": "CleanPen",
+    "description": "Clean the animal pen directly in front of the agent (if any pen is present).", 
+    "parameters": {}
+  },
+  {
+    "name": "Compliment",
+    "description": "Give a compliment to the villager directly in front of the agent (if any villager is present).",
+    "parameters": {}
+  },
+  {
+    "name": "Insult",
+    "description": "Insult the villager directly in front of the agent (if any villager is present).",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

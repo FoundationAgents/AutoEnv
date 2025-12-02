@@ -1,0 +1,314 @@
+{
+  "environment_id": "20250907_183059_env_collective_consc",
+  "calculation_timestamp": "2025-09-07 18:40:42",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1194.94,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1104.94,
+        "synergy_bonus": 0.0,
+        "estimated_knowledge_per_turn": 96.68,
+        "estimated_max_unity": 75.74,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)"
+      ]
+    },
+    "level_02.yaml": {
+      "max_reward": 1205.71,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1115.71,
+        "synergy_bonus": 0.0,
+        "estimated_knowledge_per_turn": 97.36,
+        "estimated_max_unity": 78.43,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)"
+      ]
+    },
+    "level_03.yaml": {
+      "max_reward": 1202.69,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1112.69,
+        "synergy_bonus": 0.0,
+        "estimated_knowledge_per_turn": 97.15,
+        "estimated_max_unity": 77.76,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)"
+      ]
+    },
+    "level_04.yaml": {
+      "max_reward": 1194.75,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1104.75,
+        "synergy_bonus": 0.0,
+        "estimated_knowledge_per_turn": 96.24,
+        "estimated_max_unity": 77.43,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)"
+      ]
+    },
+    "level_05.yaml": {
+      "max_reward": 1199.98,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1109.98,
+        "synergy_bonus": 0.0,
+        "estimated_knowledge_per_turn": 96.59,
+        "estimated_max_unity": 78.64,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)"
+      ]
+    },
+    "level_06.yaml": {
+      "max_reward": 1210.45,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1120.45,
+        "synergy_bonus": 0.0,
+        "estimated_knowledge_per_turn": 97.94,
+        "estimated_max_unity": 78.46,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)"
+      ]
+    },
+    "level_07.yaml": {
+      "max_reward": 1214.26,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1124.26,
+        "synergy_bonus": 0.0,
+        "estimated_knowledge_per_turn": 98.05,
+        "estimated_max_unity": 79.92,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)"
+      ]
+    },
+    "level_08.yaml": {
+      "max_reward": 1207.67,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1117.67,
+        "synergy_bonus": 0.0,
+        "estimated_knowledge_per_turn": 97.23,
+        "estimated_max_unity": 79.93,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)"
+      ]
+    },
+    "level_09.yaml": {
+      "max_reward": 1236.77,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1126.77,
+        "synergy_bonus": 20.0,
+        "estimated_knowledge_per_turn": 98.09,
+        "estimated_max_unity": 81.01,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)",
+        "Can achieve synergy bonus"
+      ]
+    },
+    "level_10.yaml": {
+      "max_reward": 1201.42,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1111.42,
+        "synergy_bonus": 0.0,
+        "estimated_knowledge_per_turn": 96.85,
+        "estimated_max_unity": 78.3,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)"
+      ]
+    },
+    "level_11.yaml": {
+      "max_reward": 1201.95,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1111.95,
+        "synergy_bonus": 0.0,
+        "estimated_knowledge_per_turn": 97.32,
+        "estimated_max_unity": 76.7,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)"
+      ]
+    },
+    "level_12.yaml": {
+      "max_reward": 1238.84,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1128.84,
+        "synergy_bonus": 20.0,
+        "estimated_knowledge_per_turn": 98.51,
+        "estimated_max_unity": 80.4,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)",
+        "Can achieve synergy bonus"
+      ]
+    },
+    "level_13.yaml": {
+      "max_reward": 1213.57,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1123.57,
+        "synergy_bonus": 0.0,
+        "estimated_knowledge_per_turn": 98.53,
+        "estimated_max_unity": 77.68,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)"
+      ]
+    },
+    "level_14.yaml": {
+      "max_reward": 1201.64,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1111.64,
+        "synergy_bonus": 0.0,
+        "estimated_knowledge_per_turn": 96.64,
+        "estimated_max_unity": 79.24,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)"
+      ]
+    },
+    "level_15.yaml": {
+      "max_reward": 1192.59,
+      "calculation_method": "optimal_path_analysis",
+      "breakdown": {
+        "milestone_rewards": 40.0,
+        "completion_bonus": 50.0,
+        "continuous_rewards": 1102.59,
+        "synergy_bonus": 0.0,
+        "estimated_knowledge_per_turn": 95.91,
+        "estimated_max_unity": 77.67,
+        "estimated_max_diversity": 90
+      },
+      "notes": [
+        "Can reach milestone 50",
+        "Can reach milestone 100",
+        "Can reach milestone 150",
+        "Can reach milestone 200",
+        "Can reach completion target (200 knowledge)"
+      ]
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 1207.82,
+    "min_max_reward": 1192.59,
+    "max_max_reward": 1238.84
+  }
+}

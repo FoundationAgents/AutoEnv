@@ -1,0 +1,69 @@
+# Inverted Box Escape Environment Design Document
+
+## Background
+
+The Inverted Box Escape environment presents a deliberately counterintuitive twist on the classic Sokoban puzzle mechanics. Set within confined grid-based rooms, this environment challenges conventional expectations by inverting the traditional meanings of game objects. Where typical box-pushing puzzles reward placing crates onto storage locations, this environment transforms crates into lethal obstacles and storage tiles into dangerous zones that must be neutralized. The agent finds itself trapped in rooms where the very objects that would typically lead to success now represent mortal threats, requiring a complete reframing of strategic thinking.
+
+Each room represents a self-contained puzzle chamber with walls forming the boundaries, scattered crates that pose immediate danger if touched, volatile storage tiles that threaten the agent's survival until properly neutralized, and a single exit point that offers escape once all hazards are managed. The stark visual presentation uses simple ASCII symbols that deliberately mirror traditional Sokoban conventions while hiding their inverted functionality, forcing agents to discover the true nature of each object through direct interaction rather than relying on visual assumptions.
+
+## Objective
+
+The agent must successfully escape from each puzzle room within a strict 40-step time limit by executing a two-phase strategy. First, the agent must neutralize all dangerous storage tiles by carefully maneuvering crates to cover each one, transforming these volatile zones into safe terrain. Second, once every storage tile has been covered and all immediate hazards eliminated, the agent must navigate to the single exit tile to complete the escape sequence.
+
+Success requires precise planning and execution, as the agent must avoid direct contact with any uncovered storage tiles or crates throughout the entire process while working within the constrained step budget. The objective demands both spatial reasoning to determine optimal crate placement sequences and temporal planning to ensure all tasks can be completed before the step limit expires.
+
+## State Setup
+
+Each episode initializes with a randomly generated room layout constrained within a maximum grid size of 10×10 cells, though actual dimensions may vary between 6×6 and 10×10 to provide spatial diversity. The environment places between 3 and 5 crates randomly throughout the room, with an equal number of storage tiles distributed to ensure puzzle balance. Wall configurations create interesting corridor and chamber structures while maintaining guaranteed solvability within the 40-step limit.
+
+The agent spawns at a safe starting position on empty floor space, ensuring no immediate hazard contact at episode initialization. A single exit tile is positioned strategically within the room layout, typically requiring the agent to traverse significant portions of the solved puzzle space to reach it. The initial state guarantees that every storage tile can be covered by pushing available crates, and that a valid solution path exists within the step constraints, though discovering and executing this path remains the agent's challenge.
+
+## Actions
+
+The agent operates with a five-action repertoire designed for precise grid-based navigation and object manipulation. The four directional movement actions—MoveNorth, MoveSouth, MoveEast, and MoveWest—serve dual purposes as both navigation commands and crate manipulation tools. When the agent attempts to move into a cell containing a crate, the action automatically becomes a push attempt, trying to slide the crate one cell further in the same direction.
+
+Push mechanics require the destination cell beyond the crate to be either empty floor space or a storage tile for the action to succeed. Walls, other crates, or grid boundaries block push attempts, leaving both agent and crate positions unchanged while still consuming the action step. The Wait action provides strategic timing control, allowing agents to consume a time step without movement when needed for planning or in situations where immediate movement might be disadvantageous.
+
+Movement into walls results in no position change but still consumes the precious step resource, encouraging agents to develop accurate spatial awareness. All actions operate deterministically with no randomness in their execution, ensuring consistent learning experiences across episodes.
+
+## State Transition Rule
+
+State transitions follow deterministic rules that maintain perfect consistency across all episodes and difficulty levels. When the agent executes a movement action toward an empty floor cell, exit tile, or covered storage tile, the agent simply relocates to that position with no additional effects. Movement attempts into walls leave the agent's position unchanged while decrementing the remaining step counter.
+
+Crate interaction triggers the push mechanism when the agent moves toward a crate-occupied cell. The system evaluates whether the cell beyond the crate in the movement direction can accommodate the pushed crate. Success requires this destination to be either empty floor or an uncovered storage tile within grid boundaries. Successful pushes simultaneously move the agent into the crate's former position and relocate the crate to the destination cell. When a crate lands on a storage tile, that tile immediately transitions from its dangerous uncovered state to a safe covered state, permanently altering the room's hazard landscape.
+
+Failed push attempts, blocked by walls, other crates, or boundary limits, leave all object positions unchanged but still advance the step counter. The step counter decrements with every action regardless of success or failure, creating consistent temporal pressure throughout the episode.
+
+## Rewards
+
+The environment employs a binary reward structure that provides exactly one reward event per episode, delivering either complete success or total failure with no intermediate scoring. The agent receives a reward of +1 exclusively when two conditions are simultaneously satisfied: all storage tiles in the room have been covered by crates, neutralizing every hazard, and the agent successfully reaches the exit tile, all within the 40-step time limit.
+
+Every other possible outcome results in a reward of 0, including partial progress scenarios where some but not all storage tiles are covered, situations where all tiles are covered but the agent fails to reach the exit before time expires, and all failure conditions such as hazard contact or step limit expiration. This stark binary feedback forces agents to develop complete solution strategies rather than settling for partial achievements.
+
+The reward structure provides no intermediate shaping signals, progress indicators, or step-based penalties, requiring agents to internally model the relationship between actions and the ultimate success condition. No negative rewards ever occur, maintaining a clean 0-1 reward signal throughout all possible episode outcomes.
+
+## Observation
+
+The environment provides complete observability through a comprehensive state representation that gives agents perfect information about all relevant environmental factors. The primary observation component consists of a full H×W grid matrix matching the current room dimensions, where each cell contains exactly one symbol indicating its current contents and state.
+
+The symbol system uses five distinct markers: 'A' represents empty floor cells safe for agent traversal, 'B' indicates crate positions that pose lethal contact threats, 'C' marks uncovered storage tiles that present immediate danger zones, 'D' identifies the single exit location required for successful escape, 'E' denotes wall cells that block movement and pushes, and 'P' shows the agent's current position within the grid. Covered storage tiles dynamically change their representation to 'A' once neutralized by crate placement, providing clear visual feedback about hazard elimination progress.
+
+Additionally, the observation includes the current step remainder as an integer value counting down from 40 to 0, giving agents explicit temporal awareness for planning purposes. This complete information set enables agents to perform comprehensive spatial analysis, track progress toward the coverage objective, plan multi-step push sequences, and manage time constraints effectively. The observation design eliminates hidden information challenges, focusing learning difficulty squarely on strategic reasoning and execution rather than state estimation problems.
+
+## Termination
+
+Episodes terminate through one of four distinct conditions that clearly distinguish between success and various failure modes. Success termination occurs exclusively when the agent steps onto the exit tile after having covered every storage tile in the room, immediately ending the episode with a reward of 1 and transitioning to the next episode with a freshly generated room layout.
+
+Three failure conditions trigger immediate termination with 0 reward. Hazard contact termination activates when the agent's position coincides with either a crate or an uncovered storage tile, representing lethal contact with dangerous room elements. Timeout termination occurs when the step counter reaches 0 without the agent having achieved the success condition, indicating insufficient progress within the allocated time budget.
+
+All termination events reset the environment state completely, generating new room dimensions, object placements, and spatial configurations while maintaining identical mechanics, object counts, and strategic requirements. The termination system provides clear binary feedback about episode outcomes while preserving learning consistency through stable rule structures across episodes.
+
+## Special Features
+
+The environment incorporates several distinctive mechanisms that create unique learning challenges while maintaining pedagogical clarity. The semantic inversion feature deliberately subverts conventional puzzle game expectations by making typically beneficial objects dangerous and typically neutral objects hazardous, forcing agents to discover object properties through interaction rather than visual assumption.
+
+Hazard neutralization mechanics create dynamic safety zones as covered storage tiles permanently transform from dangerous to safe terrain, requiring agents to understand both immediate threats and the strategic value of threat elimination. The push-only interaction model prevents agents from repositioning crates through pulling actions, constraining solution strategies to forward-planning approaches that avoid creating irreversible blocked states.
+
+Guaranteed solvability ensures every generated puzzle has at least one valid solution executable within the 40-step limit, eliminating impossible scenarios while maintaining appropriate difficulty through spatial complexity and planning requirements. The consistent rule framework across all difficulty levels ensures that object behaviors, interaction mechanics, push physics, and hazard rules remain identical between episodes, supporting stable policy learning while varying only the spatial arrangement challenges.
+
+Time pressure from the fixed 40-step budget creates strategic tension without requiring rushed decisions, encouraging efficient planning while maintaining sufficient moves for complex multi-crate manipulation sequences. The complete observability design focuses learning challenges on strategic reasoning rather than state estimation, while the binary reward structure demands comprehensive solution achievement rather than partial progress satisfaction.

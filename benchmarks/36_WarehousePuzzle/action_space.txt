@@ -1,0 +1,24 @@
+[
+  {
+    "name": "MoveNorth",
+    "description": "Move the forklift agent one cell northward (up) on the warehouse grid.",
+    "parameters": {}
+  },
+  {
+    "name": "MoveSouth", 
+    "description": "Move the forklift agent one cell southward (down) on the warehouse grid.",
+    "parameters": {}
+  },
+  {
+    "name": "MoveEast",
+    "description": "Move the forklift agent one cell eastward (right) on the warehouse grid.",
+    "parameters": {}
+  },
+  {
+    "name": "MoveWest",
+    "description": "Move the forklift agent one cell westward (left) on the warehouse grid.", 
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

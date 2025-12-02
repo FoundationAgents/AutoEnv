@@ -1,0 +1,133 @@
+{
+  "environment_id": "20250918_220928_env_84_icy_terrain_navigation",
+  "calculation_timestamp": "2025-09-18 22:22:12",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 10 steps with 30 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 10,
+      "steps_remaining": 30
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 7 steps with 33 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 7,
+      "steps_remaining": 33
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 4 steps with 36 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 4,
+      "steps_remaining": 36
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 7 steps with 33 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 7,
+      "steps_remaining": 33
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 8 steps with 32 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 8,
+      "steps_remaining": 32
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 5 steps with 35 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 5,
+      "steps_remaining": 35
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 2 steps with 38 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 2,
+      "steps_remaining": 38
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 6 steps with 34 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 6,
+      "steps_remaining": 34
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 2 steps with 38 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 2,
+      "steps_remaining": 38
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 9 steps with 31 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 9,
+      "steps_remaining": 31
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 4 steps with 36 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 4,
+      "steps_remaining": 36
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 4 steps with 36 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 4,
+      "steps_remaining": 36
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 8 steps with 32 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 8,
+      "steps_remaining": 32
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 5 steps with 35 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 5,
+      "steps_remaining": 35
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "path_analysis",
+      "notes": "Goal reachable in 4 steps with 36 steps to spare",
+      "is_solvable": true,
+      "shortest_path_length": 4,
+      "steps_remaining": 36
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "solvable_levels": 15,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0
+  }
+}

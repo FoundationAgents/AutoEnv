@@ -1,0 +1,111 @@
+meta:
+  id: "dream_nav"
+  name: "Dream Sequence Navigation"
+  description: "Navigate surreal dreamscape rooms to find key and reach Awakening Portal within time limit"
+
+state_template:
+  globals:
+    difficulty: "Easy"
+    max_steps: 40
+  agent:
+    current_room: 0
+    has_key: false
+    wait_used_in_room: false
+  world:
+    rooms: {}
+    key_location: 0
+    portal_room: 5
+    connections: {}
+  episode:
+    start_room: 0
+
+observation:
+  policy: "full_room_info"
+  params: {}
+  expose:
+    - agent.current_room
+    - agent.has_key
+    - available_exits
+    - room_type
+    - key_in_room
+    - steps_remaining
+    - t
+
+reward:
+  events:
+    - trigger: "reach_portal_with_key"
+      value_key: "success_rewards"
+  success_rewards:
+    win: 1.0
+  base_reward: 0.0
+
+transition:
+  actions:
+    - name: "ENTER_RED_DOOR"
+      params: []
+    - name: "ENTER_BLUE_DOOR"
+      params: []
+    - name: "ENTER_GREEN_DOOR"
+      params: []
+    - name: "PICK_UP_KEY"
+      params: []
+    - name: "WAIT"
+      params: []
+
+skin:
+  type: "text"
+  template: |
+    === Dream Navigation Step {t}/{max_steps} ===
+    Current Room: {current_room} ({room_type})
+    Has Key: {has_key} | Key in this room: {key_in_room}
+    Available exits: {available_exits}
+    Steps remaining: {steps_remaining}
+    
+    Actions: ENTER_RED_DOOR, ENTER_BLUE_DOOR, ENTER_GREEN_DOOR, PICK_UP_KEY, WAIT
+
+termination:
+  max_steps: 40
+  conditions:
+    - "agent.current_room == world.portal_room and agent.has_key"
+    - "agent.current_room in dead_end_rooms"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "setup_difficulty_rooms"
+      desc: "Create room layout based on difficulty (6/8/10 rooms)"
+      args: {}
+    - name: "generate_room_connections"
+      desc: "Create fixed door connections between rooms with 1-3 colored doors per room"
+      args: {}
+    - name: "assign_room_properties"
+      desc: "Randomly assign Normal, Anti-Gravity, or Time-Slow properties to rooms"
+      args: {}
+    - name: "place_key_and_portal"
+      desc: "Randomly place key in one room, set portal in final room based on difficulty"
+      args: {}
+    - name: "select_start_room"
+      desc: "Randomly select agent starting room"
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      difficulty: ["Easy", "Medium", "Hard"]
+      key_placement: true
+      start_position: true
+      room_properties: true
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

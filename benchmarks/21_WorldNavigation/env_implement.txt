@@ -1,0 +1,83 @@
+Files / classes to write
+------------------------
+1. deceptive_grid_world_env.py  -> class DeceptiveGridWorld(SkinEnv)
+2. deceptive_grid_generator.py  -> class DeceptiveGridGenerator(WorldGenerator)
+3. deceptive_obs_policy.py      -> class EgoRadiusFixed(ObservationPolicy)
+
+Key method responsibilities
+---------------------------
+DeceptiveGridWorld._dsl_config
+  - Load YAML config above into self.configs.
+
+DeceptiveGridWorld.reset(mode="generate"/"load", world_id=None, seed=None)
+  - If mode=="load": call _load_world then set self._state.
+  - If mode=="generate": call self._generate_world(seed), then _load_world.
+  - After loading, copy termination.max_steps from world if present, else keep default.
+  - Reset self._t = 0 and history list.
+
+DeceptiveGridWorld._generate_world(seed)
+  - Instantiate DeceptiveGridGenerator with self.configs["generator"].
+  - Call .generate(seed) to obtain world_id; return it.
+
+DeceptiveGridWorld._load_world(world_id)
+  - Open file at directory/lib path from generator.world_loading, yaml.safe_load.
+
+DeceptiveGridWorld.transition(action)
+  - Decrement agent.steps_remaining.
+  - Map action.name to (dx,dy):
+      N:(-1,0), S:(1,0), E:(0,1), W:(0,-1), Wait:(0,0).
+  - If move stays inside 10x10, update pos accordingly.
+  - Clamp within grid otherwise (agent stays).
+  - Append deepcopy of previous state to self._history.
+  - Update self._last_action_result with tile entered.
+
+DeceptiveGridWorld.reward(action)
+  - If agent.pos == goal_pos: return 1.0, ["success"], {}
+  - else: return 0.0, [], {}
+  - Fatal trap handled via done(): if tile at pos is 💰 mark env as terminal but reward 0.
+
+DeceptiveGridWorld.done(state=None)
+  - Override SkinEnv.done:
+      a) if agent.pos==goal_pos -> True
+      b) if tile at pos == 💰 -> True
+      c) if state.agent.steps_remaining <=0 -> True
+  - Ensure step-limit logic uses self.configs["termination"]["max_steps"]
+    (override with world-level value if generated).
+
+DeceptiveGridWorld.observe_semantic
+  - Call EgoRadiusFixed.__call__(state, self._t).
+
+DeceptiveGridWorld.render_skin(omega)
+  - Convert omega["visible_tiles"] 5×5 char matrix to ascii string {visible_ascii}.
+
+EgoRadiusFixed.__call__(env_state, t)
+  - radius=2 -> slice 5×5 window centered on agent.pos, out-of-bounds filled with space.
+  - Return dict: { "visible_tiles": window, "agent.steps_remaining": steps, "t": t }.
+
+DeceptiveGridGenerator.generate(seed, save_path=None)
+  - base_state = deepcopy(state_template)
+  - world_state = self._execute_pipeline(base_state, seed)
+  - world_id = self._generate_world_id(seed)
+  - self._save_world(world_state, world_id)
+  - return world_id
+
+DeceptiveGridGenerator._execute_pipeline(base_state, seed)
+  - Use numpy RNG(seed)
+  - Step 1: create empty 10×10 grid filled with ◻.
+  - Step 2: randomly mark ⬛ cells per wall_ratio; do NOT block movement.
+  - Step 3: randomly mark 💰 cells per trap_ratio (cannot overlap ⬛).
+  - Step 4: place num_safe_tiles ☠ randomly on remaining cells.
+  - Randomly choose one ☠ coordinate as goal_pos and store in base_state.special.goal_pos.
+  - Pick random starting ◻ cell for agent.pos; ensure not trap or ☠.
+  - Return completed world_state.
+
+Utility functions
+-----------------
+tile_at(pos): helper returns char in grid
+set_tile(pos,char)
+
+Note on max_steps
+-----------------
+Termination.max_steps is ONLY defined in config. If generator needs a different limit for a specific level, write that value inside the saved world YAML; when loading, the env must overwrite self.configs["termination"]["max_steps"] with the value found in world_state["termination"]["max_steps"] (if present).
+
+All code should stay under usual open-source style guidelines and include minimal validation (e.g., assert inside bounds).

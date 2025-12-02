@@ -1,0 +1,5 @@
+You are playing a memory card game on a 4x4 grid with a twist. Unlike traditional memory games where identical symbols match, in this game only visually different symbols can form pairs. Your goal is to discover and reveal all 8 hidden pairs within 40 steps to maximize your score. 
+
+At the start, all 16 cards are face-down. You can flip cards to reveal their symbols (A through H), and when you have exactly two face-up cards showing symbols that form a valid pair, they will be permanently removed from the board and you'll earn 1 point. Cards that don't form pairs will automatically flip back face-down at the end of each turn, so you must rely on memory to track their locations.
+
+You also earn small exploration bonuses (0.05 points) for revealing symbols you haven't seen before in the current game. The key challenge is learning which symbols pair together while efficiently managing your limited moves and remembering card positions as they flip back down.

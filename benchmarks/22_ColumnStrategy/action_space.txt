@@ -1,0 +1,11 @@
+[
+  {
+    "name": "drop_disk",
+    "description": "Drop a disk into the specified column, where it will fall to the lowest available position due to gravity.",
+    "parameters": {
+      "column": "Column index (0-6) where the disk should be dropped"
+    }
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "drop_disk", "params": {"column": 3}}

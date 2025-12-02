@@ -1,0 +1,109 @@
+[
+  {
+    "name": "MoveNorth",
+    "description": "Move the cursor one position up (decrease Y coordinate).",
+    "parameters": {}
+  },
+  {
+    "name": "MoveSouth", 
+    "description": "Move the cursor one position down (increase Y coordinate).",
+    "parameters": {}
+  },
+  {
+    "name": "MoveEast",
+    "description": "Move the cursor one position right (increase X coordinate).",
+    "parameters": {}
+  },
+  {
+    "name": "MoveWest",
+    "description": "Move the cursor one position left (decrease X coordinate).",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor0",
+    "description": "Place color 0 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor1", 
+    "description": "Place color 1 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor2",
+    "description": "Place color 2 at the current cursor position.", 
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor3",
+    "description": "Place color 3 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor4",
+    "description": "Place color 4 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor5",
+    "description": "Place color 5 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor6", 
+    "description": "Place color 6 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor7",
+    "description": "Place color 7 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor8",
+    "description": "Place color 8 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor9",
+    "description": "Place color 9 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor10",
+    "description": "Place color 10 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor11",
+    "description": "Place color 11 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor12",
+    "description": "Place color 12 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor13",
+    "description": "Place color 13 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor14",
+    "description": "Place color 14 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "WriteColor15",
+    "description": "Place color 15 at the current cursor position.",
+    "parameters": {}
+  },
+  {
+    "name": "Skip",
+    "description": "Skip the current position without placing any color.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

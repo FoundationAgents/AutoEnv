@@ -1,0 +1,203 @@
+{
+  "environment_id": "20250904_170900_env_backwards_time_i",
+  "calculation_timestamp": "2025-09-04 17:22:02",
+  "reward_structure_analysis": {
+    "reward_type": "binary",
+    "max_possible_per_level": 1.0,
+    "success_condition": "Correct identification of root cause (time, perpetrator, action)",
+    "failure_conditions": [
+      "Incorrect identification",
+      "Timeout (time index <= 0)",
+      "Max steps exceeded"
+    ]
+  },
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_5 performed fraud at time 8",
+      "ground_truth_summary": {
+        "root_cause_time": 8,
+        "root_cause_perpetrator": "person_5",
+        "root_cause_action": "fraud",
+        "essential_clues_count": 6,
+        "decoy_clues_count": 2
+      }
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_3 performed sabotage at time 15",
+      "ground_truth_summary": {
+        "root_cause_time": 15,
+        "root_cause_perpetrator": "person_3",
+        "root_cause_action": "sabotage",
+        "essential_clues_count": 6,
+        "decoy_clues_count": 3
+      }
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_6 performed sabotage at time 12",
+      "ground_truth_summary": {
+        "root_cause_time": 12,
+        "root_cause_perpetrator": "person_6",
+        "root_cause_action": "sabotage",
+        "essential_clues_count": 8,
+        "decoy_clues_count": 2
+      }
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_2 performed assault at time 8",
+      "ground_truth_summary": {
+        "root_cause_time": 8,
+        "root_cause_perpetrator": "person_2",
+        "root_cause_action": "assault",
+        "essential_clues_count": 8,
+        "decoy_clues_count": 2
+      }
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_5 performed theft at time 10",
+      "ground_truth_summary": {
+        "root_cause_time": 10,
+        "root_cause_perpetrator": "person_5",
+        "root_cause_action": "theft",
+        "essential_clues_count": 6,
+        "decoy_clues_count": 2
+      }
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_1 performed vandalism at time 12",
+      "ground_truth_summary": {
+        "root_cause_time": 12,
+        "root_cause_perpetrator": "person_1",
+        "root_cause_action": "vandalism",
+        "essential_clues_count": 7,
+        "decoy_clues_count": 2
+      }
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_4 performed assault at time 14",
+      "ground_truth_summary": {
+        "root_cause_time": 14,
+        "root_cause_perpetrator": "person_4",
+        "root_cause_action": "assault",
+        "essential_clues_count": 6,
+        "decoy_clues_count": 2
+      }
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_4 performed fraud at time 6",
+      "ground_truth_summary": {
+        "root_cause_time": 6,
+        "root_cause_perpetrator": "person_4",
+        "root_cause_action": "fraud",
+        "essential_clues_count": 6,
+        "decoy_clues_count": 2
+      }
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_4 performed assault at time 8",
+      "ground_truth_summary": {
+        "root_cause_time": 8,
+        "root_cause_perpetrator": "person_4",
+        "root_cause_action": "assault",
+        "essential_clues_count": 6,
+        "decoy_clues_count": 3
+      }
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_2 performed assault at time 14",
+      "ground_truth_summary": {
+        "root_cause_time": 14,
+        "root_cause_perpetrator": "person_2",
+        "root_cause_action": "assault",
+        "essential_clues_count": 7,
+        "decoy_clues_count": 2
+      }
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_4 performed sabotage at time 10",
+      "ground_truth_summary": {
+        "root_cause_time": 10,
+        "root_cause_perpetrator": "person_4",
+        "root_cause_action": "sabotage",
+        "essential_clues_count": 7,
+        "decoy_clues_count": 3
+      }
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_5 performed vandalism at time 15",
+      "ground_truth_summary": {
+        "root_cause_time": 15,
+        "root_cause_perpetrator": "person_5",
+        "root_cause_action": "vandalism",
+        "essential_clues_count": 8,
+        "decoy_clues_count": 2
+      }
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_3 performed theft at time 15",
+      "ground_truth_summary": {
+        "root_cause_time": 15,
+        "root_cause_perpetrator": "person_3",
+        "root_cause_action": "theft",
+        "essential_clues_count": 8,
+        "decoy_clues_count": 2
+      }
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_1 performed fraud at time 14",
+      "ground_truth_summary": {
+        "root_cause_time": 14,
+        "root_cause_perpetrator": "person_1",
+        "root_cause_action": "fraud",
+        "essential_clues_count": 7,
+        "decoy_clues_count": 3
+      }
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_success_reward",
+      "notes": "Correct identification yields 1.0 reward. Root cause: person_1 performed vandalism at time 8",
+      "ground_truth_summary": {
+        "root_cause_time": 8,
+        "root_cause_perpetrator": "person_1",
+        "root_cause_action": "vandalism",
+        "essential_clues_count": 6,
+        "decoy_clues_count": 2
+      }
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0,
+    "solvable_levels": 15
+  }
+}

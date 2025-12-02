@@ -1,0 +1,636 @@
+{
+  "environment_id": "20250907_155104_env_15_sentient_archite",
+  "calculation_timestamp": "2025-09-07 16:05:37",
+  "calculation_method": "theoretical_maximum_analysis",
+  "methodology": {
+    "trust_rewards": "Assume all buildings reach 100 trust from current levels",
+    "integrity_maintenance": "Assume all buildings maintained at 70+ integrity for all steps",
+    "growth_rewards": "Assume all buildings advance to maximum growth stage",
+    "conflict_resolution": "Assume all conflicts are resolved",
+    "synergy_cascade": "Assume 3+ buildings maintain 80+ trust for all steps",
+    "objective_completion": "Assume target synergy is reached"
+  },
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 390.95,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 405,
+          "max_possible": 700,
+          "gain": 295,
+          "reward": 2.95
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 2,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 14,
+          "reward": 42.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 3,
+          "reward": 6.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 7,
+          "total_conflicts": 3,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    },
+    "level_02.yaml": {
+      "max_reward": 365.79,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 221,
+          "max_possible": 400,
+          "gain": 179,
+          "reward": 1.79
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 2,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 8,
+          "reward": 24.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 0,
+          "reward": 0.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 4,
+          "total_conflicts": 0,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    },
+    "level_03.yaml": {
+      "max_reward": 367.61,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 239,
+          "max_possible": 400,
+          "gain": 161,
+          "reward": 1.61
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 2,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 8,
+          "reward": 24.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 1,
+          "reward": 2.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 4,
+          "total_conflicts": 1,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    },
+    "level_04.yaml": {
+      "max_reward": 384.43,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 457,
+          "max_possible": 700,
+          "gain": 243,
+          "reward": 2.43
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 4,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 14,
+          "reward": 42.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 0,
+          "reward": 0.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 7,
+          "total_conflicts": 0,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    },
+    "level_05.yaml": {
+      "max_reward": 397.23,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 477,
+          "max_possible": 800,
+          "gain": 323,
+          "reward": 3.23
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 5,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 16,
+          "reward": 48.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 3,
+          "reward": 6.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 8,
+          "total_conflicts": 3,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    },
+    "level_06.yaml": {
+      "max_reward": 380.48,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 352,
+          "max_possible": 600,
+          "gain": 248,
+          "reward": 2.48
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 4,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 12,
+          "reward": 36.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 1,
+          "reward": 2.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 6,
+          "total_conflicts": 1,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    },
+    "level_07.yaml": {
+      "max_reward": 365.64,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 236,
+          "max_possible": 400,
+          "gain": 164,
+          "reward": 1.6400000000000001
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 2,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 8,
+          "reward": 24.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 0,
+          "reward": 0.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 4,
+          "total_conflicts": 0,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    },
+    "level_08.yaml": {
+      "max_reward": 365.69,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 231,
+          "max_possible": 400,
+          "gain": 169,
+          "reward": 1.69
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 3,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 8,
+          "reward": 24.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 0,
+          "reward": 0.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 4,
+          "total_conflicts": 0,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    },
+    "level_09.yaml": {
+      "max_reward": 365.57,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 243,
+          "max_possible": 400,
+          "gain": 157,
+          "reward": 1.57
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 1,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 8,
+          "reward": 24.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 0,
+          "reward": 0.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 4,
+          "total_conflicts": 0,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    },
+    "level_10.yaml": {
+      "max_reward": 365.35,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 265,
+          "max_possible": 400,
+          "gain": 135,
+          "reward": 1.35
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 2,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 8,
+          "reward": 24.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 0,
+          "reward": 0.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 4,
+          "total_conflicts": 0,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    },
+    "level_11.yaml": {
+      "max_reward": 382.54,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 346,
+          "max_possible": 600,
+          "gain": 254,
+          "reward": 2.54
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 4,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 12,
+          "reward": 36.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 2,
+          "reward": 4.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 6,
+          "total_conflicts": 2,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    },
+    "level_12.yaml": {
+      "max_reward": 390.9,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 410,
+          "max_possible": 700,
+          "gain": 290,
+          "reward": 2.9
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 4,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 14,
+          "reward": 42.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 3,
+          "reward": 6.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 7,
+          "total_conflicts": 3,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    },
+    "level_13.yaml": {
+      "max_reward": 365.34,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 266,
+          "max_possible": 400,
+          "gain": 134,
+          "reward": 1.34
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 2,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 8,
+          "reward": 24.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 0,
+          "reward": 0.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 4,
+          "total_conflicts": 0,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    },
+    "level_14.yaml": {
+      "max_reward": 365.65,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 235,
+          "max_possible": 400,
+          "gain": 165,
+          "reward": 1.6500000000000001
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 3,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 8,
+          "reward": 24.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 0,
+          "reward": 0.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 4,
+          "total_conflicts": 0,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    },
+    "level_15.yaml": {
+      "max_reward": 396.89,
+      "calculation_details": {
+        "trust_gain": {
+          "current_total": 411,
+          "max_possible": 700,
+          "gain": 289,
+          "reward": 2.89
+        },
+        "integrity_maintenance": {
+          "buildings_below_70": 3,
+          "max_steps_maintained": 40,
+          "reward": 40.0
+        },
+        "growth_completion": {
+          "total_possible_advancements": 14,
+          "reward": 42.0
+        },
+        "conflict_resolution": {
+          "total_conflicts": 6,
+          "reward": 12.0
+        },
+        "synergy_cascade": {
+          "buildings_above_80_trust": 0,
+          "can_achieve_cascade": true,
+          "max_steps_cascade": 40,
+          "reward": 200.0
+        },
+        "objective_completion": {
+          "target_synergy": 100,
+          "reward": 100.0
+        },
+        "summary": {
+          "total_buildings": 7,
+          "total_conflicts": 6,
+          "max_steps": 40,
+          "target_synergy": 100
+        }
+      },
+      "notes": "Theoretical maximum assuming optimal play and no constraints"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 376.67,
+    "min_max_reward": 365.34,
+    "max_max_reward": 397.23
+  }
+}

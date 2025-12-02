@@ -1,0 +1,42 @@
+buildings:
+- bio_materials: 0
+  building_id: building_0
+  energy_reserves: 28
+  growth_stage: Seedling
+  integrity: 63
+  mood: Restless
+  trust: 65
+- bio_materials: 0
+  building_id: building_1
+  energy_reserves: 34
+  growth_stage: Seedling
+  integrity: 68
+  mood: Calm
+  trust: 50
+- bio_materials: 0
+  building_id: building_2
+  energy_reserves: 26
+  growth_stage: Seedling
+  integrity: 74
+  mood: Contemplative
+  trust: 55
+- bio_materials: 0
+  building_id: building_3
+  energy_reserves: 32
+  growth_stage: Seedling
+  integrity: 72
+  mood: Restless
+  trust: 69
+city:
+  bio_material_stock: 55
+  energy_grid_capacity: 112
+  harmony_index: 50
+  step_count: 0
+  synergy_score: 0
+conflicts:
+- building_id_1: building_1
+  building_id_2: building_3
+  intensity: 13
+globals:
+  max_steps: 40
+  target_synergy: 100

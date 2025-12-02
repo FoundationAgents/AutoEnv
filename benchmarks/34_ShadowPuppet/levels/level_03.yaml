@@ -1,0 +1,51 @@
+globals:
+  goal_area:
+  - - 4
+    - 6
+  - - 5
+    - 7
+  grid_size:
+  - 8
+  - 8
+  light_source:
+  - 0
+  - 1
+  max_steps: 40
+objects:
+- id: target
+  is_target: true
+  position:
+  - 0
+  - 2
+  property: Heavy
+  velocity:
+  - 0
+  - 0
+- id: obj1
+  is_target: false
+  position:
+  - 6
+  - 4
+  property: Heavy
+  velocity:
+  - 0
+  - 0
+- id: obj2
+  is_target: false
+  position:
+  - 1
+  - 2
+  property: Heavy
+  velocity:
+  - 0
+  - 0
+physics:
+  boundary_enforce: true
+  collision_enabled: true
+  gravity_enabled: false
+shadow:
+  active: true
+  position:
+  - 1
+  - 6
+  shape: circle

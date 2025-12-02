@@ -1,0 +1,50 @@
+## Implementation Guidance for Tower-Stack Connect-Four Environment
+
+### File Structure
+- `connect_four_env.py` - Main environment class inheriting from SkinEnv
+- `connect_four_observation.py` - Full board observation policy
+- `connect_four_generator.py` - World generator for game initialization
+- `connect_four_opponent.py` - Heuristic opponent AI logic
+
+### Core Classes and Methods
+
+**ConnectFourEnv(SkinEnv)**
+- `_dsl_config()`: Load YAML config from worlds/{env_id}/config.yaml
+- `reset(mode, world_id, seed)`: Initialize empty 6x7 board or load existing game state
+- `_load_world(world_id)`: Load saved game state from YAML file
+- `_generate_world(seed)`: Create new empty game using generator pipeline
+- `transition(action)`: Handle agent disk drop with gravity, then opponent move using heuristic
+- `reward(action)`: Return +1.0 if agent wins, 0.0 for all other cases (loss/timeout/continue)
+- `observe_semantic()`: Extract board grid, opponent last move, step counts for observation
+- `render_skin(omega)`: Format board as ASCII grid with player symbols, show available columns
+- `done()`: Check if game_over flag set or winner exists or max_steps reached
+
+**ConnectFourObservation(ObservationPolicy)**
+- `__call__(env_state, t)`: Return full board visibility with game metadata
+
+**ConnectFourGenerator(WorldGenerator)**
+- `generate(seed, save_path)`: Execute pipeline to create empty initialized game state
+- `_execute_pipeline(base_state, seed)`: Run setup_empty_board → initialize_game_state → setup_opponent_heuristic
+- Pipeline step "setup_empty_board": Create 6x7 zero matrix, empty filled_columns list
+- Pipeline step "initialize_game_state": Set current_player=1, game_over=false, winner=0, moves_made=0
+- Pipeline step "setup_opponent_heuristic": Configure opponent policy parameters
+
+**ConnectFourOpponent**
+- `get_move(board_state)`: Implement depth-1 heuristic: try winning moves first, then blocking moves, finally random among available columns
+- `check_winning_move(board, player)`: Test each column for immediate four-in-a-row
+- `check_blocking_move(board, opponent)`: Test each column to block opponent four-in-a-row
+- `get_random_move(board)`: Select random column from non-full columns
+
+### Key Implementation Details
+
+**Gravity System**: When dropping disk in column, find lowest empty row (highest index). If column full, action fails but turn increments.
+
+**Win Detection**: After each disk placement, check horizontal (4 consecutive in row), vertical (4 consecutive in column), and diagonal (both directions) for four-in-a-row.
+
+**Turn Management**: Agent moves first each episode. After agent action, opponent immediately responds. Both moves count as one "step" toward 40-step limit.
+
+**State Updates**: Update board.grid with player IDs (1=agent, 2=opponent), track opponent.last_move column, increment game.moves_made, set game.game_over and game.winner when terminal condition met.
+
+**Termination Logic**: Episode ends when either player achieves four-in-a-row OR agent exhausts 40 turns. Note: max_steps=40 in termination section; if level overrides max_steps, that value takes precedence over environment default.
+
+**Reward Timing**: Only award +1.0 when agent creates winning alignment. Opponent wins, timeouts, and invalid moves all yield 0.0 reward.

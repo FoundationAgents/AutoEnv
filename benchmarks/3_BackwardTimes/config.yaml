@@ -1,0 +1,156 @@
+meta:
+  id: "backwards_investigation"
+  name: "BackwardsTimeInvestigation" 
+  description: "Detective environment where agents investigate backwards through time to find the original crime trigger"
+
+state_template:
+  globals:
+    max_steps: 40
+  agent:
+    current_time_index: 40
+    investigation_status: "active"
+  timeline:
+    time_indices: 40
+    events: {}
+    validated_connections: {}
+  crime_scene:
+    location: "primary_scene"
+    initial_evidence: []
+    witness_statements: []
+    suspect_list: []
+  investigation:
+    collected_clues: []
+    timeline_ledger: {}
+    unresolved_effects: []
+    proposed_connections: []
+  ground_truth:
+    root_cause_time: 0
+    root_cause_perpetrator: ""
+    root_cause_action: ""
+    essential_clues: []
+    decoy_suspects: []
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_crime_scenario" 
+      desc: "Create the root cause event with perpetrator and action at random early time"
+      args:
+        root_time_range: [5, 15]
+        perpetrator_pool_size: [4, 6]
+    - name: "build_causal_chain"
+      desc: "Create sequence of events leading from root cause to final crime scene"
+      args:
+        chain_length: [6, 8]
+        complexity_factor: 0.7
+    - name: "distribute_clues"
+      desc: "Place essential clues throughout timeline and add decoy evidence"
+      args:
+        essential_clues: [6, 8]
+        decoy_clues: [2, 3]
+    - name: "setup_crime_scene"
+      desc: "Initialize final state at time 40 with visible effects and initial information"
+      args:
+        initial_suspects: [4, 6]
+        unresolved_effects: [2, 3]
+    - name: "validate_solvability"
+      desc: "Ensure the generated scenario has exactly one valid solution path"
+      args:
+        require_unique_solution: true
+  randomization:
+    seed_based: true
+    parameters:
+      difficulty: [0.3, 0.9]
+      timeline_complexity: [0.4, 0.8]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+observation:
+  policy: "full_timeline_access"
+  params:
+    show_future_events: false
+    show_unvalidated_connections: true
+  expose:
+    - agent.current_time_index
+    - investigation.timeline_ledger
+    - investigation.unresolved_effects
+    - investigation.collected_clues
+    - crime_scene.suspect_list  
+    - investigation.proposed_connections
+    - globals.max_steps
+    - t
+
+reward:
+  events:
+    - trigger: "correct_identification"
+      value_key: "identification_rewards"
+    - trigger: "incorrect_identification"
+      value_key: "identification_rewards"
+    - trigger: "timeout_failure"
+      value_key: "identification_rewards"
+  identification_rewards:
+    correct_full: 1.0
+    incorrect_partial: 0.0
+    incorrect_full: 0.0
+    timeout: 0.0
+
+transition:
+  actions:
+    - name: "ExamineScene"
+      params: [location]
+    - name: "InterrogatePerson"  
+      params: [person]
+    - name: "TraceObject"
+      params: [object]
+    - name: "ConnectClues"
+      params: [clueA, clueB]
+    - name: "JumpEarlier"
+      params: [steps]
+    - name: "IdentifyRootCause"
+      params: [time_index, perpetrator, action]
+
+termination:
+  max_steps: 40
+  conditions:
+    - "agent.investigation_status == 'completed'"
+    - "agent.current_time_index <= 0"
+    - "invalid_action_attempted == true"
+
+skin:
+  type: "text"
+  template: |
+    === BACKWARDS INVESTIGATION - TIME INDEX {current_time_index} ===
+    Step {t}/{max_steps}
+    
+    TIMELINE LEDGER:
+    {timeline_ledger_display}
+    
+    UNRESOLVED EFFECTS:
+    {unresolved_effects_list}
+    
+    COLLECTED CLUES:
+    {clues_inventory}
+    
+    CURRENT SUSPECTS:
+    {suspect_status}
+    
+    RECENT ACTION RESULT:
+    {last_action_result}
+    
+    Available Actions: ExamineScene(location), InterrogatePerson(person), 
+    TraceObject(object), ConnectClues(clueA,clueB), JumpEarlier(steps),
+    IdentifyRootCause(time_index,perpetrator,action)
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false
+  temporal_consistency_check: true

@@ -1,0 +1,82 @@
+meta:
+  id: "deceptive_grid_world_v1"
+  name: "Deceptive Grid World"
+  description: "10x10 grid where visual cues mislead; find the unique safe ☠ within 30 steps."
+state_template:
+  globals:
+    size: [10, 10]
+  agent:
+    pos: [0, 0]
+    steps_remaining: 30
+  tiles:
+    size: [10, 10]
+    default_type: "◻"
+  special:
+    goal_pos: null
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Copy state_template to base world"
+      args: {}
+    - name: "place_traps"
+      desc: "Scatter 💰 tiles randomly (10-20% of grid)"
+      args:
+        trap_ratio: [0.1, 0.2]
+    - name: "place_fake_walls"
+      desc: "Scatter ⬛ tiles randomly (5-15% of grid); passable"
+      args:
+        wall_ratio: [0.05, 0.15]
+    - name: "place_safe_tiles"
+      desc: "Place multiple ☠ tiles; exactly one flagged as goal_pos, others inert"
+      args:
+        num_safe_tiles: [3, 6]
+    - name: "choose_agent_start"
+      desc: "Pick random empty ◻ tile for agent.pos"
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      master_seed: null
+  world_loading:
+    directory: "worlds/deceptive_grid_world_v1/"
+    format: "yaml"
+    validation_schema: "state_template"
+    naming_convention: "{world_id}.yaml"
+transition:
+  actions:
+    - name: "MoveNorth"
+      params: []
+    - name: "MoveSouth"
+      params: []
+    - name: "MoveEast"
+      params: []
+    - name: "MoveWest"
+      params: []
+    - name: "Wait"
+      params: []
+reward:
+  conditions:
+    - if: "agent.pos == special.goal_pos"
+      value: 1.0
+observation:
+  policy: "ego_radius_fixed"
+  params:
+    radius: 2
+  expose:
+    - agent.steps_remaining
+    - visible_tiles
+    - t
+termination:
+  max_steps: 30
+  conditions:
+    - "agent.pos == special.goal_pos"
+    - "tile_at(agent.pos) == '💰'"
+skin:
+  type: "text"
+  template: |
+    Turn {t}/{max_steps}   Steps left: {agent.steps_remaining}
+    Centred view (🧍=you, ◻=floor, ⬛=illusory wall, 💰=trap, ☠=unknown):
+    {visible_ascii}
+    Actions: MoveNorth, MoveSouth, MoveEast, MoveWest, Wait

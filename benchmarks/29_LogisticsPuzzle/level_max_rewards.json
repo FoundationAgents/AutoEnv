@@ -1,0 +1,379 @@
+{
+  "environment_id": "20250918_171219_env_82_warehouse_logistics_puzzle",
+  "calculation_timestamp": "2025-09-18 17:40:36",
+  "reward_system_analysis": {
+    "type": "binary_completion_reward",
+    "success_reward": 1.0,
+    "failure_reward": 0.0,
+    "description": "Agent gets 1.0 reward only when ALL storage tiles are covered by crates AND agent reaches exit position"
+  },
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 3,
+        "storage_tiles": 3,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 5,
+        "storage_tiles": 5,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 4,
+        "storage_tiles": 4,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 4,
+        "storage_tiles": 4,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 4,
+        "storage_tiles": 4,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 4,
+        "storage_tiles": 4,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 3,
+        "storage_tiles": 3,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 5,
+        "storage_tiles": 5,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 3,
+        "storage_tiles": 3,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 5,
+        "storage_tiles": 5,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 4,
+        "storage_tiles": 4,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 4,
+        "storage_tiles": 4,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 4,
+        "storage_tiles": 4,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 5,
+        "storage_tiles": 5,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "binary_reward_analysis",
+      "notes": "Maximum reward is 1.0 for successful puzzle completion (all storage tiles covered + agent at exit)",
+      "level_stats": {
+        "crates": 3,
+        "storage_tiles": 3,
+        "balanced_puzzle": true,
+        "max_steps": 40,
+        "grid_size": [
+          8,
+          8
+        ],
+        "agent_start": [
+          1,
+          1
+        ],
+        "exit_position": [
+          6,
+          6
+        ]
+      },
+      "solvability": "assumed_solvable"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "solvable_levels": 15,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0
+  }
+}

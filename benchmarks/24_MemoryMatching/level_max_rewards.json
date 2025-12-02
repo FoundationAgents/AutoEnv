@@ -1,0 +1,124 @@
+{
+  "environment_id": "20250919_121700_env_104_spatial_tile_arrangement",
+  "calculation_timestamp": "2025-09-19 12:27:38",
+  "reward_structure": {
+    "chaos_pattern_reached": 1.0,
+    "forbidden_pattern_reached": 0.0,
+    "step_taken": 0.0
+  },
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 15,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 15 steps required)"
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 25,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 25 steps required)"
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 19,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 19 steps required)"
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 24,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 24 steps required)"
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 25,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 25 steps required)"
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 16,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 16 steps required)"
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 21,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 21 steps required)"
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 23,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 23 steps required)"
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 21,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 21 steps required)"
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 21,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 21 steps required)"
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 19,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 19 steps required)"
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 15,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 15 steps required)"
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 20,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 20 steps required)"
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 24,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 24 steps required)"
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "bfs_optimal_path_analysis",
+      "reachable": true,
+      "min_steps_to_chaos": 17,
+      "notes": "Chaos pattern reachable within 30 steps (minimum 17 steps required)"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0,
+    "solvable_levels": 15,
+    "unsolvable_levels": 0
+  }
+}

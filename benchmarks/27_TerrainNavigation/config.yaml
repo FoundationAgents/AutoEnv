@@ -1,0 +1,101 @@
+meta:
+  id: "ice_lake_crossing"
+  name: "Ice Lake Crossing"
+  description: "Navigate across a frozen lake from west to east while avoiding water holes"
+
+state_template:
+  globals:
+    max_steps: 40
+  agent:
+    pos: [4, 0]
+    steps_remaining: 40
+  tiles:
+    size: [8, 8]
+    default_type: "ice"
+    layout: []
+  goal_pos: [4, 7]
+  start_pos: [4, 0]
+
+observation:
+  policy: "radius"
+  params:
+    radius: 1
+  expose:
+    - agent.pos
+    - agent.steps_remaining
+    - visible_tiles
+    - t
+
+reward:
+  events:
+    - trigger: "goal_reached"
+      value_key: "goal_reward"
+  goal_reward:
+    success: 1.0
+
+transition:
+  actions:
+    - name: "MoveNorth"
+      params: []
+    - name: "MoveSouth"
+      params: []
+    - name: "MoveEast"
+      params: []
+    - name: "MoveWest"
+      params: []
+    - name: "Wait"
+      params: []
+
+skin:
+  type: "text"
+  template: |
+    Step {t}/{max_steps} | Steps remaining: {steps_remaining}
+    Position: ({pos_row}, {pos_col})
+    
+    Local view (3x3):
+    {local_grid}
+    
+    Legend: 🧊=Ice 💧=Water 🏁=Goal ⬛=Unknown 🤖=You
+    Available actions: MoveNorth, MoveSouth, MoveEast, MoveWest, Wait
+
+termination:
+  max_steps: 40
+  conditions:
+    - "agent.pos == goal_pos"
+    - "tiles.layout[agent.pos[0]][agent.pos[1]] == 'water'"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_lake_layout"
+      desc: "Generate ice/water layout with random hole probability between 0.1-0.2"
+      args:
+        p_hole_range: [0.1, 0.2]
+    - name: "ensure_path_connectivity"
+      desc: "Verify at least one path exists from start to goal, regenerate if blocked"
+      args:
+        max_attempts: 10
+    - name: "finalize_positions"
+      desc: "Set agent at start position and ensure goal position is accessible"
+      args: {}
+  
+  randomization:
+    seed_based: true
+    parameters:
+      hole_probability: [0.1, 0.2]
+      grid_size: [8, 8]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

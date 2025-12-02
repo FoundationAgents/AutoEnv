@@ -1,0 +1,56 @@
+## Implementation Guide
+
+### File Structure:
+- `bioluminescent_env.py` - Main environment class
+- `communication_observer.py` - Observation policy implementation  
+- `protocol_generator.py` - World generator for protocol setup
+- `protocol_evaluator.py` - Protocol validation logic
+
+### Core Classes:
+
+**BioluminescentEnv (extends SkinEnv):**
+- `_dsl_config()`: Load YAML config from worlds/{env_id}/config.yaml
+- `reset()`: Load existing world or generate new one with protocol selection
+- `_load_world()`: Read world state from YAML file using world_id
+- `_generate_world()`: Use WorldGenerator to create new protocol setup, save as YAML
+- `transition()`: Process RESPOND_PATTERN action, validate against hidden protocol, update state
+- `reward()`: Return 1.0 for successful handshake, 0.0 for failure (with immediate termination)
+- `observe_semantic()`: Extract current pattern, history, counters from state
+- `render_skin()`: Format text display showing incoming pattern and communication history
+- `done()`: Check if 3 handshakes completed, session terminated, or max_steps reached
+
+**CommunicationObserver (extends ObservationPolicy):**
+- `__call__()`: Export all non-hidden state info (pattern, history, counters, available options)
+- Hide protocol family name and parameters from agent observation
+
+**ProtocolGenerator (extends WorldGenerator):**
+- `generate()`: Create new world with random protocol selection and parameters
+- `_execute_pipeline()`: 
+  1. init_from_template: Copy state_template as base
+  2. select_protocol: Random choice from 4 families, generate 2 random params [0-10]
+  3. generate_first_pattern: Create 2-6 pulse sequence with color/duration/intensity
+- Save complete world state as YAML file with unique world_id
+
+**ProtocolEvaluator (utility class):**
+- `validate_response()`: Core logic for each protocol family:
+  - color_mirroring: Response colors follow offset/mapping rules
+  - duration_inversion: Swap short/long based on parameters  
+  - intensity_parity: Mathematical relationships (sum, modulo, etc.)
+  - sequence_fibonacci: Follow mathematical progressions
+- `generate_next_pattern()`: Create new incoming pattern for next handshake
+- Each protocol uses 2 parameters to customize rule behavior
+
+### Key Implementation Details:
+- Maintain deterministic evaluation: same input always gives same result
+- Store complete exchange tuples in history (incoming, response, accepted/rejected)
+- Energy decreases each step but doesn't affect termination (atmospheric only)
+- Pattern format: List of dicts with keys [color, duration, intensity]
+- Action validation: Ensure response length 2-6, valid attribute values
+- Immediate termination on any handshake failure
+- When reading max_steps from levels, if the level has changed max_steps, it should override the environment's self.configs["termination"]["max_steps"]
+
+### Protocol Logic Examples:
+- Color mirroring: If param1=1, shift colors by 1 position in palette
+- Duration inversion: If param2 is odd, invert all durations in response  
+- Intensity parity: Response intensity sum must match incoming sum modulo param1
+- Sequence Fibonacci: Pulse count follows Fibonacci starting at [param1, param2]

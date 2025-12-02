@@ -1,0 +1,146 @@
+meta:
+  id: "sentient_architecture"
+  name: "Sentient Architecture Management"
+  description: "Manage a living city of sentient buildings to achieve harmony and synergy"
+
+state_template:
+  globals:
+    max_steps: 40
+    target_synergy: 100
+  city:
+    bio_material_stock: 50
+    energy_grid_capacity: 100
+    harmony_index: 50
+    synergy_score: 0
+    step_count: 0
+  buildings: []
+  conflicts: []
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_buildings"
+      desc: "Create 4-8 sentient buildings with randomized balanced attributes"
+      args:
+        count_range: [4, 8]
+        integrity_range: [60, 80]
+        energy_range: [20, 35]
+        trust_range: [50, 70]
+        mood_options: ["Calm", "Restless", "Ambitious", "Contemplative", "Energetic"]
+    - name: "randomize_city_resources"
+      desc: "Set initial city resource levels within specified ranges"
+      args:
+        bio_material_range: [40, 60]
+        energy_capacity_range: [80, 120]
+    - name: "initialize_relationships"
+      desc: "Set up initial building relationships and potential conflicts"
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      difficulty: [0.1, 1.0]
+      building_count: [4, 8]
+      resource_scarcity: [0.8, 1.2]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+observation:
+  policy: "full_city_state"
+  params: {}
+  expose:
+    - city.bio_material_stock
+    - city.energy_grid_capacity
+    - city.harmony_index
+    - city.synergy_score
+    - buildings
+    - conflicts
+    - globals.max_steps
+    - t
+
+reward:
+  events:
+    - trigger: "trust_increase"
+      value_key: "trust_rewards"
+    - trigger: "integrity_maintenance"
+      value_key: "maintenance_rewards"
+    - trigger: "successful_growth"
+      value_key: "growth_rewards"
+    - trigger: "conflict_resolution"
+      value_key: "resolution_rewards"
+    - trigger: "synergy_cascade"
+      value_key: "cascade_rewards"
+    - trigger: "objective_completion"
+      value_key: "completion_rewards"
+  trust_rewards:
+    per_point: 0.01
+  maintenance_rewards:
+    all_above_70: 1.0
+  growth_rewards:
+    stage_completion: 3.0
+  resolution_rewards:
+    prevented_damage: 2.0
+  cascade_rewards:
+    three_plus_high_trust: 5.0
+  completion_rewards:
+    synergy_target_reached: 100.0
+
+transition:
+  actions:
+    - name: "Negotiate"
+      params: [building_id]
+    - name: "AllocateEnergy"
+      params: [building_id, amount]
+    - name: "SupplyBioMaterial"
+      params: [building_id, amount]
+    - name: "Mediate"
+      params: [building_id_1, building_id_2]
+    - name: "StimulateGrowth"
+      params: [building_id]
+    - name: "Repair"
+      params: [building_id, resource_amount]
+    - name: "CityFestival"
+      params: []
+
+termination:
+  max_steps: 40
+  conditions:
+    - "any building integrity <= 0"
+    - "any building trust <= 0"
+    - "city.synergy_score >= globals.target_synergy"
+
+skin:
+  type: "text"
+  template: |
+    === Sentient City Management Console ===
+    Step {t}/{max_steps} | City Synergy: {synergy_score}/100 | Harmony: {harmony_index}
+    
+    City Resources:
+    - Bio-Materials: {bio_material_stock} units
+    - Energy Grid: {energy_grid_capacity} units
+    
+    Building Status:
+    {buildings_status}
+    
+    Active Conflicts: {conflicts_count}
+    
+    Available Actions: Negotiate, AllocateEnergy, SupplyBioMaterial, Mediate, StimulateGrowth, Repair, CityFestival
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false
+  growth_stages: ["Seedling", "Mature", "Monumental"]
+  mood_compatibility:
+    Calm: ["Contemplative", "Energetic"]
+    Restless: ["Ambitious", "Energetic"]
+    Ambitious: ["Restless", "Energetic"]
+    Contemplative: ["Calm", "Energetic"]
+    Energetic: ["Calm", "Restless", "Ambitious", "Contemplative"]

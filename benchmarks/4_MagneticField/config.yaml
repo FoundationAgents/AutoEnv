@@ -1,0 +1,107 @@
+meta:
+  id: "magnetic_field_decode"
+  name: "Magnetic Field Pattern Recognition"
+  description: "Decode hidden hexadecimal messages from magnetic field visualizations"
+
+state_template:
+  globals:
+    max_steps: 40
+    encoding_table: {}
+  agent:
+    cursor_pos: 0
+    answer_slots: ["", "", "", ""]
+    submitted: false
+  grid:
+    size: [9, 9]
+    pattern: []
+    encoded_message: ""
+  step_count: 0
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_encoding_table"
+      desc: "Create fixed mapping from 2x2 patterns to 2-bit values"
+      args:
+        patterns_per_value: 4
+    - name: "generate_message"
+      desc: "Create random 4-character hexadecimal target message"
+      args: {}
+    - name: "create_grid_pattern"
+      desc: "Build 9x9 grid encoding the message using pattern mappings"
+      args:
+        add_decorative_elements: true
+    - name: "validate_encoding"
+      desc: "Verify grid correctly encodes the target message"
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      difficulty: [0.1, 1.0]
+      decorative_density: [0.0, 0.3]
+
+world_loading:
+  directory: "worlds/magnetic_field_decode/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+observation:
+  policy: "full_grid"
+  params: {}
+  expose:
+    - grid.pattern
+    - agent.cursor_pos
+    - agent.answer_slots
+    - step_count
+    - globals.max_steps
+    - t
+
+reward:
+  events:
+    - trigger: "answer_submitted"
+      value_key: "correctness_rewards"
+  correctness_rewards:
+    correct: 1.0
+    incorrect: 0.0
+
+transition:
+  actions:
+    - name: "INPUT_HEX"
+      params: [hex_value]
+    - name: "MOVE_CURSOR_RIGHT"
+      params: []
+    - name: "MOVE_CURSOR_LEFT"
+      params: []
+    - name: "SUBMIT_ANSWER"
+      params: []
+
+termination:
+  max_steps: 40
+  conditions:
+    - "agent.submitted == true"
+
+skin:
+  type: "text"
+  template: |
+    Step {t}/{max_steps}
+    
+    Magnetic Field Pattern (0=empty, 1=line, 2=intersection):
+    {grid_display}
+    
+    Current Answer: [{answer_display}]
+    Cursor Position: {cursor_pos} (slot {cursor_slot})
+    
+    Actions:
+    - INPUT_HEX(0-15): Enter hex digit (0-9, A-F) at cursor
+    - MOVE_CURSOR_RIGHT/LEFT: Navigate between slots
+    - SUBMIT_ANSWER: Finalize and submit current answer
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

@@ -1,0 +1,22 @@
+globals:
+  max_steps: 30
+  tolerance: 0.02
+agent:
+  remaining_steps: 30
+gear_system:
+  available_gears:
+  - 39
+  - 34
+  - 27
+  - 11
+  - 51
+  - 55
+  - 12
+  - 9
+  - 48
+  - 51
+  gear_chain: []
+  current_ma: 1.0
+  target_ma: 3.2465
+  episode_finished: false
+  success: false

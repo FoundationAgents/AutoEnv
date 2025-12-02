@@ -1,0 +1,16 @@
+[
+  {
+    "name": "NO_OP",
+    "description": "Take no action, allowing observation of current system state without making changes.",
+    "parameters": {}
+  },
+  {
+    "name": "TOGGLE_VALVE",
+    "description": "Switch the specified valve between open and closed states to redirect fluid flow.",
+    "parameters": {
+      "valve_id": "integer from 0-8 identifying which valve to toggle"
+    }
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "TOGGLE_VALVE", "params": {"valve_id": 3}}

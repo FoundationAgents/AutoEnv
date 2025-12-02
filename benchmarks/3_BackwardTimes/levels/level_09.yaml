@@ -1,0 +1,153 @@
+agent:
+  current_time_index: 40
+  investigation_status: active
+crime_scene:
+  initial_evidence:
+  - Crime scene photographs
+  - Initial police report
+  - Witness contact information
+  location: primary_scene
+  suspect_list:
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_4
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_3
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_2
+  - alibi_status: unverified
+    evidence_against: []
+    involvement_level: unknown
+    name: person_1
+  witness_statements: []
+globals:
+  max_steps: 40
+ground_truth:
+  decoy_suspects:
+  - person_3
+  - person_2
+  - person_1
+  essential_clues:
+  - description: Evidence piece 1 found at reception
+    id: clue_1
+    location: office
+    object: computer
+    relevance: essential
+    time_available: 21
+    type: physical
+  - description: Evidence piece 2 found at reception
+    id: clue_2
+    location: parking_lot
+    object: key
+    relevance: essential
+    time_available: 34
+    type: physical
+  - description: Evidence piece 3 found at parking_lot
+    id: clue_3
+    location: office
+    object: tool
+    relevance: essential
+    time_available: 23
+    type: physical
+  - description: Evidence piece 4 found at office
+    id: clue_4
+    location: office
+    object: document
+    relevance: essential
+    time_available: 22
+    type: forensic
+  - description: Evidence piece 5 found at reception
+    id: clue_5
+    location: parking_lot
+    object: key
+    relevance: essential
+    time_available: 20
+    type: forensic
+  - description: Evidence piece 6 found at office
+    id: clue_6
+    location: storage_room
+    object: tool
+    relevance: essential
+    time_available: 24
+    type: digital
+  - description: Misleading evidence 1
+    id: decoy_1
+    location: reception
+    object: tool
+    relevance: decoy
+    time_available: 26
+    type: witness
+  - description: Misleading evidence 2
+    id: decoy_2
+    location: storage_room
+    object: phone
+    relevance: decoy
+    time_available: 23
+    type: witness
+  - description: Misleading evidence 3
+    id: decoy_3
+    location: office
+    object: document
+    relevance: decoy
+    time_available: 27
+    type: digital
+  root_cause_action: assault
+  root_cause_perpetrator: person_4
+  root_cause_time: 8
+investigation:
+  collected_clues: []
+  proposed_connections: []
+  timeline_ledger: {}
+  unresolved_effects:
+  - Unexplained access to secured area
+  - Missing security footage from critical time period
+  - Contradictory witness statements about suspect locations
+timeline:
+  events:
+    '10':
+      caused_by: 5
+      event: discovery by person_2 at time 10
+      perpetrator: person_2
+      type: discovery
+    '14':
+      caused_by: 9
+      event: discovery by person_2 at time 14
+      perpetrator: person_2
+      type: discovery
+    '18':
+      caused_by: 14
+      event: evidence_creation by person_2 at time 18
+      perpetrator: person_2
+      type: evidence_creation
+    '22':
+      caused_by: 19
+      event: discovery by person_5 at time 22
+      perpetrator: person_5
+      type: discovery
+    '24':
+      caused_by: 21
+      event: cover_attempt by person_5 at time 24
+      perpetrator: person_5
+      type: cover_attempt
+    '27':
+      caused_by: 22
+      event: escalation by person_4 at time 27
+      perpetrator: person_4
+      type: escalation
+    '30':
+      caused_by: 27
+      event: evidence_creation by person_3 at time 30
+      perpetrator: person_3
+      type: evidence_creation
+    '8':
+      action: assault
+      event: person_4 performs assault
+      perpetrator: person_4
+      type: root_cause
+  time_indices: 40
+  validated_connections: {}

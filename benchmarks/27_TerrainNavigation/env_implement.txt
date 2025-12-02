@@ -1,0 +1,78 @@
+# Ice Lake Crossing Implementation Guide
+
+## Core Files Structure
+- `ice_lake_env.py` - Main environment class inheriting from SkinEnv
+- `ice_lake_generator.py` - World generator for lake layouts
+- `ice_lake_observation.py` - Observation policy for 3x3 local view
+
+## IceLakeEnv Class (ice_lake_env.py)
+
+### Key Methods:
+
+**_dsl_config()**: Load YAML config from worlds/{env_id}/config.yaml
+
+**reset(mode, world_id, seed)**: 
+- If mode="load": Call _load_world(world_id) to restore saved lake layout
+- If mode="generate": Call _generate_world(seed) to create new layout
+- Initialize agent at start_pos [N/2, 0], set steps_remaining=40
+
+**transition(action)**: 
+- Parse action name (MoveNorth/South/East/West/Wait)
+- Calculate target position, validate grid boundaries
+- If valid and target is ice/goal: update agent.pos
+- If target is water: update pos but trigger termination 
+- Always decrement steps_remaining by 1
+- Store action result in _last_action_result for UI feedback
+
+**reward(action)**: 
+- Return (1.0, ["goal_reached"], {}) if agent.pos == goal_pos
+- Return (0.0, [], {}) for all other cases (ice, water, wait, timeout)
+
+**observe_semantic()**: 
+- Extract 3x3 grid centered on agent position
+- Include agent.pos, steps_remaining, and visible tile types
+- Mark out-of-bounds areas as "unknown"
+
+**render_skin(omega)**: 
+- Convert 3x3 grid to visual symbols: 🧊=ice, 💧=water, 🏁=goal, ⬛=unknown
+- Show agent position as 🤖 in center
+- Format template with current position, steps, and grid visualization
+
+**done()**: 
+- Check if agent.pos == goal_pos (success)
+- Check if current tile is water (failure)  
+- Check if steps_remaining <= 0 (timeout)
+- Note: When reading max_steps from level config, if the level has changed max_steps, it should override environment's self.configs["termination"]["max_steps"]
+
+## IceLakeGenerator Class (ice_lake_generator.py)
+
+**generate(seed, save_path)**: 
+- Set random seed, execute pipeline, save result
+- Return world_id for the saved file
+
+**_execute_pipeline(base_state, seed)**:
+1. **init_from_template**: Copy state_template as starting point
+2. **generate_lake_layout**: 
+   - Sample p_hole from [0.1, 0.2]
+   - For each cell except start/goal: make water with probability p_hole
+   - Ensure start_pos and goal_pos are always ice
+3. **ensure_path_connectivity**: 
+   - Run pathfinding (BFS/A*) from start to goal
+   - If no path exists, regenerate layout (max 10 attempts)
+4. **finalize_positions**: Set agent at start_pos, confirm goal accessibility
+
+## RadiusObservationPolicy Class (ice_lake_observation.py)
+
+**__call__(env_state, t)**:
+- Extract agent position from env_state
+- Build 3x3 grid around agent (radius=1)  
+- For each cell: get tile type or mark as "unknown" if out of bounds
+- Return dict with visible_tiles, agent info, and metadata
+
+## Key Implementation Notes
+- Lake layout is static within episode but varies between episodes
+- Grid coordinates: (row, col) where (0,0) is top-left
+- Default 8x8 grid with start at (4,0) and goal at (4,7)
+- Generator must ensure connectivity - regenerate if start/goal unreachable
+- Observation shows immediate 3x3 neighborhood only
+- All actions consume 1 step, even if blocked or invalid

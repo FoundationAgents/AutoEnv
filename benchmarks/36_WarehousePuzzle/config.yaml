@@ -1,0 +1,112 @@
+meta:
+  id: "binary_warehouse_sorting"
+  name: "Binary Warehouse Box Sorting"
+  description: "Sokoban-style warehouse where agent must push all boxes onto dock tiles within 60 steps for binary reward"
+
+state_template:
+  globals:
+    max_steps: 60
+  agent:
+    pos: [0, 0]
+  tiles:
+    size: [10, 10]
+    default_type: "floor"
+  objects:
+    boxes: []
+    docks: []
+  level_info:
+    total_boxes: 0
+    boxes_on_docks: 0
+
+observation:
+  policy: "full"
+  params: {}
+  expose:
+    - agent.pos
+    - tiles
+    - objects.boxes
+    - objects.docks
+    - level_info.total_boxes
+    - level_info.boxes_on_docks
+    - globals.max_steps
+    - t
+
+reward:
+  events:
+    - trigger: "task_completed"
+      value: 1.0
+  default_reward: 0.0
+
+transition:
+  actions:
+    - name: "MoveNorth"
+      params: []
+    - name: "MoveSouth"
+      params: []
+    - name: "MoveEast"
+      params: []
+    - name: "MoveWest"
+      params: []
+
+skin:
+  type: "text"
+  template: |
+    Warehouse Box Sorting - Step {t}/{max_steps}
+    Agent Position: {agent_pos}
+    Boxes Remaining: {boxes_remaining}/{total_boxes}
+    
+    Warehouse Layout:
+    {warehouse_grid}
+    
+    Legend: A=Agent, #=Wall, .=Floor, B=Box, D=Dock, X=BoxOnDock
+    Actions: MoveNorth, MoveSouth, MoveEast, MoveWest
+
+termination:
+  max_steps: 60
+  conditions:
+    - "level_info.boxes_on_docks == level_info.total_boxes"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_warehouse_layout"
+      desc: "Create 10x10 grid with walls forming realistic warehouse corridors and storage areas"
+      args:
+        corridor_width: 2
+        storage_alcove_count: 3
+    - name: "place_boxes_and_docks"
+      desc: "Randomly place 3-5 boxes and equal number of dock tiles ensuring solvability"
+      args:
+        min_boxes: 3
+        max_boxes: 5
+        min_separation: 2
+    - name: "place_agent_start"
+      desc: "Position agent at valid starting location on empty floor tile"
+      args:
+        avoid_near_boxes: true
+    - name: "validate_level_solvability"
+      desc: "Ensure level is solvable within 40 steps using pathfinding verification"
+      args:
+        max_attempts: 10
+        
+  randomization:
+    seed_based: true
+    parameters:
+      box_count: [3, 5]
+      layout_complexity: [0.3, 0.7]
+      wall_density: [0.15, 0.25]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

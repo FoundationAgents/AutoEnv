@@ -1,0 +1,117 @@
+{
+  "environment_id": "20250919_152054_env_106_visual_pattern_completion",
+  "calculation_timestamp": "2025-09-19 15:44:10",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 16.0,
+      "masked_positions_count": 16,
+      "mask_count": 16,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 16 masked pixels"
+    },
+    "level_02.yaml": {
+      "max_reward": 20.0,
+      "masked_positions_count": 20,
+      "mask_count": 20,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 20 masked pixels"
+    },
+    "level_03.yaml": {
+      "max_reward": 18.0,
+      "masked_positions_count": 18,
+      "mask_count": 18,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 18 masked pixels"
+    },
+    "level_04.yaml": {
+      "max_reward": 16.0,
+      "masked_positions_count": 16,
+      "mask_count": 16,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 16 masked pixels"
+    },
+    "level_05.yaml": {
+      "max_reward": 17.0,
+      "masked_positions_count": 17,
+      "mask_count": 17,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 17 masked pixels"
+    },
+    "level_06.yaml": {
+      "max_reward": 18.0,
+      "masked_positions_count": 18,
+      "mask_count": 18,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 18 masked pixels"
+    },
+    "level_07.yaml": {
+      "max_reward": 19.0,
+      "masked_positions_count": 19,
+      "mask_count": 19,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 19 masked pixels"
+    },
+    "level_08.yaml": {
+      "max_reward": 20.0,
+      "masked_positions_count": 20,
+      "mask_count": 20,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 20 masked pixels"
+    },
+    "level_09.yaml": {
+      "max_reward": 16.0,
+      "masked_positions_count": 16,
+      "mask_count": 16,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 16 masked pixels"
+    },
+    "level_10.yaml": {
+      "max_reward": 19.0,
+      "masked_positions_count": 19,
+      "mask_count": 19,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 19 masked pixels"
+    },
+    "level_11.yaml": {
+      "max_reward": 17.0,
+      "masked_positions_count": 17,
+      "mask_count": 17,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 17 masked pixels"
+    },
+    "level_12.yaml": {
+      "max_reward": 20.0,
+      "masked_positions_count": 20,
+      "mask_count": 20,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 20 masked pixels"
+    },
+    "level_13.yaml": {
+      "max_reward": 20.0,
+      "masked_positions_count": 20,
+      "mask_count": 20,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 20 masked pixels"
+    },
+    "level_14.yaml": {
+      "max_reward": 19.0,
+      "masked_positions_count": 19,
+      "mask_count": 19,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 19 masked pixels"
+    },
+    "level_15.yaml": {
+      "max_reward": 16.0,
+      "masked_positions_count": 16,
+      "mask_count": 16,
+      "calculation_method": "optimal_completion",
+      "notes": "Assumes perfect restoration of all 16 masked pixels"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 18.066666666666666,
+    "min_max_reward": 16.0,
+    "max_max_reward": 20.0
+  }
+}

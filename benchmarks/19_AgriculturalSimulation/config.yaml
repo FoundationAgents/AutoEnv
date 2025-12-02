@@ -1,0 +1,125 @@
+meta:
+  id: "backwards_valley_farm_v0"
+  name: "BackwardsValleyFarm"
+  description: "Inverse-causality 10×10 farm where neglect is beneficial."
+
+state_template:
+  globals:
+    max_steps: 40
+    farm_value: 0
+  agent:
+    pos: [0, 0]
+    facing: "N"
+  tiles:
+    size: [10, 10]
+    default_type: "grass"
+  objects:
+    fields: []        # to be filled by generator
+    pens: []
+    villagers: []
+    fences: []
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Deep-copy state_template as base."
+      args: {}
+    - name: "place_zones"
+      desc: "Partition map into crop, pen, village zones; add fences."
+      args:
+        num_fields: 12
+        num_pens: 4
+        num_houses: 6
+    - name: "populate_entities"
+      desc: "Instantiate crops, animals, villagers into zones."
+      args:
+        crop_types: ["wheat", "corn", "rice", "pumpkin"]
+        animal_types: ["cow", "sheep", "pig"]
+    - name: "assign_initial_states"
+      desc: "Randomise growth/health/mood categories per spec."
+      args:
+        crop_stages: ["Seed", "Sprout", "Young", "HarvestReady"]
+        animal_states: ["Weak", "Okay", "Thriving"]
+        moods: ["Hostile", "Neutral", "Friendly"]
+    - name: "place_agent"
+      desc: "Pick random empty tile for agent spawn."
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      field_density: [0.2, 0.5]
+      pen_density: [0.05, 0.15]
+      villager_density: [0.05, 0.15]
+
+transition:
+  actions:
+    - name: "MoveN"
+      params: []
+    - name: "MoveS"
+      params: []
+    - name: "MoveE"
+      params: []
+    - name: "MoveW"
+      params: []
+    - name: "Wait"
+      params: []
+    - name: "UseWateringCan"
+      params: []
+    - name: "SpreadFertilizer"
+      params: []
+    - name: "Feed"
+      params: []
+    - name: "CleanPen"
+      params: []
+    - name: "Compliment"
+      params: []
+    - name: "Insult"
+      params: []
+
+reward:
+  events:
+    - trigger: "harvest_crop"
+      value_key: "crop_value"
+    - trigger: "animal_thriving"
+      value_key: "animal_value"
+    - trigger: "villager_friendly"
+      value_key: "social_value"
+  crop_value:
+    wheat: 2
+    corn: 3
+    rice: 4
+    pumpkin: 5
+  animal_value:
+    cow: 1
+    sheep: 2
+    pig: 3
+  social_value:
+    villager: 4
+
+observation:
+  policy: "radius"
+  params:
+    radius: 2
+  expose:
+    - agent.pos
+    - globals.max_steps
+    - globals.farm_value
+    - visible_tiles
+    - t
+
+termination:
+  max_steps: 40
+  conditions:
+    - "globals.farm_value >= 300"
+
+skin:
+  type: "text"
+  template: |
+    Step {t}/{max_steps}   Farm Value: {farm_value}
+    Position: {agent_pos}  Facing: {agent_facing}
+    Remaining steps: {remaining}
+    Visible (5×5, A=Agent, C=Crop, P=Pen, V=Villager, #=Fence, .=Grass):
+    {tiles_ascii}
+    Actions: MoveN/S/E/W, Wait, UseWateringCan, SpreadFertilizer, Feed, CleanPen, Compliment, Insult

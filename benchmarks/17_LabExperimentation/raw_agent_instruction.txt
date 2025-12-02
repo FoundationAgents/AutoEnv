@@ -1,0 +1,11 @@
+You are a laboratory chemist working in an inverted chemistry environment where all chemical and physical rules are systematically reversed. Your task is to synthesize a specific target compound at 95% or higher purity within 40 steps and submit it for analysis.
+
+Key rules in this bizarro laboratory:
+- Hot plates actually cool substances (subtract temperature), while cooling coils heat them (add temperature)
+- Reagents labeled "Acid" behave like bases, and "Base" reagents behave like acids
+- All chemical reactions follow inverted stoichiometry and energetics
+- You have 5 beakers (250ml capacity each), hot plates, cooling coils, and magnetic stirrers
+- Temperature changes affect reaction rates and outcomes
+- Stirring speed (0-3) influences how quickly reactions occur
+
+Your goal is to manipulate reagents, temperature, and stirring to create the target compound at the required purity, then submit the correct beaker for analysis before time runs out. Pay attention to the composition percentages in each beaker to track your progress toward the target purity.

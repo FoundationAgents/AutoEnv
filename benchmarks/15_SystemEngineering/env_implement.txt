@@ -1,0 +1,65 @@
+## Implementation Guide for Pressure Valve Engineering Environment
+
+### Core Files Structure
+- `pressure_valve_env.py` - Main environment class
+- `hydraulic_simulator.py` - Pressure calculation engine  
+- `valve_generator.py` - World generation logic
+- `pressure_observation.py` - Observation policy implementation
+
+### Main Environment Class: `PressureValveEnv(SkinEnv)`
+
+**Key Methods to Implement:**
+
+**`_dsl_config()`**: Load YAML config from `worlds/{env_id}/config.yaml`. Parse hydraulic parameters, action space, and termination conditions.
+
+**`reset(mode, world_id, seed)`**: 
+- If mode="load": Load valve states and targets from `worlds/{env_id}/{world_id}.yaml`  
+- If mode="generate": Call `_generate_world(seed)` to create new scenario, then load it
+- Initialize hydraulic simulator and calculate initial pressures
+
+**`transition(action)`**: 
+- Parse action dict: `{"action": "TOGGLE_VALVE", "params": {"valve_id": 3}}`
+- For TOGGLE_VALVE: flip `self._state["valves"]["states"][valve_id]`  
+- For NO_OP: advance time without valve changes
+- Trigger hydraulic recalculation via `HydraulicSimulator.calculate_steady_state()`
+- Update sensor readings from calculated pipe pressures
+- Decrement step_count and advance timestep
+
+**`reward(action)`**:
+- Check if all 4 sensor readings exactly match targets (zero tolerance)
+- Return (1.0, ["pressure_target_achieved"], {}) if perfect match
+- Return (0.0, [], {}) otherwise
+- Events list used for logging/analysis
+
+**`observe_semantic()`**: Extract observation dict with valve states, all pipe pressures, sensor readings, targets, and remaining steps. Apply observation policy (full visibility in this case).
+
+**`render_skin(omega)`**: Format text display showing current step, valve states as binary array, sensor vs target comparisons, and available actions.
+
+**`done()`**: Check termination conditions - either max_steps reached OR all sensors match targets exactly. Note: When reading max_steps, if the level has changed max_steps, it should override the environment's `self.configs["termination"]["max_steps"]`.
+
+### Hydraulic Simulator Class: `HydraulicSimulator`
+
+**`calculate_steady_state(valve_states, pump_speed, reservoir_pressure)`**: 
+Core physics engine implementing fluid flow equations for the 3-loop, 12-pipe network. Takes valve positions and returns pressure array for all pipe sections. Must be deterministic - identical inputs produce identical outputs.
+
+**`extract_sensor_readings(pipe_pressures)`**: Map specific pipe section pressures to the 4 sensor node locations based on network topology.
+
+### World Generator Class: `PressureValveGenerator(WorldGenerator)`
+
+**`_execute_pipeline(base_state, seed)`**:
+1. **generate_solvable_targets**: Sample random valve configurations, simulate pressures, store as target profiles. Ensures every generated level has at least one solution.
+2. **randomize_initial_valves**: Set random valve states guaranteed to differ from target solution by at least 2 valves. Prevents trivial episodes.  
+3. **simulate_initial_pressures**: Run hydraulic simulation on initial valve config to populate starting pressure state.
+
+**Generator Logic**: The key insight is reverse-engineering solvability. First generate random valve configs and compute their pressure profiles to build a database of achievable targets. Then select targets from this database and randomize initial states to create challenging but solvable puzzles. This guarantees 40 steps is sufficient while maintaining difficulty variety.
+
+### Observation Policy: `FullObservationPolicy(ObservationPolicy)`
+
+**`__call__(env_state, t)`**: Return complete state visibility - all valve states (9 binary), all pipe pressures (12 float), sensor readings (4 float), targets (4 float), and time remaining. No partial observability in this environment.
+
+### Key Implementation Notes
+- Hydraulic simulation must be deterministic and fast (called every action)
+- Zero-tolerance pressure matching requires careful floating-point comparison  
+- Target generation should sample from diverse valve configurations to ensure variety
+- Step counting decrements from 40 to 0, representing time urgency
+- All actions are always legal (no invalid moves to handle)

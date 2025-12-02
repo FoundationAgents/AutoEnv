@@ -1,0 +1,44 @@
+[
+  {
+    "name": "MoveForward",
+    "description": "Move one step forward in the current facing direction.",
+    "parameters": {}
+  },
+  {
+    "name": "TurnLeft", 
+    "description": "Rotate 90 degrees counterclockwise without changing position.",
+    "parameters": {}
+  },
+  {
+    "name": "TurnRight",
+    "description": "Rotate 90 degrees clockwise without changing position.", 
+    "parameters": {}
+  },
+  {
+    "name": "PickUp",
+    "description": "Pick up an object from an adjacent cell if inventory is empty.",
+    "parameters": {}
+  },
+  {
+    "name": "Drop",
+    "description": "Drop the carried object in front of the agent or into a container.",
+    "parameters": {}
+  },
+  {
+    "name": "ToggleAppliance",
+    "description": "Switch an adjacent appliance between on and off states.",
+    "parameters": {}
+  },
+  {
+    "name": "OpenCloseContainer", 
+    "description": "Toggle the open/closed state of a container in front of the agent.",
+    "parameters": {}
+  },
+  {
+    "name": "Wait",
+    "description": "Take no action and advance time by one step.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

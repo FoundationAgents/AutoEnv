@@ -1,0 +1,46 @@
+## Implementation Guide for AlienColonyManager Environment
+
+### Core Files Structure:
+- `alien_colony_env.py`: Main environment class inheriting from SkinEnv
+- `colony_observation.py`: ObservationPolicy implementation  
+- `colony_generator.py`: WorldGenerator implementation
+- `semantic_mappings.py`: Hidden resource/building effect mappings
+
+### Key Classes and Methods:
+
+**AlienColonyEnv(SkinEnv):**
+- `_dsl_config()`: Load config from worlds/{env_id}/config.yaml
+- `reset(mode, world_id, seed)`: Load existing world or generate new one using mode parameter
+- `_load_world(world_id)`: Parse YAML world file, validate against state_template schema
+- `_generate_world(seed)`: Use ColonyGenerator to create world, return generated world_id
+- `transition(action)`: Apply action effects using hidden semantic mappings. Handle 5 action types: gather_resource (modify resources dict), build_structure (add to buildings list, check grid availability), allocate_resource (affect population/happiness based on true effects), manage_environment (change season/weather), explore_area (increase area_exploration, potentially unlock resources)
+- `reward(action)`: Check for resource/building discoveries (compare agent usage patterns to hidden effects, trigger discovery events), check population goal achievement, return cumulative rewards up to 1.0 max
+- `observe_semantic()`: Extract exposed state elements, compute resource/building status displays
+- `render_skin(omega)`: Format text template with population, resources, buildings, environment status
+- `done()`: Check termination conditions - population >= 50, population < 5, or t >= max_steps (note: max_steps from level config overrides environment default)
+
+**ColonyObservationPolicy(ObservationPolicy):**
+- `__call__(env_state, t)`: Return full colony status including all resources, buildings, population metrics, and discovery progress
+
+**ColonyWorldGenerator(WorldGenerator):**
+- `generate(seed, save_path)`: Execute pipeline steps, save to YAML file, return world_id
+- `_execute_pipeline(base_state, seed)`: Run 6 pipeline steps in sequence
+- `_setup_resource_semantics()`: Create consistent global mapping where "toxic_waste"->nutrition boost, "rotten_food"->health boost, "contaminated_water"->happiness boost, "broken_machinery"->efficiency boost
+- `_setup_building_semantics()`: Map "decay_chamber"->population accelerator, "poison_distributor"->happiness generator, maintain consistency across all worlds
+- `_initialize_environment_cycles()`: Define how seasons/weather affect resource effectiveness in predictable patterns
+- `_place_discoverable_resources()`: Add 2-4 new misleadingly-named resources in unexplored areas
+- `_setup_difficulty_scaling()`: Adjust starting resources, building availability, environmental volatility while preserving semantic inversion logic
+
+### Critical Implementation Notes:
+
+**Semantic Inversion Logic**: All "negative" resource/building names must have beneficial effects. Use consistent global seed to ensure same mappings across episodes. Agent discovers true effects by observing population/happiness changes after usage.
+
+**Discovery Mechanism**: Track agent actions and resulting state changes. When agent successfully uses a "negative" resource/building and achieves positive outcomes, trigger discovery event and 0.1 reward. Maximum 3 discoveries per episode.
+
+**Environmental Cycles**: Seasons and weather should modify resource/building effectiveness in learnable patterns. "Harsh season" might actually boost certain resource gathering. "Corrosive weather" might improve building efficiency.
+
+**Grid Management**: 5x5 grid for building placement. Track occupied positions. Exploration actions expand accessible areas and may reveal new resources.
+
+**Termination Logic**: Episode ends immediately on population >= 50 (success), population < 5 (failure), or max_steps reached. When reading max_steps, level-specific max_steps should override the environment's self.configs["termination"]["max_steps"] if present in the loaded world configuration.
+
+**Reward Structure**: Resource/building discoveries: 0.1 each (max 0.3 total), Goal achievement: 0.7, Maximum episode reward: 1.0

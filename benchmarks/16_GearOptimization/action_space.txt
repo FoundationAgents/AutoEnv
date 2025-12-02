@@ -1,0 +1,26 @@
+[
+  {
+    "name": "PlaceGear",
+    "description": "Add a gear from the available library to the end of the current gear chain.",
+    "parameters": {
+      "gear_index": "index of the gear to place from the available gears list (0-based indexing)"
+    }
+  },
+  {
+    "name": "RemoveLast", 
+    "description": "Remove the most recently placed gear from the end of the gear chain.",
+    "parameters": {}
+  },
+  {
+    "name": "Finish",
+    "description": "Complete the current gear train design and evaluate whether it meets the target mechanical advantage within tolerance.",
+    "parameters": {}
+  },
+  {
+    "name": "Skip",
+    "description": "Pass this turn without making any changes to the gear chain.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

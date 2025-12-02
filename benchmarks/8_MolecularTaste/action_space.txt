@@ -1,0 +1,29 @@
+[
+  {
+    "name": "DO_NOTHING",
+    "description": "Stay in current position and re-sample the chemical signature without moving.",
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_NORTH",
+    "description": "Attempt to move one cell north (decrease y-coordinate).",
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_EAST", 
+    "description": "Attempt to move one cell east (increase x-coordinate).",
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_SOUTH",
+    "description": "Attempt to move one cell south (increase y-coordinate).",
+    "parameters": {}
+  },
+  {
+    "name": "MOVE_WEST",
+    "description": "Attempt to move one cell west (decrease x-coordinate).",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

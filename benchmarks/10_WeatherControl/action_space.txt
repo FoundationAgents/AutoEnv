@@ -1,0 +1,34 @@
+[
+  {
+    "name": "inject_cold_ions",
+    "description": "Deploy cold ion injection system to modify atmospheric thermal dynamics and pressure distribution.",
+    "parameters": {}
+  },
+  {
+    "name": "release_dry_fog",
+    "description": "Release specialized dry fog particles that interact with atmospheric moisture and solar radiation.",
+    "parameters": {}
+  },
+  {
+    "name": "vent_heavy_vapor",
+    "description": "Activate heavy vapor venting system to alter atmospheric composition and thermal balance.",
+    "parameters": {}
+  },
+  {
+    "name": "trigger_pressure_spike",
+    "description": "Generate controlled pressure disturbance to redistribute atmospheric energy and moisture.",
+    "parameters": {}
+  },
+  {
+    "name": "emit_solar_net",
+    "description": "Deploy solar net emission system to modify radiation interactions and thermal distribution.",
+    "parameters": {}
+  },
+  {
+    "name": "redirect_jet_stream",
+    "description": "Redirect atmospheric jet streams to alter large-scale circulation patterns and energy distribution.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

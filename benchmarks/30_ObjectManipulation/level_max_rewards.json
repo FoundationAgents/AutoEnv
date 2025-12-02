@@ -1,0 +1,312 @@
+{
+  "environment_id": "20250918_222610_env_85_household_object_manipulation",
+  "calculation_timestamp": "2025-09-20 14:50:26",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup blue cleaning_supplies for: Move the blue cleaning_supplies to the bathroom",
+        "Pickup white clothes for: Put the white clothes in the dresser"
+      ],
+      "chores": [
+        "Move the blue cleaning_supplies to the bathroom",
+        "Turn on the tv in the living room",
+        "Put the white clothes in the dresser"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    },
+    "level_02.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup blue cleaning_supplies for: Move the blue cleaning_supplies to the living room",
+        "Pickup white cleaning_supplies for: Move the white cleaning_supplies to the kitchen"
+      ],
+      "chores": [
+        "Move the blue cleaning_supplies to the living room",
+        "Turn off the stove in the kitchen",
+        "Move the white cleaning_supplies to the kitchen"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    },
+    "level_03.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup green electronics for: Move the green electronics to the bedroom",
+        "Pickup red clothes for: Put the red clothes in the dresser"
+      ],
+      "chores": [
+        "Move the green electronics to the bedroom",
+        "Turn on the refrigerator in the kitchen",
+        "Put the red clothes in the dresser"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    },
+    "level_04.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup black food for: Move the black food to the living room",
+        "Pickup black food for: Put the black food in the refrigerator"
+      ],
+      "chores": [
+        "Move the black food to the living room",
+        "Turn on the refrigerator in the kitchen",
+        "Put the black food in the refrigerator"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    },
+    "level_05.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup black electronics for: Move the black electronics to the bedroom",
+        "Pickup green food for: Put the green food in the refrigerator"
+      ],
+      "chores": [
+        "Move the black electronics to the bedroom",
+        "Turn on the refrigerator in the kitchen",
+        "Put the green food in the refrigerator"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    },
+    "level_06.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup blue food for: Move the blue food to the kitchen",
+        "Pickup black clothes for: Put the black clothes in the closet"
+      ],
+      "chores": [
+        "Move the blue food to the kitchen",
+        "Turn off the stove in the kitchen",
+        "Put the black clothes in the closet"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    },
+    "level_07.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup blue electronics for: Move the blue electronics to the bedroom",
+        "Pickup red food for: Put the red food in the refrigerator"
+      ],
+      "chores": [
+        "Move the blue electronics to the bedroom",
+        "Turn off the tv in the living room",
+        "Put the red food in the refrigerator"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    },
+    "level_08.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup red food for: Move the red food to the living room",
+        "Pickup red food for: Put the red food in the refrigerator"
+      ],
+      "chores": [
+        "Move the red food to the living room",
+        "Turn off the stove in the kitchen",
+        "Put the red food in the refrigerator"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    },
+    "level_09.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup green electronics for: Move the green electronics to the kitchen",
+        "Pickup red clothes for: Put the red clothes in the closet"
+      ],
+      "chores": [
+        "Move the green electronics to the kitchen",
+        "Turn on the tv in the living room",
+        "Put the red clothes in the closet"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    },
+    "level_10.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup green electronics for: Move the green electronics to the kitchen",
+        "Pickup yellow food for: Put the yellow food in the refrigerator"
+      ],
+      "chores": [
+        "Move the green electronics to the kitchen",
+        "Turn off the refrigerator in the kitchen",
+        "Put the yellow food in the refrigerator"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    },
+    "level_11.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup white cleaning_supplies for: Move the white cleaning_supplies to the bathroom",
+        "Pickup red clothes for: Put the red clothes in the closet"
+      ],
+      "chores": [
+        "Move the white cleaning_supplies to the bathroom",
+        "Turn off the refrigerator in the kitchen",
+        "Put the red clothes in the closet"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    },
+    "level_12.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup white cleaning_supplies for: Move the white cleaning_supplies to the bathroom",
+        "Pickup green clothes for: Put the green clothes in the dresser"
+      ],
+      "chores": [
+        "Move the white cleaning_supplies to the bathroom",
+        "Turn off the stove in the kitchen",
+        "Put the green clothes in the dresser"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    },
+    "level_13.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup red cleaning_supplies for: Move the red cleaning_supplies to the bathroom",
+        "Pickup black clothes for: Put the black clothes in the dresser"
+      ],
+      "chores": [
+        "Move the red cleaning_supplies to the bathroom",
+        "Turn off the stove in the kitchen",
+        "Put the black clothes in the dresser"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    },
+    "level_14.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup white electronics for: Move the white electronics to the bedroom",
+        "Pickup blue food for: Put the blue food in the refrigerator"
+      ],
+      "chores": [
+        "Move the white electronics to the bedroom",
+        "Turn off the tv in the living room",
+        "Put the blue food in the refrigerator"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    },
+    "level_15.yaml": {
+      "max_reward": 3.6999999999999997,
+      "breakdown": {
+        "chore_completions": 2.0999999999999996,
+        "final_bonus": 1.0,
+        "pickup_bonuses": 0.6,
+        "pickup_count": 2
+      },
+      "pickup_details": [
+        "Pickup black cleaning_supplies for: Move the black cleaning_supplies to the bedroom",
+        "Pickup white food for: Put the white food in the refrigerator"
+      ],
+      "chores": [
+        "Move the black cleaning_supplies to the bedroom",
+        "Turn on the refrigerator in the kitchen",
+        "Put the white food in the refrigerator"
+      ],
+      "calculation_method": "analytical_reward_structure",
+      "notes": "Assumes optimal execution: all chores completed with all applicable pickup bonuses"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 3.6999999999999997,
+    "min_max_reward": 3.6999999999999997,
+    "max_max_reward": 3.6999999999999997
+  }
+}

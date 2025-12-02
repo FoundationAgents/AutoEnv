@@ -1,0 +1,156 @@
+meta:
+  id: "atmosphere_regulation_array"
+  name: "Atmosphere Regulation Array"
+  description: "Manage alien planet atmospheric system with counterintuitive physics and coupled dynamics"
+
+state_template:
+  globals:
+    max_steps: 30
+  atmosphere:
+    climate_stability_index: 50.0
+    temperature: 300.0
+    humidity: 50.0
+    atmospheric_pressure: 1.0
+    cloud_coverage: 50.0
+    storm_energy: 30.0
+    solar_flux: 1000.0
+  agent:
+    energy_budget: 45
+    step_counter: 0
+  physics:
+    action_effects_queue: []
+    drift_rates:
+      temperature: 0.02
+      humidity: 0.015
+      atmospheric_pressure: 0.01
+      cloud_coverage: 0.025
+      storm_energy: 0.03
+      solar_flux: 0.02
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "randomize_initial_conditions"
+      desc: "Randomize starting atmospheric conditions within plausible ranges"
+      args:
+        csi_range: [40, 60]
+        temperature_range: [200, 400]
+        humidity_range: [30, 70]
+        pressure_range: [0.8, 1.2]
+        cloud_range: [20, 80]
+        storm_range: [10, 50]
+        solar_range: [800, 1200]
+    - name: "calculate_initial_csi"
+      desc: "Calculate initial Climate Stability Index from randomized weather variables"
+      args: {}
+    - name: "initialize_drift_directions"
+      desc: "Set random but consistent drift directions for atmospheric instability"
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      atmospheric_chaos: [0.8, 1.2]
+      coupling_strength: [0.9, 1.1]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+observation:
+  policy: "full_atmospheric"
+  params: {}
+  expose:
+    - atmosphere.climate_stability_index
+    - atmosphere.temperature
+    - atmosphere.humidity
+    - atmosphere.atmospheric_pressure
+    - atmosphere.cloud_coverage
+    - atmosphere.storm_energy
+    - atmosphere.solar_flux
+    - agent.energy_budget
+    - agent.step_counter
+    - t
+
+reward:
+  events:
+    - trigger: "stability_maintenance"
+      value: 0.5
+    - trigger: "stability_recovery"
+      value: 3.0
+    - trigger: "discovery_bonus"
+      value: 2.0
+    - trigger: "perfect_episode"
+      value: 20.0
+    - trigger: "energy_efficiency"
+      value_key: "remaining_energy_multiplier"
+  remaining_energy_multiplier: 0.1
+
+transition:
+  actions:
+    - name: "inject_cold_ions"
+      params: []
+      cost: 2
+    - name: "release_dry_fog"
+      params: []
+      cost: 1
+    - name: "vent_heavy_vapor"
+      params: []
+      cost: 3
+    - name: "trigger_pressure_spike"
+      params: []
+      cost: 2
+    - name: "emit_solar_net"
+      params: []
+      cost: 1
+    - name: "redirect_jet_stream"
+      params: []
+      cost: 2
+
+termination:
+  max_steps: 30
+  conditions:
+    - condition: "critical_failure_low"
+      check: "atmosphere.climate_stability_index < 15"
+    - condition: "critical_failure_high"
+      check: "atmosphere.climate_stability_index > 85"
+    - condition: "energy_depletion"
+      check: "agent.energy_budget <= 0"
+
+skin:
+  type: "text"
+  template: |
+    === ATMOSPHERE REGULATION ARRAY - STEP {t}/{max_steps} ===
+    
+    CLIMATE STATUS:
+    Climate Stability Index: {climate_stability_index:.1f} [TARGET: 45-55]
+    
+    ATMOSPHERIC READINGS:
+    Temperature: {temperature:.1f} ATU
+    Humidity: {humidity:.1f} AMU  
+    Pressure: {atmospheric_pressure:.1f} APU
+    Cloud Coverage: {cloud_coverage:.1f}%
+    Storm Energy: {storm_energy:.1f} AEU
+    Solar Flux: {solar_flux:.1f} ARU
+    
+    FACILITY STATUS:
+    Energy Budget: {energy_budget} units remaining
+    
+    AVAILABLE ACTIONS:
+    - inject_cold_ions (2 energy)
+    - release_dry_fog (1 energy)  
+    - vent_heavy_vapor (3 energy)
+    - trigger_pressure_spike (2 energy)
+    - emit_solar_net (1 energy)
+    - redirect_jet_stream (2 energy)
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false
+  physics_consistency: true

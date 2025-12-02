@@ -1,0 +1,24 @@
+atmosphere:
+  co2_pct: 71.04814784017759
+  oxygen_pct: 0.0
+  pressure: 0.31415949718781255
+  temperature: -36.09323755033713
+biosphere_seeds:
+  dormant_flora: 68.17800627514652
+  dormant_microbes: 120.0
+global_metrics:
+  habitability_index: 0.0
+  instability_index: 10.0
+globals:
+  max_steps: 40
+hydrosphere:
+  ph_level: 2.823632915891167
+  subsurface_ice_pct: 47.1885275324827
+  surface_water_pct: 11.325151101554159
+infrastructure:
+  energy_reserves: 2000.0
+  station_upgrade_level: 0
+  terraforming_stations: 1
+lithosphere:
+  soil_fertility: 0.0
+  tectonic_stress: 53.844229045765466

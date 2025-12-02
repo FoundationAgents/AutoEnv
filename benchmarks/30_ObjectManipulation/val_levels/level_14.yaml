@@ -1,0 +1,294 @@
+agent:
+  facing: south
+  inventory: null
+  pos:
+  - 9
+  - 9
+apartment:
+  doors:
+  - - 3
+    - 4
+  - - 8
+    - 4
+  - - 3
+    - 8
+  - - 7
+    - 8
+  - - 5
+    - 9
+  rooms:
+    bathroom:
+      appliances: []
+      bounds:
+      - 6
+      - 5
+      - 11
+      - 8
+      furniture:
+      - pos:
+        - 7
+        - 6
+        type: toilet
+      - pos:
+        - 6
+        - 7
+        type: sink
+    bedroom:
+      appliances: []
+      bounds:
+      - 0
+      - 5
+      - 5
+      - 8
+      furniture:
+      - pos:
+        - 1
+        - 6
+        type: bed
+      - pos:
+        - 4
+        - 6
+        type: dresser
+    corridor:
+      appliances: []
+      bounds:
+      - 0
+      - 9
+      - 11
+      - 11
+      furniture: []
+    kitchen:
+      appliances:
+      - &id001
+        pos:
+        - 1
+        - 1
+        state: 'off'
+        type: refrigerator
+      - &id002
+        pos:
+        - 2
+        - 1
+        state: 'off'
+        type: stove
+      bounds:
+      - 0
+      - 0
+      - 5
+      - 4
+      furniture:
+      - pos:
+        - 3
+        - 1
+        type: counter
+      - pos:
+        - 4
+        - 1
+        type: sink
+    living_room:
+      appliances:
+      - &id003
+        pos:
+        - 9
+        - 1
+        state: 'off'
+        type: tv
+      bounds:
+      - 6
+      - 0
+      - 11
+      - 4
+      furniture:
+      - pos:
+        - 7
+        - 2
+        type: sofa
+      - pos:
+        - 8
+        - 2
+        type: table
+  walls:
+  - - 0
+    - 0
+  - - 1
+    - 0
+  - - 2
+    - 0
+  - - 3
+    - 0
+  - - 4
+    - 0
+  - - 5
+    - 0
+  - - 0
+    - 0
+  - - 0
+    - 1
+  - - 0
+    - 2
+  - - 0
+    - 3
+  - - 0
+    - 4
+  - - 6
+    - 0
+  - - 7
+    - 0
+  - - 8
+    - 0
+  - - 9
+    - 0
+  - - 10
+    - 0
+  - - 11
+    - 0
+  - - 11
+    - 0
+  - - 11
+    - 1
+  - - 11
+    - 2
+  - - 11
+    - 3
+  - - 11
+    - 4
+  - - 0
+    - 5
+  - - 0
+    - 6
+  - - 0
+    - 7
+  - - 0
+    - 8
+  - - 11
+    - 5
+  - - 11
+    - 6
+  - - 11
+    - 7
+  - - 11
+    - 8
+  - - 0
+    - 9
+  - - 11
+    - 9
+  - - 0
+    - 10
+  - - 11
+    - 10
+  - - 0
+    - 11
+  - - 11
+    - 11
+  - - 0
+    - 11
+  - - 1
+    - 11
+  - - 2
+    - 11
+  - - 3
+    - 11
+  - - 4
+    - 11
+  - - 5
+    - 11
+  - - 6
+    - 11
+  - - 7
+    - 11
+  - - 8
+    - 11
+  - - 9
+    - 11
+  - - 10
+    - 11
+  - - 11
+    - 11
+appliances:
+- *id001
+- *id002
+- *id003
+chores:
+  completed:
+  - false
+  - false
+  - false
+  instructions:
+  - Move the white electronics to the bedroom
+  - Turn off the tv in the living room
+  - Put the blue food in the refrigerator
+containers:
+- contents: []
+  open: false
+  pos:
+  - 1
+  - 1
+  type: refrigerator
+- contents: []
+  open: false
+  pos:
+  - 4
+  - 6
+  type: dresser
+- contents: []
+  open: false
+  pos:
+  - 4
+  - 7
+  type: closet
+current_room: corridor
+globals:
+  grid_size:
+  - 12
+  - 12
+  max_steps: 60
+  num_chores: 3
+objects:
+- color: blue
+  id: obj_0
+  pos:
+  - 8
+  - 7
+  type: food
+- color: yellow
+  id: obj_1
+  pos:
+  - 4
+  - 10
+  type: food
+- color: white
+  id: obj_2
+  pos:
+  - 7
+  - 5
+  type: electronics
+- color: white
+  id: obj_3
+  pos:
+  - 3
+  - 7
+  type: cleaning_supplies
+- color: black
+  id: obj_4
+  pos:
+  - 8
+  - 8
+  type: clothes
+- color: yellow
+  id: obj_5
+  pos:
+  - 7
+  - 7
+  type: electronics
+- color: blue
+  id: obj_6
+  pos:
+  - 2
+  - 7
+  type: food
+- color: blue
+  id: obj_7
+  pos:
+  - 10
+  - 2
+  type: book

@@ -1,0 +1,119 @@
+{
+  "environment_id": "20250905_002350_env_magnetic_field_p",
+  "calculation_timestamp": "2025-09-05 00:33:42",
+  "reward_structure": "Simplified: 0.6 points for free first 2 chars + 0.4 for last 2 chars + 0.2 perfect bonus = max 1.2",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "D0C7",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer 'D0C7' within 40 steps"
+    },
+    "level_02.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "756C",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer '756C' within 40 steps"
+    },
+    "level_03.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "0688",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer '0688' within 40 steps"
+    },
+    "level_04.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "64B3",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer '64B3' within 40 steps"
+    },
+    "level_05.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "22AA",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer '22AA' within 40 steps"
+    },
+    "level_06.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "ED50",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer 'ED50' within 40 steps"
+    },
+    "level_07.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "DDC4",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer 'DDC4' within 40 steps"
+    },
+    "level_08.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "7F5B",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer '7F5B' within 40 steps"
+    },
+    "level_09.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "DDCE",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer 'DDCE' within 40 steps"
+    },
+    "level_10.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "91DF",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer '91DF' within 40 steps"
+    },
+    "level_11.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "3427",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer '3427' within 40 steps"
+    },
+    "level_12.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "E3BD",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer 'E3BD' within 40 steps"
+    },
+    "level_13.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "28B9",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer '28B9' within 40 steps"
+    },
+    "level_14.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "8058",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer '8058' within 40 steps"
+    },
+    "level_15.yaml": {
+      "max_reward": 1.2,
+      "calculation_method": "binary_reward_analysis",
+      "encoded_message": "C86B",
+      "max_steps": 40,
+      "notes": "Optimal agent submits correct answer 'C86B' within 40 steps"
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 1.2,
+    "min_max_reward": 1.2,
+    "max_max_reward": 1.2,
+    "total_possible_reward": 18.0
+  }
+}

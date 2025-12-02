@@ -1,0 +1,162 @@
+{
+  "environment_id": "20250919_121700_env_100_hidden_danger_detection",
+  "calculation_timestamp": "2025-09-19 12:32:14",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['7,0'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "7,0"
+      ]
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['2,3'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "2,3"
+      ]
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['6,4'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "6,4"
+      ]
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['2,7'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "2,7"
+      ]
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['7,3'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "7,3"
+      ]
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['4,4'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "4,4"
+      ]
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['1,1'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "1,1"
+      ]
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['0,2'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "0,2"
+      ]
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['2,1'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "2,1"
+      ]
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['4,0'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "4,0"
+      ]
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['1,2'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "1,2"
+      ]
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['6,4'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "6,4"
+      ]
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['7,1'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "7,1"
+      ]
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['2,4'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "2,4"
+      ]
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_treasure_collection",
+      "notes": "Level has 1 bomb(s) at ['3,6'], 10 flowers. Max reward assumes finding all bombs while avoiding flowers.",
+      "bomb_count": 1,
+      "flower_count": 10,
+      "bomb_positions": [
+        "3,6"
+      ]
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0
+  }
+}

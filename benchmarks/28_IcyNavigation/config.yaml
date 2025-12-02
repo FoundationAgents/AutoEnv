@@ -1,0 +1,110 @@
+meta:
+  id: "reverse_lake_nav"
+  name: "Reverse Lake Navigation"
+  description: "Navigate an 8x8 grid where holes are safe and ice is dangerous to reach the goal flag"
+
+state_template:
+  globals:
+    max_steps: 40
+    grid_size: [8, 8]
+  agent:
+    pos: [0, 0]
+    start_pos: [0, 0]
+  tiles:
+    size: [8, 8]
+    default_type: "hole"
+    grid: []
+  objects:
+    goal_flag:
+      pos: [7, 7]
+      collected: false
+    ice_tiles: []
+    hole_tiles: []
+
+observation:
+  policy: "local_window"
+  params:
+    window_size: 3
+  expose:
+    - agent.pos
+    - local_grid
+    - remaining_steps
+    - t
+
+reward:
+  events:
+    - trigger: "goal_reached"
+      value_key: "goal_values"
+  goal_values:
+    success: 1.0
+    failure: 0.0
+    timeout: 0.0
+
+transition:
+  actions:
+    - name: "MoveNorth"
+      params: []
+    - name: "MoveSouth"
+      params: []
+    - name: "MoveEast"
+      params: []
+    - name: "MoveWest"
+      params: []
+    - name: "Wait"
+      params: []
+
+skin:
+  type: "text"
+  template: |
+    Step {t}/{max_steps} | Remaining: {remaining_steps}
+    Local View (3x3 centered on agent):
+    {local_grid_display}
+    
+    Legend: A=Agent, H=Hole(safe), I=Ice(danger), G=Goal, #=Boundary
+    Position: {agent_pos}
+    Actions: MoveNorth, MoveSouth, MoveEast, MoveWest, Wait
+
+termination:
+  max_steps: 40
+  conditions:
+    - "objects.goal_flag.collected == true"
+    - "agent stepped on ice tile"
+    - "t >= max_steps"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize 8x8 grid with base state template"
+      args: {}
+    - name: "place_ice_tiles"
+      desc: "Randomly place 8-12 ice trap tiles across the grid"
+      args:
+        min_ice: 8
+        max_ice: 12
+    - name: "place_goal_flag"
+      desc: "Place single goal flag on a safe hole tile"
+      args: {}
+    - name: "place_agent_start"
+      desc: "Place agent starting position on a safe hole tile"
+      args: {}
+    - name: "validate_reachability"
+      desc: "Ensure goal is reachable from start via safe path"
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      ice_density: [0.125, 0.1875]
+      goal_distance: [3, 7]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: false
+  debug_mode: false

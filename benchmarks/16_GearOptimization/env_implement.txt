@@ -1,0 +1,62 @@
+## Implementation Guide
+
+### Core Files Structure
+- `gear_ratio_env.py`: Main environment class `GearRatioEnv(SkinEnv)`
+- `gear_observation.py`: Observation policy class `GearObservationPolicy(ObservationPolicy)`  
+- `gear_generator.py`: World generator class `GearWorldGenerator(WorldGenerator)`
+
+### GearRatioEnv Class Methods
+
+**_dsl_config()**: Load YAML config from `worlds/{env_id}/config.yaml`, store in `self.configs`
+
+**reset(mode, world_id, seed)**: 
+- mode="load": call `_load_world(world_id)` and set `self._state`
+- mode="generate": call `_generate_world(seed)` to create world_id, then load it
+- Reset `self._t = 0`, clear history
+
+**_load_world(world_id)**: Load YAML from `worlds/{env_id}/{world_id}.yaml`, return state dict
+
+**_generate_world(seed)**: Instantiate `GearWorldGenerator`, call `generator.generate(seed)`, return world_id
+
+**transition(action)**: 
+- Handle 4 actions: PlaceGear(i), RemoveLast(), Finish(), Skip()
+- PlaceGear: append `available_gears[i]` to gear_chain, recalc MA
+- RemoveLast: pop from gear_chain if not empty, recalc MA  
+- Finish: set episode_finished=True, check if |current_ma - target_ma|/target_ma <= tolerance
+- Skip: no-op except decrement remaining_steps
+- Always decrement remaining_steps, update current_ma
+- Set `self._last_action_result` for action feedback
+
+**calculate_mechanical_advantage(gear_chain)**:
+- If empty chain: return 1.0
+- For chain [T1,T2,T3,T4,...]: return (T1/T2) * (T3/T4) * ...
+- Odd-length chains: last gear doesn't form ratio
+
+**reward(action)**: 
+- Return (1.0, ["finish_success"], {}) if Finish action succeeds
+- Return (0.0, ["finish_fail"], {}) if Finish action fails  
+- Return (0.0, ["step"], {}) for all other actions
+
+**observe_semantic()**: Return full state dict with all gear_system fields + agent fields
+
+**render_skin(omega)**: Format text using skin template, substitute values like {current_ma}, {target_ma}
+
+**done()**: Return `self._t >= max_steps OR gear_system.episode_finished`
+
+### GearObservationPolicy Class
+**__call__(env_state, t)**: For "full" policy, return complete state. Could implement "partial" to hide some gears.
+
+### GearWorldGenerator Class  
+**generate(seed, save_path)**: Execute pipeline, save world, return world_id
+
+**_execute_pipeline(base_state, seed)**:
+1. init_from_template: copy state_template
+2. generate_gear_library: create 10 random integers [6,60], store in available_gears
+3. generate_target_ma: sample random float in [0.1,10.0], store in target_ma
+4. validate_solvability: verify target is achievable (could brute-force check small combinations)
+
+**Important Notes**:
+- When reading max_steps in done(), if the loaded level has changed max_steps in its state, it should override the environment's `self.configs["termination"]["max_steps"]`
+- Generator should ensure target_ma is actually achievable with the generated gear set
+- Mechanical advantage calculation must handle both even/odd length chains correctly
+- Invalid PlaceGear indices should be handled gracefully (no-op but consume step)

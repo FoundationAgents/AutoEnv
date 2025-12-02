@@ -1,0 +1,87 @@
+{
+  "environment_id": "20250918_204705_env_83_icy_terrain_navigation",
+  "calculation_timestamp": "2025-09-18 21:02:06",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    },
+    "level_02.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    },
+    "level_03.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    },
+    "level_04.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    },
+    "level_05.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    },
+    "level_06.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    },
+    "level_07.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    },
+    "level_08.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    },
+    "level_09.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    },
+    "level_10.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    },
+    "level_11.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    },
+    "level_12.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    },
+    "level_13.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    },
+    "level_14.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    },
+    "level_15.yaml": {
+      "max_reward": 1.0,
+      "calculation_method": "optimal_path_analysis",
+      "notes": "Path exists: True. Reward = 1.0 if goal reachable, 0.0 otherwise."
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "average_max_reward": 1.0,
+    "min_max_reward": 1.0,
+    "max_max_reward": 1.0
+  }
+}

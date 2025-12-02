@@ -1,0 +1,11 @@
+You are a farmer in a 15x15 valley with 50 steps before nightfall. Your goal is to efficiently manage crops, animals, and villager relationships to earn the highest possible cumulative reward.
+
+You start with limited resources (seeds, water, animal feed, and gifts). The valley contains multiple crop fields, barns with different animals, villager cottages, and a market. You can only see a 5x5 area around you, so exploration is important.
+
+General guidance:
+- Plant seeds on suitable soil and tend crops to bring them to maturity before harvesting.
+- Care for animals and collect their products at appropriate intervals.
+- Improve relationships with villagers to unlock better economic outcomes at the market.
+- Sell agricultural goods at the market to convert effort into income.
+
+Plan your route and actions carefully given the step and resource limits. Balance exploration, production, relationships, and trading to maximize your final outcome.

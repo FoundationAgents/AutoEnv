@@ -1,0 +1,37 @@
+**Reverse Lake Navigation Environment Design Document**
+
+**Background**
+
+The Reverse Lake Navigation Environment presents a counter-intuitive twist on traditional frozen lake scenarios. Set in an 8×8 grid world with winter-themed visual elements, this environment deliberately subverts common-sense expectations about terrain safety. The core deception lies in the inverse relationship between visual appearance and actual physics: dark holes that would typically represent dangerous water are completely safe to traverse, while bright ice surfaces that normally indicate solid footing will instantly end the episode upon contact. This design creates a scenario where agents must overcome pre-existing biases and learn through direct experience rather than relying on intuitive assumptions about environmental semantics.
+
+**Objective**
+
+The agent's primary goal is to locate and reach a single Goal Flag tile positioned randomly within the 8×8 grid. Success requires careful navigation through the terrain while avoiding ice traps, all within a strict budget of 40 steps. The challenge stems from the need to identify safe paths using only local observations while managing the time pressure of the step limitation. Agents must develop efficient exploration strategies that balance risk assessment with forward progress toward the goal.
+
+**State Setup**
+
+Each episode begins with a fresh 8×8 grid configuration generated through controlled randomization. The environment first places between 8 and 12 ice trap tiles randomly across the grid, then positions exactly one Goal Flag on a remaining safe location. Finally, the agent's starting position is selected uniformly from the available hole tiles, ensuring every episode begins on safe terrain. The resulting map topology remains fixed throughout the entire episode, providing consistency for learning while maintaining variety across different episodes. No two tiles share the same position, and the goal is guaranteed to be reachable through at least one safe path from the starting location.
+
+**Actions**
+
+The agent has access to five distinct actions at each time step. Four directional movement actions (MoveNorth, MoveSouth, MoveEast, MoveWest) attempt to relocate the agent to adjacent grid cells, consuming one step from the remaining budget regardless of success. The fifth action, Wait, allows the agent to remain stationary while still consuming a step, potentially useful for strategic planning or when no safe moves are apparent. When movement actions would carry the agent beyond the grid boundaries, the agent remains in its current position but the step is still consumed, creating a natural penalty for inefficient exploration near map edges.
+
+**State Transition Rule**
+
+Movement actions trigger position updates based on the target cell's contents and validity. When an agent moves to a hole tile or the goal flag, the position updates normally and the episode continues. Moving onto an ice tile immediately triggers episode termination with failure status. Boundary violations result in no position change while still advancing the step counter. The Wait action advances time without any spatial changes. All valid transitions decrement the remaining step counter, and the environment tracks cumulative steps to enforce the 40-step episode limit. State transitions are fully deterministic given the current position and chosen action.
+
+**Rewards**
+
+The environment implements a binary reward structure focusing solely on successful goal achievement. Agents receive a reward of +1 exclusively when stepping onto the Goal Flag tile within the allocated step budget. All other outcomes, including timeout scenarios and ice trap encounters, yield a reward of 0. This stark binary feedback eliminates reward shaping and forces agents to develop intrinsic motivation for exploration and risk assessment. The reward structure maintains non-negative values throughout all possible episodes, ensuring compatibility with algorithms that assume non-negative reward signals.
+
+**Observation**
+
+At each time step, agents receive a carefully constrained observation designed to balance challenge with learnability. The primary component is a 3×3 local grid centered on the agent's current position, revealing the terrain type of immediately adjacent cells and the agent's current location. Each cell displays one of five symbols: 'H' for holes (safe terrain), 'I' for ice (dangerous terrain), 'G' for the goal flag (safe target), 'S' for the starting position (visible only at step 0), or '#' for areas beyond the map boundary. Additionally, agents observe their remaining step count as an integer value, providing crucial information for time management and strategic planning. This observation design ensures agents have sufficient local information to make informed movement decisions while maintaining the challenge of global navigation without a complete map view.
+
+**Termination**
+
+Episodes conclude under three distinct conditions, each representing a different outcome category. Successful termination occurs when the agent steps onto the Goal Flag tile, immediately ending the episode with positive reward regardless of remaining steps. Failure termination triggers when the agent moves onto any ice tile, instantly concluding the episode with zero reward. Timeout termination activates when the agent exhausts all 40 allocated steps without reaching the goal, also resulting in zero reward. The environment clearly communicates the termination reason alongside final rewards, enabling agents to distinguish between different types of unsuccessful outcomes for improved learning.
+
+**Special Features**
+
+The environment incorporates several distinctive mechanics that enhance its educational and research value. The inverse semantic mapping between visual symbols and actual physics remains globally consistent across all episodes, ensuring that learned associations transfer reliably between different map configurations. The fixed step budget creates consistent time pressure across all episodes, preventing agents from relying on unlimited exploration strategies. Map generation follows controlled randomization that guarantees solvability while maintaining appropriate difficulty levels. The partial observation system through local grid views forces agents to develop memory and spatial reasoning capabilities rather than relying on complete information. Additionally, the environment supports optional deterministic seeding for reproducible experiments while maintaining stochastic variety in default operation mode.

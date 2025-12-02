@@ -1,0 +1,10 @@
+You are navigating a deceptive 10x10 grid world where appearances may not match underlying behavior. Your goal is to locate and step on the single true goal tile within 30 steps.
+
+Observations and movement:
+- You start on a random floor tile and can see a 5x5 area around yourself.
+- Use movement actions (MoveNorth, MoveSouth, MoveEast, MoveWest) or Wait to pause.
+
+Guidance:
+- Symbols and visuals may not reliably indicate how tiles behave.
+- Use cautious exploration and simple empirical tests to verify which tiles are safe, blocked, or special.
+- Systematically probe candidate goal tiles to identify the true objective while managing the step limit.

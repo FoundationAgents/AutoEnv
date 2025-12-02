@@ -1,0 +1,495 @@
+{
+  "environment_id": "20250905_101109_env_terraforming_pro",
+  "calculation_timestamp": "2025-09-05 10:28:17",
+  "calculation_method": "improved_simulation_based",
+  "levels": {
+    "level_01.yaml": {
+      "max_reward": 45.6,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 2000.0,
+        "possible_major_actions": 23.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.6,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 36.0,
+        "rewarded_water_range": 16.0
+      },
+      "notes": "Based on 40 steps, 23.0 major actions possible with 2000.0 energy",
+      "initial_conditions": {
+        "energy_reserves": 2000.0,
+        "initial_water_pct": 10.048920647247472,
+        "initial_ice_pct": 44.97945789191373,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    },
+    "level_02.yaml": {
+      "max_reward": 45.74,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 1961.6272915178288,
+        "possible_major_actions": 23.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.74,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 37.2,
+        "rewarded_water_range": 17.4
+      },
+      "notes": "Based on 40 steps, 23.0 major actions possible with 1961.6272915178288 energy",
+      "initial_conditions": {
+        "energy_reserves": 1961.6272915178288,
+        "initial_water_pct": 10.150490248065237,
+        "initial_ice_pct": 46.509744951582526,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    },
+    "level_03.yaml": {
+      "max_reward": 45.45,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 2000.0,
+        "possible_major_actions": 23.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.45,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 36.5,
+        "rewarded_water_range": 14.5
+      },
+      "notes": "Based on 40 steps, 23.0 major actions possible with 2000.0 energy",
+      "initial_conditions": {
+        "energy_reserves": 2000.0,
+        "initial_water_pct": 8.0,
+        "initial_ice_pct": 45.56574136848624,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    },
+    "level_04.yaml": {
+      "max_reward": 45.6,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 2000.0,
+        "possible_major_actions": 23.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.6,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 34.4,
+        "rewarded_water_range": 16.0
+      },
+      "notes": "Based on 40 steps, 23.0 major actions possible with 2000.0 energy",
+      "initial_conditions": {
+        "energy_reserves": 2000.0,
+        "initial_water_pct": 11.540548241291226,
+        "initial_ice_pct": 43.04931793055815,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    },
+    "level_05.yaml": {
+      "max_reward": 45.49,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 1993.124530875621,
+        "possible_major_actions": 23.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.49,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 36.9,
+        "rewarded_water_range": 14.9
+      },
+      "notes": "Based on 40 steps, 23.0 major actions possible with 1993.124530875621 energy",
+      "initial_conditions": {
+        "energy_reserves": 1993.124530875621,
+        "initial_water_pct": 8.0,
+        "initial_ice_pct": 46.079543586329685,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    },
+    "level_06.yaml": {
+      "max_reward": 45.32,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 2000.0,
+        "possible_major_actions": 23.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.32,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 34.2,
+        "rewarded_water_range": 13.2
+      },
+      "notes": "Based on 40 steps, 23.0 major actions possible with 2000.0 energy",
+      "initial_conditions": {
+        "energy_reserves": 2000.0,
+        "initial_water_pct": 9.033423839560893,
+        "initial_ice_pct": 42.75203271698282,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    },
+    "level_07.yaml": {
+      "max_reward": 45.41,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 2000.0,
+        "possible_major_actions": 23.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.41,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 36.1,
+        "rewarded_water_range": 14.1
+      },
+      "notes": "Based on 40 steps, 23.0 major actions possible with 2000.0 energy",
+      "initial_conditions": {
+        "energy_reserves": 2000.0,
+        "initial_water_pct": 8.0,
+        "initial_ice_pct": 45.1614690193801,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    },
+    "level_08.yaml": {
+      "max_reward": 45.65,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 1941.8795263777827,
+        "possible_major_actions": 22.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.65,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 34.5,
+        "rewarded_water_range": 16.5
+      },
+      "notes": "Based on 40 steps, 22.0 major actions possible with 1941.8795263777827 energy",
+      "initial_conditions": {
+        "energy_reserves": 1941.8795263777827,
+        "initial_water_pct": 11.995119819310442,
+        "initial_ice_pct": 43.13333370622839,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    },
+    "level_09.yaml": {
+      "max_reward": 45.57,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 1916.1629294366003,
+        "possible_major_actions": 22.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.57,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 34.2,
+        "rewarded_water_range": 15.7
+      },
+      "notes": "Based on 40 steps, 22.0 major actions possible with 1916.1629294366003 energy",
+      "initial_conditions": {
+        "energy_reserves": 1916.1629294366003,
+        "initial_water_pct": 11.430468632178853,
+        "initial_ice_pct": 42.778957743365055,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    },
+    "level_10.yaml": {
+      "max_reward": 45.72,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 1932.0459113037641,
+        "possible_major_actions": 22.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.72,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 37.1,
+        "rewarded_water_range": 17.2
+      },
+      "notes": "Based on 40 steps, 22.0 major actions possible with 1932.0459113037641 energy",
+      "initial_conditions": {
+        "energy_reserves": 1932.0459113037641,
+        "initial_water_pct": 10.059446189846584,
+        "initial_ice_pct": 46.40994563110794,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    },
+    "level_11.yaml": {
+      "max_reward": 45.4,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 2000.0,
+        "possible_major_actions": 23.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.4,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 36.0,
+        "rewarded_water_range": 14.0
+      },
+      "notes": "Based on 40 steps, 23.0 major actions possible with 2000.0 energy",
+      "initial_conditions": {
+        "energy_reserves": 2000.0,
+        "initial_water_pct": 8.0,
+        "initial_ice_pct": 45.03528572878022,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    },
+    "level_12.yaml": {
+      "max_reward": 45.22,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 2000.0,
+        "possible_major_actions": 23.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.22,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 34.2,
+        "rewarded_water_range": 12.2
+      },
+      "notes": "Based on 40 steps, 23.0 major actions possible with 2000.0 energy",
+      "initial_conditions": {
+        "energy_reserves": 2000.0,
+        "initial_water_pct": 8.0,
+        "initial_ice_pct": 42.79887199390531,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    },
+    "level_13.yaml": {
+      "max_reward": 45.29,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 1945.0325871124226,
+        "possible_major_actions": 22.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.29,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 34.9,
+        "rewarded_water_range": 12.9
+      },
+      "notes": "Based on 40 steps, 22.0 major actions possible with 1945.0325871124226 energy",
+      "initial_conditions": {
+        "energy_reserves": 1945.0325871124226,
+        "initial_water_pct": 8.0,
+        "initial_ice_pct": 43.58575878243181,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    },
+    "level_14.yaml": {
+      "max_reward": 45.57,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 2000.0,
+        "possible_major_actions": 23.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.57,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 35.2,
+        "rewarded_water_range": 15.7
+      },
+      "notes": "Based on 40 steps, 23.0 major actions possible with 2000.0 energy",
+      "initial_conditions": {
+        "energy_reserves": 2000.0,
+        "initial_water_pct": 10.510732439210301,
+        "initial_ice_pct": 43.97001851952145,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    },
+    "level_15.yaml": {
+      "max_reward": 45.91,
+      "calculation_method": "simulation_based_optimal",
+      "energy_analysis": {
+        "initial_energy": 2000.0,
+        "possible_major_actions": 23.0,
+        "estimated_completable": true
+      },
+      "reward_components": {
+        "mission_completion": 20.0,
+        "stability_rewards": 3.5,
+        "atmospheric_progress": 0.5,
+        "hydrological_progress": 1.91,
+        "habitability_increase": 20.0,
+        "penalties": 0.0
+      },
+      "progression_analysis": {
+        "estimated_habitat_gain_pct": 100.0,
+        "atmospheric_actions_est": 7.0,
+        "water_actions_est": 5.0,
+        "potential_water_gain": 37.8,
+        "rewarded_water_range": 19.1
+      },
+      "notes": "Based on 40 steps, 23.0 major actions possible with 2000.0 energy",
+      "initial_conditions": {
+        "energy_reserves": 2000.0,
+        "initial_water_pct": 11.325151101554159,
+        "initial_ice_pct": 47.1885275324827,
+        "initial_instability": 10.0,
+        "max_steps": 40
+      }
+    }
+  },
+  "summary": {
+    "total_levels": 15,
+    "successful_calculations": 15,
+    "average_max_reward": 45.53,
+    "min_max_reward": 45.22,
+    "max_max_reward": 45.91,
+    "reward_range": 0.69
+  }
+}

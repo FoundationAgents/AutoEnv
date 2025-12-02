@@ -1,0 +1,47 @@
+## Implementation Guide for Backwards Time Investigation Environment
+
+### Core Files Structure
+- `backwards_investigation_env.py`: Main environment class inheriting from SkinEnv
+- `investigation_observation.py`: ObservationPolicy implementation  
+- `crime_world_generator.py`: WorldGenerator implementation
+- `temporal_logic.py`: Helper module for timeline validation and causality checks
+
+### Main Environment Class (BackwardsInvestigationEnv)
+
+**_dsl_config()**: Load YAML config from worlds/{env_id}/config.yaml, validate required sections exist.
+
+**reset()**: In "load" mode, call _load_world(world_id). In "generate" mode, call _generate_world(seed) then load the result. Initialize agent at time_index 40 with crime scene visible.
+
+**_load_world()**: Read YAML file using world_loading config, validate against state_template schema. Return complete world state dict with all timeline events, clues, and ground truth.
+
+**_generate_world()**: Create WorldGenerator instance, call generate() with seed, return world_id of saved file.
+
+**transition()**: Handle 6 action types. ExamineScene/InterrogatePerson/TraceObject reveal information from time periods before current_time_index, add to timeline_ledger, decrement time_index by 1. ConnectClues validates proposed causal relationships against ground truth chain. JumpEarlier decreases time_index by specified steps. IdentifyRootCause sets investigation_status to 'completed'. Store action results in _last_action_result for feedback.
+
+**reward()**: Binary reward system. Return 1.0 only if IdentifyRootCause action has all three components exactly matching ground_truth (time, perpetrator, action). All other cases return 0.0. Generate events list for logging.
+
+**observe_semantic()**: Extract current state according to observation.expose list. Build timeline_ledger_display showing events organized by time with validated connections marked. Format unresolved_effects, clues_inventory, and suspect_status for presentation.
+
+**render_skin()**: Use skin.template to format semantic observation into text display. Replace template variables with observation data, format timeline and clue information for readability.
+
+**done()**: Check termination conditions: investigation_status == 'completed', current_time_index <= 0, or max_steps exceeded. Note: if level has custom max_steps in metadata, that overrides self.configs["termination"]["max_steps"].
+
+### Observation Policy (FullTimelineAccessPolicy)
+
+**__call__()**: Return filtered state based on policy.params. Include current_time_index, all revealed timeline_ledger entries, collected_clues, unresolved_effects list, and current suspect_list. Hide future events (time > current_time_index) but show all validated past connections.
+
+### World Generator (CrimeWorldGenerator)
+
+**generate()**: Execute _execute_pipeline() with seed, save result using _save_world(), return world_id. Handle file path generation using world_loading config.
+
+**_execute_pipeline()**: Follow 6-step pipeline. First initialize from state_template. Then generate_crime_scenario creates root cause at random early time with random perpetrator/action. build_causal_chain creates logical sequence of events leading to time 40. distribute_clues places essential clues throughout timeline plus decoys. setup_crime_scene creates initial visible state at time 40. validate_solvability ensures exactly one valid solution exists.
+
+Each pipeline step should maintain temporal consistency - effects never precede causes, clues logically connect to events, and the causal chain has no contradictions. Ground truth must be discoverable through systematic investigation but not obvious from initial state.
+
+### Key Implementation Notes
+- Maintain strict backwards time progression in all actions
+- Validate all causal connections against internal timeline logic  
+- Ensure binary reward only for complete correct identification
+- Timeline ledger must preserve validated connections permanently
+- Generator must create exactly one solvable root cause per level
+- Max steps override: check level metadata for custom max_steps before using config default

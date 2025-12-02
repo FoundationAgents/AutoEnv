@@ -1,0 +1,53 @@
+## Implementation Guide
+
+### Files to Create:
+- `shadow_puppet_env.py` - Main environment class
+- `shadow_observation.py` - Observation policy implementation  
+- `shadow_generator.py` - World generator implementation
+- `shadow_physics.py` - Physics simulation utilities
+
+### Core Classes:
+
+**ShadowPuppetEnv(SkinEnv):**
+- `_dsl_config()`: Load config from worlds/{env_id}/config.yaml
+- `reset()`: Load existing level or generate new one with seed
+- `_load_world()`: Parse YAML world files, validate against state_template
+- `_generate_world()`: Create new level using generator pipeline, return world_id
+- `transition()`: Handle shadow movement, shape changes, wind pulses, physics step
+- `reward()`: Return +1.0 when target object entirely within goal_area bounds
+- `observe_semantic()`: Return full state dict with all observable elements
+- `render_skin()`: Format text display with 8x8 grid, object positions, properties
+- `done()`: Check if target in goal OR steps >= 40 OR impossible state detected
+
+**ShadowObservationPolicy(ObservationPolicy):**
+- `__call__()`: Extract full state including positions, properties, shadow state
+- Always returns complete information - no partial observability in this environment
+
+**ShadowWorldGenerator(WorldGenerator):**
+- `generate()`: Execute pipeline to create solvable puzzle, save to file
+- `_execute_pipeline()`: Run generation steps sequentially with seed control
+- Pipeline steps:
+  - `init_from_template`: Copy state_template as base
+  - `randomize_positions`: Place objects avoiding overlaps, ensure min distances
+  - `set_goal_area`: Position goal requiring multi-step solution
+  - `assign_properties`: Set initial object properties for puzzle interest
+  - `validate_solvability`: Run simple pathfinding to confirm level is solvable
+- Use difficulty parameter to control complexity (object count, distances)
+
+**Physics Implementation:**
+- Shadow-object overlap detection using grid coordinates
+- Property transformation: square→Heavy, circle→Light, triangle→Bouncy, cross→Sticky
+- Wind pulse: Push all Light objects away from shadow center
+- Collision resolution: Handle Bouncy objects, Sticky adhesion, boundary enforcement
+- Deterministic movement: Apply velocities, resolve collisions, enforce grid bounds
+
+**Key Implementation Notes:**
+- Property mappings are fixed and deterministic for consistent learning
+- Physics runs after every action to update object positions/states
+- Target detection checks if object entirely within goal_area bounds
+- Wind pulse affects only Light objects, creates radial push from shadow center
+- Boundary enforcement keeps all objects within [0,7] x [0,7] grid
+- Generator must ensure solvability within 40-step limit using validation
+- When reading max_steps, if loaded level has different max_steps, it overrides environment's self.configs["termination"]["max_steps"]
+
+The generator creates 5 distinct levels with varying difficulty through object placement and property assignment, but identical rules ensure strategy transfer.

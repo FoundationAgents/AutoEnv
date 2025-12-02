@@ -1,0 +1,44 @@
+agent:
+  step_count: 40
+globals:
+  max_steps: 40
+  num_pipe_sections: 12
+  num_sensors: 4
+  num_valves: 9
+hydraulics:
+  pipe_pressures:
+  - 135.00000000000003
+  - 137.50000000000003
+  - 120.0
+  - 125.00000000000003
+  - 148.50000000000006
+  - 126.0
+  - 120.00000000000001
+  - 137.50000000000003
+  - 138.0
+  - 125.00000000000003
+  - 132.00000000000003
+  - 126.0
+  pump_speed: 1500.0
+  reservoir_pressure: 100.0
+  sensor_readings:
+  - 120.0
+  - 126.0
+  - 138.0
+  - 126.0
+  target_pressures:
+  - 138.0
+  - 132.0
+  - 150.00000000000003
+  - 138.0
+valves:
+  states:
+  - false
+  - false
+  - true
+  - true
+  - false
+  - true
+  - true
+  - false
+  - false

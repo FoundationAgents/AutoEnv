@@ -1,0 +1,75 @@
+Files / Classes
+---------------
+1. envs/underground_ruin_v1/env.py  -> class UndergroundRuinEnv(SkinEnv)
+2. generators/maze_generator.py     -> class MazeGenerator(WorldGenerator)
+3. obs_policies/egocentric_crop.py  -> class EgocentricCropPolicy(ObservationPolicy)
+
+UndergroundRuinEnv methods
+--------------------------
+_dsl_config:
+  • Load DSL YAML above and store in self.configs.
+
+reset(mode, world_id, seed):
+  • If mode=="load" call _load_world(world_id) else use _generate_world(seed).
+  • After loading, copy world dict into self._state, zero _t, keep steps_left = globals.max_steps.
+  • Ensure if loaded world contains a different max_steps, override self.configs["termination"]["max_steps"] accordingly.
+
+_load_world(world_id):
+  • Open YAML at worlds/underground_ruin_v1/{world_id}.yaml and yaml.safe_load it.
+
+_generate_world(seed):
+  • Instantiate MazeGenerator(self.env_id, self.configs["generator"]); call generate(seed).
+  • Return world_id from generator and then _load_world.
+
+transition(action):
+  • Decompose action["action"].
+  • For MOVE_*, compute target cell; if Wall/Water stay; else move.
+  • ROTATE_* alters facing only; WAIT does nothing.
+  • Decrement agent.steps_left and store in state.
+  • If after move on Fire/Treasure, set self._last_action_result = "fire"/"treasure".
+  • Append deep-copy of state to self._history.
+  • Return new state.
+
+reward(action):
+  • If self._last_action_result == "treasure": return 1.0, ["goal"], {}
+  • Else return 0.0, [], {}.
+
+observe_semantic():
+  • Call self.obs_policy(self._state, self._t) -> dict.
+
+render_skin(omega):
+  • Convert 5×5 tile ids to ASCII (@,#,~,^,$) respecting agent center, return multiline string.
+
+done():
+  • True if agent.on_treasure or agent.on_fire or _t >= self.configs["termination"]["max_steps"] or agent.steps_left <=0.
+
+MazeGenerator logic
+-------------------
+generate(seed, save_path):
+  • world_id = self._generate_world_id(seed)
+  • state = deepcopy(state_template) from config.
+  • Execute _execute_pipeline(state, seed) to fill tiles & agent.
+  • _save_world(state, world_id), return world_id.
+
+_execute_pipeline(state, seed):
+  1. carve_outer_wall: set boundary indices to "Wall".
+  2. generate_maze_interior: use recursive backtracker seeded RNG to mark corridors (Empty) and walls.
+  3. add_water_pools: sample floor cells by water_ratio.
+  4. scatter_fire_pits: sample unique floor cells (5–8) to "Fire".
+  5. place_treasure: choose floor cell reachable from any starting cell (use BFS) and mark "Treasure".
+  6. place_agent: choose reachable Empty cell farthest (max shortest-path length) from treasure; set facing random dir and update agent.pos.
+  7. Guarantee connectivity via BFS; if not, re-sample.
+
+EgocentricCropPolicy
+--------------------
+__call__(env_state, t):
+  • Extract agent.pos & facing.
+  • Build 5×5 grid centered on agent; out-of-bounds = "Unknown".
+  • Package dict {visible_tiles: 5x5 list, agent.facing, agent.steps_left, t}.
+
+Additional Notes
+----------------
+• max_steps is only stored in termination; always sync agent.steps_left with it at reset.
+• For randomization, pass seed to RNG for repeatability.
+• Use constants for tile chars {'Empty':'.','#':'Wall',...} in render_skin.
+• Invalid moves still decrement steps; record in history.

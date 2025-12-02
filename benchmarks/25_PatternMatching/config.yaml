@@ -1,0 +1,94 @@
+meta:
+  id: "memory_pair_matching"
+  name: "Memory Pair Matching"
+  description: "Card matching game where agent flips cards to find pairs within step limit"
+
+state_template:
+  globals:
+    max_steps: 40
+    total_pairs: 8
+    grid_size: [4, 4]
+  game:
+    cards: []
+    card_states: []
+    revealed_positions: []
+    cleared_pairs: 0
+    current_revealed_symbol: -1
+    explored_positions: []
+  agent:
+    steps_remaining: 40
+
+observation:
+  policy: "full"
+  params: {}
+  expose:
+    - game.card_states
+    - game.current_revealed_symbol
+    - agent.steps_remaining
+    - t
+
+reward:
+  events:
+    - trigger: "pair_cleared"
+      value: 1.0
+    - trigger: "first_exploration"  
+      value: 0.05
+    - trigger: "no_reward"
+      value: 0.0
+
+transition:
+  actions:
+    - name: "flip"
+      params: [position]
+
+skin:
+  type: "text"
+  template: |
+    Memory Pair Matching - Step {t}/{globals.max_steps}
+    Steps remaining: {agent.steps_remaining}
+    Cleared pairs: {game.cleared_pairs}/8
+    Current revealed symbol: {game.current_revealed_symbol}
+    
+    Grid (0=face-down, 1=revealed, 2=cleared):
+    {grid_display}
+    
+    Available action: flip(position) where position is 0-15
+
+termination:
+  max_steps: 40
+  conditions:
+    - "game.cleared_pairs >= 8"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_card_symbols"
+      desc: "Create 8 unique symbols, duplicate each to make 16 cards total"
+      args:
+        num_symbols: 8
+    - name: "shuffle_cards"
+      desc: "Randomly arrange the 16 cards in 4x4 grid positions using Fisher-Yates shuffle"
+      args:
+        grid_size: [4, 4]
+    - name: "initialize_states"
+      desc: "Set all card states to face-down (0), clear revealed positions and exploration tracking"
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      shuffle_seed: true
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

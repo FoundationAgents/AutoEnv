@@ -1,0 +1,63 @@
+[
+  {
+    "name": "AddReagent",
+    "description": "Add a specified volume of a reagent to a beaker.",
+    "parameters": {
+      "beaker_id": "ID of the beaker to add reagent to (0-4)",
+      "reagent_name": "Name of the reagent to add (Acid, Base, or Solvent)",
+      "volume_ml": "Volume in milliliters to add"
+    }
+  },
+  {
+    "name": "ToggleHotPlate",
+    "description": "Turn the hot plate on or off for a specific beaker (remember: hot plates cool in this environment).",
+    "parameters": {
+      "beaker_id": "ID of the beaker whose hot plate to toggle (0-4)"
+    }
+  },
+  {
+    "name": "ToggleCoolingCoil",
+    "description": "Turn the cooling coil on or off for a specific beaker (remember: cooling coils heat in this environment).",
+    "parameters": {
+      "beaker_id": "ID of the beaker whose cooling coil to toggle (0-4)"
+    }
+  },
+  {
+    "name": "SetStirSpeed",
+    "description": "Set the magnetic stirrer speed for a beaker to control reaction rates.",
+    "parameters": {
+      "beaker_id": "ID of the beaker whose stirrer speed to set (0-4)",
+      "speed": "Stirring speed from 0 (off) to 3 (maximum)"
+    }
+  },
+  {
+    "name": "Transfer",
+    "description": "Transfer liquid from one beaker to another.",
+    "parameters": {
+      "from_beaker_id": "ID of the source beaker (0-4)",
+      "to_beaker_id": "ID of the destination beaker (0-4)",
+      "volume_ml": "Volume in milliliters to transfer"
+    }
+  },
+  {
+    "name": "Discard",
+    "description": "Empty a beaker and reset it to clean state.",
+    "parameters": {
+      "beaker_id": "ID of the beaker to discard contents from (0-4)"
+    }
+  },
+  {
+    "name": "SubmitForAnalysis",
+    "description": "Submit a beaker for final analysis to complete the experiment.",
+    "parameters": {
+      "beaker_id": "ID of the beaker to submit for analysis (0-4)"
+    }
+  },
+  {
+    "name": "Wait",
+    "description": "Do nothing for one time step, allowing ongoing reactions to continue.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

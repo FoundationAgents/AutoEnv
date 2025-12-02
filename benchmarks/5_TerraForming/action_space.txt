@@ -1,0 +1,39 @@
+[
+  {
+    "name": "DEPLOY_ATMOSPHERIC_PROCESSOR",
+    "description": "Deploy advanced atmospheric processing equipment to modify planetary air composition and environmental conditions.",
+    "parameters": {}
+  },
+  {
+    "name": "RELEASE_WATER_CATALYSTS",
+    "description": "Release specialized catalytic compounds to activate planetary water systems and hydrological processes.",
+    "parameters": {}
+  },
+  {
+    "name": "SEED_MICROBIAL_LIFE",
+    "description": "Introduce dormant microorganisms and biological agents to initiate ecosystem development.",
+    "parameters": {}
+  },
+  {
+    "name": "STABILIZE_TECTONICS",
+    "description": "Deploy geological stabilization technology to reduce seismic activity and planetary instability.",
+    "parameters": {}
+  },
+  {
+    "name": "CONSTRUCT_UPGRADE_STATION",
+    "description": "Build new terraforming infrastructure or upgrade existing facilities to improve operational effectiveness.",
+    "parameters": {}
+  },
+  {
+    "name": "DIVERT_ENERGY_TO_SHIELDS",
+    "description": "Redirect power reserves to emergency planetary shields for immediate stability enhancement.",
+    "parameters": {}
+  },
+  {
+    "name": "PASSIVE_OBSERVATION",
+    "description": "Monitor planetary systems without active intervention, allowing natural processes to continue.",
+    "parameters": {}
+  }
+]
+
+Actions should be formatted as dictionaries with an 'action' key specifying the action name and a 'params' key containing the required parameters as a dictionary. For example: {"action": "ACTION_NAME", "params": {"param1": value1, "param2": value2}}

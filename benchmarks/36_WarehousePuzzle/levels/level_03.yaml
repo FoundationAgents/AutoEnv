@@ -1,0 +1,124 @@
+agent:
+  pos:
+  - 3
+  - 8
+globals:
+  max_steps: 60
+level_info:
+  boxes_on_docks: 0
+  total_boxes: 1
+objects:
+  boxes:
+  - pos:
+    - 3
+    - 2
+  docks:
+  - pos:
+    - 6
+    - 2
+tiles:
+  default_type: floor
+  grid:
+  - - wall
+    - wall
+    - wall
+    - wall
+    - wall
+    - wall
+    - wall
+    - wall
+    - wall
+    - wall
+  - - wall
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - wall
+  - - wall
+    - floor
+    - wall
+    - wall
+    - floor
+    - floor
+    - wall
+    - floor
+    - floor
+    - wall
+  - - wall
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - wall
+  - - wall
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - wall
+  - - wall
+    - floor
+    - wall
+    - wall
+    - floor
+    - floor
+    - wall
+    - floor
+    - floor
+    - wall
+  - - wall
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - wall
+  - - wall
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - wall
+  - - wall
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - floor
+    - wall
+  - - wall
+    - wall
+    - wall
+    - wall
+    - wall
+    - wall
+    - wall
+    - wall
+    - wall
+    - wall
+  size:
+  - 10
+  - 10

@@ -1,0 +1,61 @@
+agent:
+  player_id: 1
+  wins: 0
+board:
+  filled_columns: []
+  grid:
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+game:
+  current_player: 1
+  game_over: false
+  moves_made: 0
+  winner: 0
+globals:
+  board_height: 6
+  board_width: 7
+  max_steps: 40
+opponent:
+  last_move: -1
+  player_id: 2
+  policy: win_block_random

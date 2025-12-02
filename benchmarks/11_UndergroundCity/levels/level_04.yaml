@@ -1,0 +1,260 @@
+agent:
+  available_materials:
+  - basic_support
+  - rock_excavator
+  - air_pump
+  districts_built: 0
+  power_storage: 50
+globals:
+  airflow_cycle_length: 8
+  max_steps: 40
+grid:
+  cells:
+    airflow_vector:
+    - - 0.0
+      - 0.34107042313029046
+    - - 0.4834132515192111
+      - 0.0
+    - - -0.4782618499713575
+      - 0.0
+    - - 0.0
+      - 0.5326494218306039
+    - - 0.0
+      - -0.38727365482047715
+    - - 0.0
+      - 0.4564736157175846
+    - - 0.0
+      - -0.6425831443961247
+    - - 0.0
+      - -0.538353179837448
+    - - 0.0
+      - 0.44657782278414127
+    - - 0.0
+      - 0.6360097709695667
+    - - 0.46050952982357846
+      - 0.0
+    - - 0.0
+      - 0.26133177675975106
+    - - 0.0
+      - -0.727359495059535
+    - - 0.0
+      - -0.7129059174028902
+    - - 0.0
+      - -0.7145897805914665
+    - - 0.2763134078543143
+      - 0.0
+    - - 0.0
+      - 0.2597501651222268
+    - - 0.32563213681983416
+      - 0.0
+    - - 0.0
+      - -0.3175705944940242
+    - - 0.0
+      - 0.5629044657409568
+    - - -0.20456174203911986
+      - 0.0
+    - - 0.0
+      - 0.4600724201760904
+    - - 0.0
+      - 0.7694285426041245
+    - - 0.32822566251422136
+      - 0.0
+    - - 0.0
+      - 0.3784929836681401
+    district_core:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    excavated:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    has_support:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    power_conduit:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - true
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    rock_stress:
+    - 84
+    - 50
+    - 88
+    - 100
+    - 75
+    - 63
+    - 60
+    - 53
+    - 45
+    - 29
+    - 95
+    - 56
+    - 18
+    - 100
+    - 40
+    - 30
+    - 44
+    - 13
+    - 53
+    - 0
+    - 48
+    - 95
+    - 51
+    - 94
+    - 48
+    structure_type:
+    - rock
+    - rock
+    - rock
+    - rock
+    - rock
+    - rock
+    - rock
+    - rock
+    - rock
+    - rock
+    - rock
+    - chamber
+    - rock
+    - rock
+    - rock
+    - rock
+    - rock
+    - rock
+    - rock
+    - chamber
+    - rock
+    - rock
+    - rock
+    - rock
+    - rock
+    ventilation_shaft:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+  size:
+  - 5
+  - 5
+metrics:
+  breathable_air_index: 85.68092590225883
+  structural_integrity: 72.816
+  total_power_usage: 0
+physics_state:
+  current_airflow_phase: normal
+  stress_redistribution_pending: []
+research:
+  advanced_materials_unlocked: false
+  airflow_patterns_unlocked: false
+  gravity_mechanics_unlocked: false
+world_id: underground_1004_1757238454

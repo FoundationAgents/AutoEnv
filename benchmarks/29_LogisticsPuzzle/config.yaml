@@ -1,0 +1,123 @@
+meta:
+  id: "inverted_box_escape"
+  name: "Inverted Box Escape"
+  description: "Escape puzzle rooms by neutralizing dangerous storage tiles with lethal crates"
+
+state_template:
+  globals:
+    max_steps: 40
+  agent:
+    pos: [0, 0]
+  grid:
+    size: [6, 6]
+    layout: []
+  objects:
+    crates: []
+    storage_tiles: []
+    exit_pos: [0, 0]
+    covered_tiles: []
+
+observation:
+  policy: "full_grid"
+  params: {}
+  expose:
+    - agent.pos
+    - grid.layout
+    - objects.crates
+    - objects.storage_tiles
+    - objects.exit_pos
+    - objects.covered_tiles
+    - globals.max_steps
+    - t
+
+reward:
+  events:
+    - trigger: "escape_success"
+      value_key: "success_reward"
+  success_reward:
+    complete: 1.0
+    incomplete: 0.0
+
+transition:
+  actions:
+    - name: "MOVE_NORTH"
+      params: []
+    - name: "MOVE_SOUTH"
+      params: []
+    - name: "MOVE_EAST"
+      params: []
+    - name: "MOVE_WEST"
+      params: []
+    - name: "WAIT"
+      params: []
+
+skin:
+  type: "text"
+  template: |
+    Step {t}/{max_steps}
+    Agent at {agent_pos}
+    
+    Grid Layout:
+    {grid_display}
+    
+    Legend: P=Agent, B=Crate(lethal), C=Storage(dangerous), D=Exit, E=Wall, A=Safe floor
+    Covered storage tiles: {covered_count}/{total_storage}
+    
+    Actions: MOVE_NORTH, MOVE_SOUTH, MOVE_EAST, MOVE_WEST, WAIT
+
+termination:
+  max_steps: 40
+  conditions:
+    - "agent_touched_hazard"
+    - "successful_escape"
+    - "timeout"
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_room_dimensions"
+      desc: "Randomly select room size between 6x6 and 10x10"
+      args:
+        min_size: [6, 6]
+        max_size: [10, 10]
+    - name: "place_walls"
+      desc: "Create wall boundaries and internal wall structures for interesting layouts"
+      args:
+        ensure_connectivity: true
+    - name: "place_objects"
+      desc: "Place 3-5 crates and equal number of storage tiles ensuring solvability"
+      args:
+        crate_count_range: [3, 5]
+        match_storage_count: true
+    - name: "place_agent_and_exit"
+      desc: "Place agent at safe starting position and exit tile strategically"
+      args:
+        safe_spawn: true
+        strategic_exit: true
+    - name: "validate_solvability"
+      desc: "Ensure puzzle is solvable within 40 steps using pathfinding algorithms"
+      args:
+        max_steps: 40
+        require_valid_solution: true
+
+  randomization:
+    seed_based: true
+    parameters:
+      room_size: [[6, 6], [10, 10]]
+      crate_count: [3, 5]
+      wall_complexity: [0.1, 0.3]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false

@@ -1,0 +1,93 @@
+agent:
+  accumulated_rewards: 0.0
+  inventory:
+    artifacts: 0
+    crystals: 9
+    dark_matter: 0
+    energy_cells: 0
+    neural_matrices: 7
+    plasma_cores: 0
+    quantum_dust: 0
+    singularity_fragments: 6
+    time_shards: 14
+    void_essence: 7
+  ledgers:
+    entropy: 25.53358475305001
+    historical: 13.444220189911144
+    mass: 21.362005636801648
+  total_profit: 0.0
+episode_complete: false
+globals:
+  dimensions:
+  - mass
+  - entropy
+  - historical
+  item_categories:
+  - crystals
+  - artifacts
+  - energy_cells
+  - time_shards
+  - void_essence
+  - quantum_dust
+  - neural_matrices
+  - plasma_cores
+  - dark_matter
+  - singularity_fragments
+  max_steps: 40
+market:
+  embargo_risks:
+    entropy: 21.845048003237412
+    historical: 30.640450612737933
+    mass: 34.85602051246088
+  exchange_matrices:
+    drift_params:
+      entropy_historical:
+      - 0.2970604931619277
+      - 0.12169708076592607
+      - 1.082088354514413
+      entropy_mass:
+      - 0.23919943747560804
+      - 0.1295528662342248
+      - 0.5243979877253739
+      historical_entropy:
+      - 0.19903560640629314
+      - 0.06853593660884318
+      - 1.967909417115688
+      historical_mass:
+      - 0.17498420168241552
+      - 0.14629707419443347
+      - 1.1157376982820397
+      mass_entropy:
+      - 0.20310409016841435
+      - 0.09884846085614551
+      - 6.012299476142523
+      mass_historical:
+      - 0.10210594570688265
+      - 0.0823381490652649
+      - 2.2084859248417366
+    noise_reduction:
+      entropy_historical: 1.0
+      entropy_mass: 1.0
+      historical_entropy: 1.0
+      historical_mass: 1.0
+      mass_entropy: 1.0
+      mass_historical: 1.0
+    observed_rates:
+      entropy_historical: 1.189117068336328
+      entropy_mass: 1.1278472692906545
+      historical_entropy: 1.1242515993418605
+      historical_mass: 0.9825954756947564
+      mass_entropy: 0.915002283796221
+      mass_historical: 1.1136053823851781
+    true_rates:
+      entropy_historical: 1.189117068336328
+      entropy_mass: 1.1278472692906545
+      historical_entropy: 1.1242515993418605
+      historical_mass: 0.9825954756947564
+      mass_entropy: 0.915002283796221
+      mass_historical: 1.1136053823851781
+  hedge_status:
+    entropy: 0
+    historical: 0
+    mass: 0
+timestep: 0

@@ -1,0 +1,119 @@
+meta:
+  id: "underground_ruin_v1"
+  name: "UndergroundRuin"
+  description: "11x11 procedurally generated maze; reach treasure within 40 steps or fail."
+
+state_template:
+  globals:
+    width: 11
+    height: 11
+    max_steps: 40
+    tile_types:
+      - Empty
+      - Wall
+      - Water
+      - Fire
+      - Treasure
+      - Agent
+    directions:
+      - N
+      - E
+      - S
+      - W
+  agent:
+    pos: [0, 0]
+    facing: N
+    steps_left: 40
+  tiles:
+    size: [11, 11]
+    default_type: Empty
+  objects: []
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: init_from_template
+      desc: Initialize world grid and agent data from state_template
+      args: {}
+    - name: carve_outer_wall
+      desc: Create solid wall border around the grid
+      args: {}
+    - name: generate_maze_interior
+      desc: Carve random corridors via recursive backtracker algorithm
+      args:
+        complexity: 0.75
+    - name: add_water_pools
+      desc: Convert a fraction of floor cells to Water
+      args:
+        water_ratio: 0.05
+    - name: scatter_fire_pits
+      desc: Place 5–8 Fire tiles on empty floor cells
+      args:
+        min_fire: 5
+        max_fire: 8
+    - name: place_treasure
+      desc: Put Treasure on a floor tile reachable from agent spawn
+      args: {}
+    - name: place_agent
+      desc: Spawn agent on a reachable Empty tile and set random facing
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      complexity: [0.5, 0.9]
+      water_ratio: [0.03, 0.08]
+  world_loading:
+    directory: "worlds/underground_ruin_v1/"
+    format: "yaml"
+    validation_schema: "state_template"
+    naming_convention: "{world_id}.yaml"
+
+transition:
+  actions:
+    - name: MOVE_NORTH
+      params: []
+    - name: MOVE_SOUTH
+      params: []
+    - name: MOVE_EAST
+      params: []
+    - name: MOVE_WEST
+      params: []
+    - name: ROTATE_LEFT
+      params: []
+    - name: ROTATE_RIGHT
+      params: []
+    - name: WAIT
+      params: []
+
+reward:
+  conditions:
+    - if: "agent.on_treasure"
+      value: 1.0
+
+observation:
+  policy: "egocentric_crop"
+  params:
+    crop_size: 5
+    mask_token: Unknown
+  expose:
+    - agent.facing
+    - agent.steps_left
+    - visible_tiles
+    - t
+
+termination:
+  max_steps: 40
+  conditions:
+    - "agent.on_treasure"
+    - "agent.on_fire"
+
+skin:
+  type: "ascii"
+  template: |
+    Step {t}/{globals.max_steps}
+    Facing: {agent.facing}
+    Steps left: {agent.steps_left}
+    Local view:
+    {ascii_crop}
+    Legend: @=Agent #=Wall ~=Water ^=Fire $=Treasure

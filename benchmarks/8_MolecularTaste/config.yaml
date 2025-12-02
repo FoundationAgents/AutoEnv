@@ -1,0 +1,118 @@
+meta:
+  id: "molecular_taste_nav"
+  name: "Molecular Taste Navigation"
+  description: "Navigate maze using only chemical taste signatures from 5 compounds"
+
+state_template:
+  globals:
+    max_steps: 40
+  agent:
+    pos: [0, 0]
+  maze:
+    size: [9, 9]
+    walls: []
+    goal_pos: [4, 4]
+    chemical_map: {}
+  level_info:
+    world_id: ""
+    optimal_path_length: 10
+
+generator:
+  mode: "procedural"
+  output_format: "yaml"
+  pipeline:
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "generate_maze_layout"
+      desc: "Create 9x9 maze with walls ensuring solvable paths"
+      args:
+        min_path_length: 8
+        max_path_length: 12
+        wall_density: 0.3
+    - name: "place_goal_position"
+      desc: "Set goal location ensuring optimal path length constraint"
+      args: {}
+    - name: "generate_chemical_signatures"
+      desc: "Create unique 5-compound taste signatures for each cell with spatial gradients"
+      args:
+        compounds: ["sweet", "sour", "salty", "bitter", "umami"]
+        gradient_rules:
+          sweet: "decreases_with_distance_to_goal"
+          umami: "decreases_with_distance_to_goal"
+          bitter: "increases_with_distance_to_goal"
+          sour: "controlled_stochastic"
+          salty: "controlled_stochastic"
+        uniqueness_constraint: "3x3_neighborhood"
+    - name: "validate_level"
+      desc: "Ensure maze is solvable within step limit and chemical signatures are unique"
+      args: {}
+  randomization:
+    seed_based: true
+    parameters:
+      start_positions: "multiple_valid_locations"
+      chemical_noise: [0.0, 0.1]
+
+world_loading:
+  directory: "worlds/{env_id}/"
+  format: "yaml"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+observation:
+  policy: "chemical_sensor"
+  params:
+    include_wall_detection: true
+    include_step_counter: true
+  expose:
+    - agent.pos
+    - current_flavor_vector
+    - remaining_steps
+    - wall_bitmask
+    - t
+
+reward:
+  events:
+    - trigger: "goal_reached_first_time"
+      value_key: "goal_rewards"
+  goal_rewards:
+    success: 1.0
+    all_other_states: 0.0
+
+transition:
+  actions:
+    - name: "DO_NOTHING"
+      params: []
+    - name: "MOVE_NORTH"
+      params: []
+    - name: "MOVE_EAST"
+      params: []
+    - name: "MOVE_SOUTH"
+      params: []
+    - name: "MOVE_WEST"
+      params: []
+
+termination:
+  max_steps: 40
+  conditions:
+    - "agent.pos == maze.goal_pos"
+
+skin:
+  type: "text"
+  template: |
+    Step {t}/{max_steps} - Chemical Sensor Reading
+    
+    Flavor Vector (0.0-1.0):
+    Sweet: {flavor_sweet:.3f} | Sour: {flavor_sour:.3f} | Salty: {flavor_salty:.3f}
+    Bitter: {flavor_bitter:.3f} | Umami: {flavor_umami:.3f}
+    
+    Movement Options:
+    North: {can_move_north} | East: {can_move_east}
+    South: {can_move_south} | West: {can_move_west}
+    
+    Actions: DO_NOTHING, MOVE_NORTH, MOVE_EAST, MOVE_SOUTH, MOVE_WEST
+
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false
