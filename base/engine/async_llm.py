@@ -262,6 +262,7 @@ class AsyncLLM:
         self.max_completion_tokens = max_completion_tokens
         
     async def __call__(self, prompt, max_tokens=None):
+        """Send a prompt to the LLM. Accepts text (str) or multimodal payloads (list)."""
         message = []
         if self.sys_msg is not None:
             message.append({
@@ -269,7 +270,13 @@ class AsyncLLM:
                 "role": "system"
             })
 
-        message.append({"role": "user", "content": prompt})
+        # Support plain text prompts and multimodal payloads (list)
+        if isinstance(prompt, str):
+            message.append({"role": "user", "content": prompt})
+        elif isinstance(prompt, list):
+            message.append({"role": "user", "content": prompt})
+        else:
+            raise ValueError(f"prompt must be str or list, got {type(prompt)}")
 
         # Prefer to use the max_tokens argument passed to the function; if it is None, use the instance variable.
         tokens_to_use = max_tokens if max_tokens is not None else self.max_completion_tokens
@@ -310,6 +317,7 @@ class AsyncLLM:
             output_tokens
         )
         
+        # Return text or multimodal content (API returns content as provided)
         ret = response.choices[0].message.content
         logger.log_to_file(LogLevel.INFO, f"LLM Response: {ret}")
         
