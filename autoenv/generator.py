@@ -2,6 +2,7 @@ import ast
 import csv
 import os
 import time
+from types import GenericAlias
 from typing import Optional, Dict, Any
 from pydantic import Field
 
@@ -298,9 +299,10 @@ class Generator(BaseAgent):
         return self.env_folder_path
         
 
-    async def generate_multimodal_environment(self, requirements):
-        pass
 
+class MultiModalGenerator(Generator):
+    modifier: Optional[BaseAgent] = Field(default=None)
 
-class SkinGenerator(BaseAgent):
-    pass
+    async def run(self, requirements):
+        self.generate_textual_environment()
+        self.modifer.run()
