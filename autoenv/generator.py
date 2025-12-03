@@ -264,7 +264,7 @@ class Generator(BaseAgent):
         
         return archive_files(self.env_folder_path, self.current_env_id)
     
-    async def run(self, requirements):
+    async def generate_textual_environment(self, requirements):
         # Check if requirements is a file path and read it if so
         if isinstance(requirements, str) and requirements.endswith('.txt') and os.path.exists(requirements):
             env_theme = os.path.basename(requirements).split('.')[0]
@@ -297,3 +297,10 @@ class Generator(BaseAgent):
         
         return self.env_folder_path
         
+
+    async def generate_multimodal_environment(self, requirements):
+        pass
+
+
+class SkinGenerator(BaseAgent):
+    pass

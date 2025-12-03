@@ -11,7 +11,7 @@ import sys
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from autoenv.agent.miniswe_agent import MiniSWEAutoEnvAgent
+from autoenv.miniswe_agent import MiniSWEAutoEnvAgent
 from visualizer.agents.prompt_mm import instruction_analysis_prompt
 
 

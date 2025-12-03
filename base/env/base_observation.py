@@ -9,7 +9,7 @@ from typing import Dict, Any
 class ObservationPolicy(ABC):
     """Semantic observation extractor."""
     @abstractmethod
-    def __call__(self, env_state: Dict[str, Any], t: int) -> Dict[str, Any]:
+    def __call__(self, env_state: Dict[str, Any], t: int):
         """
         You can implement custom observe methods here. 
         """

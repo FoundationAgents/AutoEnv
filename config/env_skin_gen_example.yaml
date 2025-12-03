@@ -1,0 +1,18 @@
+# We use this yaml to configure the environment generation from an exist environment.
+mode: "<textual or multi-modal>"
+
+# configure model used to generate environment, we use Claude-4-Sonnet as Default. 
+model: "<model_name>"
+
+generative_models: "<generative_model_name>"
+
+# configure the path to the exist environment.
+exist_environment_path: "<path>"
+
+# configure the path of output folder
+envs_root_path: "workspace/envs"
+
+# configure the requirements you want to apply on skin.
+requirements: "<inline_text>"
+
+

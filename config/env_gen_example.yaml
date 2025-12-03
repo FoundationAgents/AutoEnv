@@ -1,7 +1,11 @@
 # We use this yaml to configure the environment generation from scratch.
 
+mode: "<textual or multi-modal>"
+
 # configure model used to generate environment, we use Claude-4-Sonnet as Default. 
 model: "<model_name>"
+
+generative_models: "<generative_model_name>"
 
 # concurrency for generating environments.
 concurrency: 1

@@ -98,7 +98,7 @@ class ObsEnv(BaseEnv):
         self.obs_policy = obs_policy
 
     @abstractmethod
-    def observe_semantic(self) -> Dict[str, Any]:
+    def observe_semantic(self):
         """
         Semantic-level observation.
         The observation policy refer to the observation state, such as full, partial, radius. 
@@ -111,7 +111,7 @@ class SkinEnv(ObsEnv):
     """Adds rendering interface: semantic observation -> final input (X)."""
 
     @abstractmethod
-    def render_skin(self, omega: Dict[str, Any]) -> Any:
+    def render_skin(self, omega) -> Any:
         """Render the final input from semantic observation."""
         pass
 

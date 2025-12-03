@@ -56,7 +56,7 @@ async def run_single_requirement(requirement, envs_root_path, gen_llm, re_llm):
     try:
         generator = Generator(llm=gen_llm, envs_root_path=envs_root_path, re_llm=re_llm)
         print(f"🚀 Starting generation for: {label}")
-        await generator.run(requirement)
+        await generator.generate_textual_environment(requirement)
         print(f"✅ Finished generation for: {label}")
     except Exception as e:
         print(f"❌ Error for {label}: {e}")

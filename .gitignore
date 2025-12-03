@@ -1,1 +1,3 @@
 *.pyc
+/visualizer/output
+/workspace/logs
