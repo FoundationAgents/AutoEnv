@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Date    : 2025-03-31
 # @Author  : Zhaoyang & didi
-# @Desc    : 
+# @Desc    :
 import os
+import re
 import yaml
 
 from openai import AsyncOpenAI
@@ -329,8 +330,110 @@ class AsyncLLM:
     
     def get_usage_summary(self):
         """Get a summary of token usage and costs"""
-        return self.usage_tracker.get_summary()    
-    
+        return self.usage_tracker.get_summary()
+
+    async def generate_text_to_image(self, prompt: str) -> dict[str, Any]:
+        """
+        Text-to-image generation.
+
+        Args:
+            prompt: Text prompt for image generation
+
+        Returns:
+            {
+                'success': bool,
+                'image_base64': str | None,
+                'prompt': str,
+                'error': str | None
+            }
+        """
+        try:
+            response = await self(prompt)
+            image_b64 = self._extract_image_from_response(response)
+
+            if not image_b64:
+                return {
+                    "success": False,
+                    "image_base64": None,
+                    "prompt": prompt,
+                    "error": "No image found in response",
+                }
+
+            return {
+                "success": True,
+                "image_base64": image_b64,
+                "prompt": prompt,
+                "error": None,
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "image_base64": None,
+                "prompt": prompt,
+                "error": str(e),
+            }
+
+    async def generate_image_to_image(
+        self, prompt: str, reference_images: list[str]
+    ) -> dict[str, Any]:
+        """
+        Image-to-image generation with style references.
+
+        Args:
+            prompt: Text prompt for image generation
+            reference_images: List of base64-encoded reference images
+
+        Returns:
+            {
+                'success': bool,
+                'image_base64': str | None,
+                'prompt': str,
+                'error': str | None
+            }
+        """
+        try:
+            content = []
+            for img_b64 in reference_images:
+                content.append(
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": f"data:image/png;base64,{img_b64}"},
+                    }
+                )
+            content.append({"type": "text", "text": prompt})
+
+            response = await self(content)
+            image_b64 = self._extract_image_from_response(response)
+
+            if not image_b64:
+                return {
+                    "success": False,
+                    "image_base64": None,
+                    "prompt": prompt,
+                    "error": "No image found in response",
+                }
+
+            return {
+                "success": True,
+                "image_base64": image_b64,
+                "prompt": prompt,
+                "error": None,
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "image_base64": None,
+                "prompt": prompt,
+                "error": str(e),
+            }
+
+    def _extract_image_from_response(self, response: str) -> str | None:
+        """Extract base64 image from LLM response."""
+        if not isinstance(response, str):
+            return None
+        match = re.search(r"data:image/[^;]+;base64,([^)]+)", response)
+        return match.group(1) if match else None
+
 
 def create_llm_instance(llm_config) -> AsyncLLM:
     """

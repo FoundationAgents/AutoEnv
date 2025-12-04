@@ -384,35 +384,75 @@ Your job: **Given the requirements and the environment code, produce**
 # ==================== Mini-Swe Agent Template Prompt ====================
 
 MINISWE_SYSTEM_TEMPLATE = """
-You are an automation assistant. Execute ONE command at a time, observe results, then decide next step.
-CRITICAL: You must verify each step works before proceeding. Never skip validation.
-For level generation: first ensure ONE level can be generated AND successfully loaded by the env.
-COMPLETION: When you have successfully completed the task (e.g., 100 working levels generated), 
-run this exact command to finish: echo 'COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT'
+You are an automation assistant that executes bash commands one at a time.
+
+CRITICAL RULES:
+1. Reply with EXACTLY ONE ```bash code block per response
+2. NEVER include multiple code blocks in one response
+3. Execute ONE command, wait for result, then next command
+4. Never combine commands with && or ; or |
+5. For files, use heredoc: cat << 'EOF' > file.json
+6. After writing a file, wait for confirmation before proceeding
+
+RESPONSE FORMAT:
+```bash
+single_command_here
+```
+
+WRONG (multiple blocks):
+```bash
+cat << 'EOF' > file.txt
+content
+EOF
+```
+```bash
+echo 'COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT'
+```
+
+CORRECT (one block only):
+```bash
+cat << 'EOF' > file.txt
+content
+EOF
+```
 """
 
 MINISWE_INSTANCE_TEMPLATE = """
 Your task: {{task}}
 
-Execute commands step-by-step. After each command, observe the results and verify success before proceeding.
-Reply with EXACTLY ONE bash command in fenced code blocks:
-
+RESPONSE FORMAT - Reply with EXACTLY ONE code block:
 ```bash
-<command>
+your_command_here
 ```
 
-IMPORTANT: When task is 100% complete, run this exact command:
+CRITICAL:
+- Only ONE ```bash block per response
+- NO multiple code blocks
+- After file creation, wait for result before completing
+
+When task is 100% done:
 ```bash
 echo 'COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT'
 ```
-A working level means: the env can load it without errors AND run at least one step successfully.
 """
 
 MINISWE_FORMAT_ERROR_TEMPLATE = """
-Format error. Provide EXACTLY ONE bash command in a single fenced block:
+FORMAT ERROR! Your response must contain EXACTLY ONE code block.
+
+CORRECT format (single block):
 ```bash
-<command>
+your_command_here
 ```
+
+WRONG (multiple blocks will fail):
+```bash
+command1
+```
+```bash
+command2
+```
+
+Try again with ONE code block only.
 """
 
 
