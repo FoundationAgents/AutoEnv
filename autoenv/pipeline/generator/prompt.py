@@ -381,41 +381,6 @@ Your job: **Given the requirements and the environment code, produce**
 ====  YOUR RESPONSE STARTS  ====
 """
 
-# ==================== Mini-Swe Agent Template Prompt ====================
-
-MINISWE_SYSTEM_TEMPLATE = """
-You are an automation assistant. Execute ONE command at a time, observe results, then decide next step.
-CRITICAL: You must verify each step works before proceeding. Never skip validation.
-For level generation: first ensure ONE level can be generated AND successfully loaded by the env.
-COMPLETION: When you have successfully completed the task (e.g., 100 working levels generated), 
-run this exact command to finish: echo 'COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT'
-"""
-
-MINISWE_INSTANCE_TEMPLATE = """
-Your task: {{task}}
-
-Execute commands step-by-step. After each command, observe the results and verify success before proceeding.
-Reply with EXACTLY ONE bash command in fenced code blocks:
-
-```bash
-<command>
-```
-
-IMPORTANT: When task is 100% complete, run this exact command:
-```bash
-echo 'COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT'
-```
-A working level means: the env can load it without errors AND run at least one step successfully.
-"""
-
-MINISWE_FORMAT_ERROR_TEMPLATE = """
-Format error. Provide EXACTLY ONE bash command in a single fenced block:
-```bash
-<command>
-```
-"""
-
-
 # ==================== Coding Agents Prompt ====================
 
 CODE_FOR_RUN_ENV_MAIN_USE = """

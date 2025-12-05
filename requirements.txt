@@ -115,3 +115,5 @@ wheel==0.45.1
 yarl==1.20.1
 zipp==3.21.0
 pillow==11.3.0
+rembg==2.0.68
+onnxruntime-gpu==1.23.2

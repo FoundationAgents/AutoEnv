@@ -1,132 +1,150 @@
+"""
+Environment Generation Entry Point
+
+Usage:
+    python run_environment_generation.py --config config/env_gen.yaml
+    python run_environment_generation.py --theme "A puzzle game"
+"""
+
 import argparse
 import asyncio
-import os
-from typing import Dict, List, Optional
+from pathlib import Path
 
 import yaml
 
-from autoenv.generator import Generator
-from base.engine.async_llm import LLMsConfig, create_llm_instance
-from base.engine.logs import logger
+from autoenv.pipeline import VisualPipeline, GeneratorPipeline
+from base.engine.cost_monitor import CostMonitor
 
-DEFAULT_CONFIG_PATH = "config/env_gen.yaml"
+DEFAULT_CONFIG = "config/env_gen.yaml"
 
 
-def _load_config(path: str) -> Dict:
-    if not os.path.exists(path):
+def load_config(path: str) -> dict:
+    p = Path(path)
+    if not p.exists():
         return {}
-    with open(path, "r") as f:
-        return yaml.safe_load(f) or {}
+    return yaml.safe_load(p.read_text(encoding="utf-8")) or {}
 
 
-def _clean_value(value: Optional[str]) -> Optional[str]:
-    """Treat placeholders or empty strings as missing."""
-    if value is None:
-        return None
-    if isinstance(value, str):
-        stripped = value.strip()
-        if not stripped or (stripped.startswith("<") and stripped.endswith(">")):
-            return None
-    return value
+def get_themes(themes_folder: str) -> list[str]:
+    folder = Path(themes_folder)
+    if not folder.is_dir():
+        return []
+    return sorted(str(f) for f in folder.glob("*.txt"))
 
 
-def _pick(config_val, cli_val, default=None):
-    value = _clean_value(config_val)
-    if value is not None:
-        return value
-    value = _clean_value(cli_val)
-    if value is not None:
-        return value
-    return default
+async def run_generation(
+    theme: str,
+    model: str,
+    output: str,
+    mode: str = "textual",
+    image_model: str | None = None,
+):
+    """Run a single generation task."""
+    label = theme
+    if theme.endswith(".txt") and Path(theme).exists():
+        label = Path(theme).stem
+        theme = Path(theme).read_text(encoding="utf-8")
 
+    # Step 1: Run generator pipeline
+    print(f"🚀 [{label}] Generating environment...")
+    gen_pipeline = GeneratorPipeline.create_default(llm_name=model)
+    gen_ctx = await gen_pipeline.run(requirements=theme, output_dir=output)
 
-def _get_requirements_files(folder_path: str) -> List[str]:
-    files = []
-    if not folder_path:
-        return files
-    for fname in os.listdir(folder_path):
-        fpath = os.path.join(folder_path, fname)
-        if os.path.isfile(fpath) and fname.endswith(".txt"):
-            files.append(fpath)
-    return sorted(files)
+    if not gen_ctx.success:
+        print(f"❌ [{label}] Generation failed: {gen_ctx.error}")
+        return
 
+    env_path = gen_ctx.env_folder_path
+    print(f"✅ [{label}] Environment generated → {env_path}")
 
-async def run_single_requirement(requirement, envs_root_path, gen_llm, re_llm):
-    label = requirement if isinstance(requirement, str) else "inline"
-    try:
-        generator = Generator(llm=gen_llm, envs_root_path=envs_root_path, re_llm=re_llm)
-        print(f"🚀 Starting generation for: {label}")
-        await generator.generate_textual_environment(requirement)
-        print(f"✅ Finished generation for: {label}")
-    except Exception as e:
-        print(f"❌ Error for {label}: {e}")
+    # Step 2: Run visual pipeline if multimodal mode
+    if mode == "multimodal":
+        if not image_model:
+            print(f"⚠️ [{label}] Skipping visual: no image_model configured")
+            return
+
+        print(f"🎨 [{label}] Generating visuals...")
+        visual_output = env_path / "visual"
+        visual_pipeline = VisualPipeline.create_default(
+            llm_name=model,
+            image_model=image_model,
+        )
+        visual_ctx = await visual_pipeline.run(
+            benchmark_path=env_path,
+            output_dir=visual_output,
+        )
+
+        if visual_ctx.success:
+            print(f"✅ [{label}] Visuals generated → {visual_output}")
+        else:
+            print(f"❌ [{label}] Visual generation failed: {visual_ctx.error}")
 
 
 async def main():
-    parser = argparse.ArgumentParser(description="Generate environments from themes.")
-    parser.add_argument("--config", default=DEFAULT_CONFIG_PATH, help="Config YAML path (defaults to config/env_gen.yaml)")
-    parser.add_argument("--model", help="LLM model name for generation")
-    parser.add_argument("--theme", help="Single theme file path or inline requirement text")
-    parser.add_argument("--themes-folder", help="Folder containing multiple theme txt files")
-    parser.add_argument("--envs-root", help="Root folder to place generated environments")
-    parser.add_argument("--concurrency", type=int, help="Parallelism when using themes folder")
+    parser = argparse.ArgumentParser(description="Generate environments")
+    parser.add_argument("--config", default=DEFAULT_CONFIG, help="Config YAML path")
+    parser.add_argument("--theme", help="Override: single theme text or .txt file")
+    parser.add_argument("--model", help="Override: LLM model name")
+    parser.add_argument("--output", help="Override: output directory")
+    parser.add_argument("--mode", choices=["textual", "multimodal"], help="Override mode")
     args = parser.parse_args()
 
-    config = _load_config(args.config)
+    cfg = load_config(args.config)
 
-    # Config has priority; CLI is used only when config is missing/placeholder.
-    theme_config = config.get("theme") or config.get("theme_path")
-    themes_folder = _pick(config.get("themes_folder"), args.themes_folder)
-    theme = _pick(theme_config, args.theme)
-    if theme:
-        themes_folder = None  # Theme wins over folder when both are set
+    # CLI args override config
+    model = args.model or cfg.get("model") or "claude-sonnet-4-5"
+    output = args.output or cfg.get("envs_root_path") or "workspace/envs"
+    mode = args.mode or cfg.get("mode") or "textual"
+    image_model = cfg.get("image_model")
+    concurrency = cfg.get("concurrency", 1)
 
-    model_name = _pick(config.get("model"), args.model)
-    if not model_name:
-        raise ValueError("Model is required. Set it in the config file or pass --model.")
+    Path(output).mkdir(parents=True, exist_ok=True)
+    print(f"🔧 Config: {args.config}")
+    print(f"🤖 Model: {model}")
+    print(f"🎨 Image Model: {image_model}")
+    print(f"📁 Output: {output}")
+    print(f"📦 Mode: {mode}")
 
-    concurrency = _pick(config.get("concurrency"), args.concurrency, 1)
-    try:
-        concurrency = max(1, int(concurrency))
-    except Exception:
-        concurrency = 1
+    # Determine themes (priority: CLI --theme > themes_folder > theme)
+    themes: list[str] = []
+    if args.theme:
+        themes = [args.theme]
+    elif cfg.get("themes_folder"):
+        themes = get_themes(cfg["themes_folder"])
+    elif cfg.get("theme"):
+        themes = [cfg["theme"]]
 
-    envs_root_path = _pick(config.get("envs_root_path"), args.envs_root, "workspace/envs")
-    os.makedirs(envs_root_path, exist_ok=True)
-    logger.info(f"Using envs_root_path: {envs_root_path}")
-
-    llm_config_mgr = LLMsConfig.default()
-    gen_llm = create_llm_instance(llm_config_mgr.get(model_name))
-    re_llm = gen_llm
-
-    print(f"🔧 Config file: {args.config}")
-    print(f"🚀 Generation model: {model_name}")
-    print(f"📁 Output path: {envs_root_path}")
-
-    if theme:
-        await run_single_requirement(theme, envs_root_path, gen_llm, re_llm)
+    if not themes:
+        print("❌ No theme provided. Set 'theme' or 'themes_folder' in config.")
         return
 
-    if not themes_folder:
-        print("❌ No theme or themes_folder provided. Set it in the config or pass --theme / --themes-folder.")
-        return
-
-    requirement_files = _get_requirements_files(themes_folder)
-    if not requirement_files:
-        print(f"❌ No .txt theme files found in folder: {themes_folder}")
-        return
-
-    print(f"📄 Found {len(requirement_files)} theme files in {themes_folder}")
-    print(f"🔢 Using concurrency: {concurrency}")
-
+    # Concurrent execution with cost tracking
     sem = asyncio.Semaphore(concurrency)
 
-    async def sem_task(req_path):
+    async def task(t: str):
         async with sem:
-            await run_single_requirement(req_path, envs_root_path, gen_llm, re_llm)
+            await run_generation(t, model, output, mode, image_model)
 
-    tasks = [sem_task(f) for f in requirement_files]
-    await asyncio.gather(*tasks)
+    with CostMonitor() as monitor:
+        await asyncio.gather(*[task(t) for t in themes])
+
+        # Print and save cost summary
+        summary = monitor.summary()
+        print("\n" + "=" * 50)
+        print("💰 Cost Summary")
+        print("=" * 50)
+        print(f"Total Cost: ${summary['total_cost']:.4f}")
+        print(f"Total Calls: {summary['call_count']}")
+        print(f"Input Tokens: {summary['total_input_tokens']:,}")
+        print(f"Output Tokens: {summary['total_output_tokens']:,}")
+
+        if summary["by_model"]:
+            print("\nBy Model:")
+            for model_name, stats in summary["by_model"].items():
+                print(f"  {model_name}: ${stats['cost']:.4f} ({stats['calls']} calls)")
+
+        cost_file = monitor.save()
+        print(f"\n📊 Cost saved: {cost_file}")
 
 
 if __name__ == "__main__":

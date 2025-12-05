@@ -24,9 +24,9 @@ from openai import BadRequestError
 from base.agent.base_agent import BaseAgent
 from base.engine.async_llm import AsyncLLM, LLMsConfig, ModelPricing
 
-from autoenv.prompt import (
-    MINISWE_SYSTEM_TEMPLATE, 
-    MINISWE_INSTANCE_TEMPLATE, 
+from autoenv.miniswe_prompt import (
+    MINISWE_SYSTEM_TEMPLATE,
+    MINISWE_INSTANCE_TEMPLATE,
     MINISWE_FORMAT_ERROR_TEMPLATE
 )
 
@@ -130,14 +130,19 @@ class LLMAdapter:
         return MockResponse()
 
     def _update_cost(self, response: Any) -> None:
-        """Update usage statistics."""
+        """Update usage statistics and report to global monitor."""
         if hasattr(response, 'usage'):
             in_tokens = getattr(response.usage, 'prompt_tokens', 0)
             out_tokens = getattr(response.usage, 'completion_tokens', 0)
             in_cost = (in_tokens / 1000) * ModelPricing.get_price(self.llm.config.model, 'input')
             out_cost = (out_tokens / 1000) * ModelPricing.get_price(self.llm.config.model, 'output')
-            self.cost += in_cost + out_cost
+            total_cost = in_cost + out_cost
+            self.cost += total_cost
             self.n_calls += 1
+
+            # Report to global cost monitor
+            from base.engine.cost_monitor import record_cost
+            record_cost(self.llm.config.model, in_tokens, out_tokens, total_cost)
 
 
 class MiniSWEAutoEnvAgent(BaseAgent):
@@ -166,6 +171,9 @@ class MiniSWEAutoEnvAgent(BaseAgent):
     docker_cwd: str = Field(default="/workspace", description="Container working directory")
     docker_run_args: List[str] = Field(default_factory=list, description="Docker run arguments")
     docker_bootstrap: List[str] = Field(default_factory=list, description="Bootstrap commands")
+
+    # Logging
+    log_dir: str = Field(default="workspace/logs/miniswe", description="Directory for trajectory logs")
 
     # Internal components
     _model: Optional[LLMAdapter] = PrivateAttr(default=None)
@@ -366,12 +374,12 @@ class MiniSWEAutoEnvAgent(BaseAgent):
             messages = None
         if not messages:
             return None
-        
+
         try:
-            base_dir = Path(self.cwd or os.getcwd())
-            base_dir.mkdir(parents=True, exist_ok=True)
+            log_dir = Path(self.log_dir)
+            log_dir.mkdir(parents=True, exist_ok=True)
             ts = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
-            path = base_dir / f"trajectory_miniswe_{ts}.json"
+            path = log_dir / f"trajectory_miniswe_{ts}.json"
             payload = {
                 "identifier": "miniswe_agent_trajectory",
                 "agent": self.name,
@@ -380,11 +388,14 @@ class MiniSWEAutoEnvAgent(BaseAgent):
                 "model": self._model.config.model_name if self._model else None,
                 "calls": self._model.n_calls if self._model else None,
                 "cost": round(self._model.cost, 6) if self._model else None,
-                "cwd": str(base_dir),
+                "cwd": self.cwd or str(Path.cwd()),
                 "timestamp": ts,
                 "messages": messages,
             }
-            path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
+            path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2, default=str),
+                encoding="utf-8",
+            )
             return str(path)
         except Exception:
             return None

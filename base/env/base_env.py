@@ -17,7 +17,6 @@ class BaseEnv(ABC):
         self.configs = None
         # Optional: store latest action side-effect/result for UI/agent feedback
         self._last_action_result: Any = None
-        self._dsl_config() 
 
     @abstractmethod
     def _dsl_config(self): 
@@ -131,7 +130,7 @@ class SkinEnv(ObsEnv):
         self._t += 1
         raw_obs = self.observe_semantic()
         agent_obs = self.render_skin(raw_obs)
-        if_done = self.done(s_next)
+        if_done = self.done()
         info = {
             "raw_obs": raw_obs,
             "skinned": agent_obs,

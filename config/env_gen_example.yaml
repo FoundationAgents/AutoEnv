@@ -1,21 +1,21 @@
-# We use this yaml to configure the environment generation from scratch.
+# Generation mode: "textual" or "multimodal"
+mode: "<textual or multimodal>"
 
-mode: "<textual or multi-modal>"
-
-# configure model used to generate environment, we use Claude-4-Sonnet as Default. 
+# LLM model for environment generation (default: claude-sonnet-4-5)
 model: "<model_name>"
 
-generative_models: "<generative_model_name>"
+# Image generation model (only used in multimodal mode)
+image_model: "<image_model_name>"
 
-# concurrency for generating environments.
+# Concurrency for batch generation
 concurrency: 1
 
-# configure themes folder, when you want to generate multiple envs.
-themes_folder: "<themes_folder>"
+# Folder containing .txt theme files for batch generation (takes priority over 'theme')
+# themes_folder: "<themes_folder>"
 
-# configure theme, when you want to only generate one env.
+# Single theme text or .txt file path (used only if themes_folder is not set)
 theme: "<inline_text>"
 
-# optional custom root for generated env folders
+# Output directory for generated environments
 envs_root_path: "workspace/envs"
 

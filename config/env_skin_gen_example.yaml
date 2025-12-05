@@ -1,18 +1,16 @@
-# We use this yaml to configure the environment generation from an exist environment.
-mode: "<textual or multi-modal>"
+# LLM model for analysis and code generation (default: claude-sonnet-4-5)
+model: "claude-4-5-haiku"
 
-# configure model used to generate environment, we use Claude-4-Sonnet as Default. 
-model: "<model_name>"
+# Image generation model (required)
+image_model: "gemini-2.5-flash-image"
 
-generative_models: "<generative_model_name>"
+# Mode 1: Existing environment path (analyze and generate visuals)
+# exist_environment_path: "benchmarks/01_Maze"
 
-# configure the path to the exist environment.
-exist_environment_path: "<path>"
+# Mode 2: Instruction-based generation (text prompt)
+requirements: "A pixel art dungeon crawler game with dark atmosphere"
 
-# configure the path of output folder
+# Output directory for standalone instruction mode
 envs_root_path: "workspace/envs"
-
-# configure the requirements you want to apply on skin.
-requirements: "<inline_text>"
 
 

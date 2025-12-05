@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 # @Date    : 2025-03-31
 # @Author  : Zhaoyang & didi
-# @Desc    : 
+# @Desc    :
 import os
+import re
 import yaml
 
 from openai import AsyncOpenAI
 
 from pathlib import Path
 from typing import Dict, Optional, Any
+from base.engine.cost_monitor import record_cost
 from base.engine.logs import logger, LogLevel
 
 class LLMConfig:
@@ -172,8 +174,11 @@ class ModelPricing:
         "z-ai/glm-4.5": {"input": 0.00033, "output": 0.00132},
         "gemini-2.5-pro": {"input": 0.00125, "output": 0.01},
         "claude-4-sonnet": {"input": 0.003, "output": 0.015},
+        "claude-sonnet-4-5": {"input": 0.003, "output": 0.015},
+        "claude-4-5-haiku": {"input": 0.00088, "output": 0.0044},
         "claude-4-sonnet-20250514": {"input": 0.003, "output": 0.015},
         "gemini-2.5-flash": {"input": 0.0003, "output": 0.000252},
+        "gemini-2.5-flash-image": {"input": 0.0003, "output": 0.03},
     }
 
 
@@ -281,56 +286,162 @@ class AsyncLLM:
         # Prefer to use the max_tokens argument passed to the function; if it is None, use the instance variable.
         tokens_to_use = max_tokens if max_tokens is not None else self.max_completion_tokens
 
+        # Claude models via Bedrock don't support both temperature and top_p
+        is_claude = "claude" in self.config.model.lower()
+        sampling_params = (
+            {"temperature": self.config.temperature}
+            if is_claude
+            else {"temperature": self.config.temperature, "top_p": self.config.top_p}
+        )
+
         if tokens_to_use is not None and "o3" in self.config.model:
             response = await self.aclient.chat.completions.create(
                 model=self.config.model,
                 messages=message,
-                temperature=self.config.temperature,
                 max_completion_tokens=tokens_to_use,
-                top_p = self.config.top_p,
+                **sampling_params,
             )
         # Only gpt-series support max_completion_tokens.
         elif tokens_to_use is not None and "o3" not in self.config.model:
             response = await self.aclient.chat.completions.create(
                 model=self.config.model,
                 messages=message,
-                temperature=self.config.temperature,
                 max_tokens=tokens_to_use,
-                top_p = self.config.top_p,
+                **sampling_params,
             )
         else:
             response = await self.aclient.chat.completions.create(
                 model=self.config.model,
                 messages=message,
-                temperature=self.config.temperature,
-                top_p = self.config.top_p,
+                **sampling_params,
             )
 
         # Extract token usage from response
         input_tokens = response.usage.prompt_tokens
         output_tokens = response.usage.completion_tokens
-        
+
         # Track token usage and calculate cost
         usage_record = self.usage_tracker.add_usage(
             self.config.model,
             input_tokens,
             output_tokens
         )
-        
+
+        # Report to global cost monitor if active
+        record_cost(self.config.model, input_tokens, output_tokens, usage_record["total_cost"])
+
         # Return text or multimodal content (API returns content as provided)
         ret = response.choices[0].message.content
         logger.log_to_file(LogLevel.INFO, f"LLM Response: {ret}")
-        
-        # You can optionally print token usage information
-        # print(f"Token usage: {input_tokens} input + {output_tokens} output = {input_tokens + output_tokens} total")
-        # print(f"Cost: ${usage_record['total_cost']:.6f} (${usage_record['input_cost']:.6f} for input, ${usage_record['output_cost']:.6f} for output)")
-        
+
         return ret
     
     def get_usage_summary(self):
         """Get a summary of token usage and costs"""
-        return self.usage_tracker.get_summary()    
-    
+        return self.usage_tracker.get_summary()
+
+    async def generate_text_to_image(self, prompt: str) -> dict[str, Any]:
+        """
+        Text-to-image generation.
+
+        Args:
+            prompt: Text prompt for image generation
+
+        Returns:
+            {
+                'success': bool,
+                'image_base64': str | None,
+                'prompt': str,
+                'error': str | None
+            }
+        """
+        try:
+            response = await self(prompt)
+            image_b64 = self._extract_image_from_response(response)
+
+            if not image_b64:
+                return {
+                    "success": False,
+                    "image_base64": None,
+                    "prompt": prompt,
+                    "error": "No image found in response",
+                }
+
+            return {
+                "success": True,
+                "image_base64": image_b64,
+                "prompt": prompt,
+                "error": None,
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "image_base64": None,
+                "prompt": prompt,
+                "error": str(e),
+            }
+
+    async def generate_image_to_image(
+        self, prompt: str, reference_images: list[str]
+    ) -> dict[str, Any]:
+        """
+        Image-to-image generation with style references.
+
+        Args:
+            prompt: Text prompt for image generation
+            reference_images: List of base64-encoded reference images
+
+        Returns:
+            {
+                'success': bool,
+                'image_base64': str | None,
+                'prompt': str,
+                'error': str | None
+            }
+        """
+        try:
+            content = []
+            for img_b64 in reference_images:
+                content.append(
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": f"data:image/png;base64,{img_b64}"},
+                    }
+                )
+            content.append({"type": "text", "text": prompt})
+
+            response = await self(content)
+            image_b64 = self._extract_image_from_response(response)
+
+            if not image_b64:
+                return {
+                    "success": False,
+                    "image_base64": None,
+                    "prompt": prompt,
+                    "error": "No image found in response",
+                }
+
+            return {
+                "success": True,
+                "image_base64": image_b64,
+                "prompt": prompt,
+                "error": None,
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "image_base64": None,
+                "prompt": prompt,
+                "error": str(e),
+            }
+
+    def _extract_image_from_response(self, response: str) -> str | None:
+        """Extract base64 image from LLM response."""
+        if not isinstance(response, str):
+            return None
+        match = re.search(r"data:image/[^;]+;base64,([^)]+)", response)
+        return match.group(1) if match else None
+
 
 def create_llm_instance(llm_config) -> AsyncLLM:
     """

@@ -75,30 +75,59 @@ We also generate multimodal skin based on the rules of the same maze. Generated 
  
 ## RoadMap
 
-- [ ] Add Environments Level Scaling Feature. 
-- [ ] Add Skin Control pipeline abstraction. 
+- [ ] Add Environments Level Scaling Feature.
+- [ ] Add Skin Control pipeline abstraction.
 - [ ] Add Multimodal Environment Generation Pipelines.
-- [ ] Add Three-stage Verfication Pipeline for both text and multimodal environments. 
+- [ ] Add Three-stage Verification Pipeline for both text and multimodal environments.
 - [ ] Add Learning Experiments Scripts.
 - [ ] Add Coding Agents Option: Codex, Gemini Cli.
 - [ ] Add 3D Environment Generation Pipelines.
 
 ## Repository Layout
-- `autoenv/`: generation workflow (`generator.py`), mini-swe wrapper (`miniswe_agent.py`), prompts, and the coder bridge.
-- `base/`: core abstractions (env/generator/observation), async LLM client with pricing and token tracking, logging, and trajectory utilities.
-- `config/`: model and generation configs.
-- `scripts/`: utilities (e.g., `run_archive_files.py` for cleaning env outputs).
-- `workspace/`: runtime outputs.
-- Entry points: `run_environment_generation.py` (main generator driver), `run_environment_skin_generation.py` (optional skin pipeline).
+
+```
+AutoEnv/
+├── autoenv/              # Environment generation logic and pipelines
+├── base/                 # Core abstractions (LLM client, pipeline, env)
+├── benchmarks/           # AutoEnv-36 benchmark environments
+├── config/               # Configuration files
+├── scripts/              # Utility scripts
+└── workspace/            # Runtime outputs (envs, logs, costs)
+```
 
 ## Quick Start
-1. **Install dependencies** (Python 3.11 recommended): `pip install -r requirements.txt`.
 
-2. **Configure model keys**: Fill `config/model_config.yaml` with your model names and endpoints.
+### 1. Install Dependencies
 
-3. **Configure generation**: Edit `config/env_gen.yaml` (or `config/env_gen_example.yaml`) to set `model`, and either a single `theme` (inline text) or `themes_folder` for batch runs. Adjust `concurrency` if batching.
+```bash
+pip install -r requirements.txt
+```
 
-4. **Generate environments**: run `python run_environment_generation.py --config config/env_gen.yaml`
+Python 3.11+ recommended.
+
+### 2. Configure Model Keys
+
+Fill `config/model_config.yaml` with your model names and endpoints.
+
+### 3. Run
+
+**Environment Generation** (`run_environment_generation.py`): Generates text-based game environments from theme descriptions.
+
+```bash
+cp config/env_gen_example.yaml config/env_gen.yaml
+# Edit config/env_gen.yaml with your settings
+python run_environment_generation.py
+```
+
+**Skin Generation** (`run_environment_skin_generation.py`): Generates visual assets for existing environments or from text instructions.
+
+```bash
+cp config/env_skin_gen_example.yaml config/env_skin_gen.yaml
+# Edit config/env_skin_gen.yaml with your settings
+python run_environment_skin_generation.py
+```
+
+Cost summaries are automatically saved to `workspace/costs/`.
 
 ## Awesome work powered by AutoEnv
 
@@ -107,7 +136,11 @@ We also generate multimodal skin based on the rules of the same maze. Generated 
 
 ## Acknowledgements
 
-Thanks to [mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent), [codex](https://github.com/openai/codex) for providing basic support for this project!
+Thanks to 
+[mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent), 
+[codex](https://github.com/openai/codex), 
+[rembg](https://github.com/danielgatis/rembg),
+for providing basic support for this project!
 
 ## Citation
 

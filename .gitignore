@@ -1,3 +1,11 @@
 *.pyc
 /visualizer/output
+
+# workspace
+/workspace/
 /workspace/logs
+
+# config
+/config/model_config.yaml
+/config/env_gen.yaml
+/config/env_skin_gen.yaml
