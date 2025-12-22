@@ -1,38 +1,3 @@
-"""
-Claude Code Agent for AutoEnv
-
-This module provides a ClaudeCodeAgent class that integrates Claude Agent SDK
-into the AutoEnv project. It inherits from BaseAgent and provides a unified
-interface for code generation and execution tasks.
-
-Installation:
-    pip install claude-agent-sdk
-
-    Note: The Claude Code CLI is automatically bundled with the SDK -
-    no separate installation required!
-
-Prerequisites:
-    - Python 3.10+
-    - ANTHROPIC_API_KEY environment variable
-
-Example:
-    from autoenv.claude_code_agent import ClaudeCodeAgent
-    from base.engine.async_llm import AsyncLLM
-
-    agent = ClaudeCodeAgent(
-        llm=AsyncLLM("claude-sonnet-4-5"),
-        max_turns=5,
-        cwd="/path/to/project"
-    )
-
-    result = await agent.run(request="Write a function to calculate Fibonacci numbers")
-    print(result)
-
-References:
-    - Claude Agent SDK: https://github.com/anthropics/claude-agent-sdk-python
-    - Documentation: https://platform.claude.com/docs/en/agent-sdk/python
-"""
-
 from __future__ import annotations
 
 import asyncio
@@ -61,30 +26,7 @@ except ImportError:
 
 
 class ClaudeCodeAgent(BaseAgent):
-    """
-    Claude Code Agent that integrates Claude Code SDK for code generation tasks.
-    
-    This agent wraps the Claude Code SDK to provide a unified interface compatible
-    with AutoEnv's BaseAgent architecture. It supports both single-step execution
-    and multi-turn conversations.
-    
-    Attributes:
-        name: Agent name (default: "claude_code")
-        description: Agent description
-        llm: AsyncLLM instance (optional, for compatibility)
-        max_turns: Maximum number of conversation turns (default: 10)
-        cwd: Current working directory for code execution
-        allowed_tools: List of allowed tools (e.g., ["Read", "Write", "Bash"])
-        permission_mode: Permission mode ("default", "acceptEdits", "bypassPermissions", "plan")
-        system_prompt_override: Optional system prompt override
-        append_system_prompt: Optional text to append to system prompt
-        
-        # Internal state
-        _messages: List of messages from the current session
-        _session_id: Current session ID
-        _total_cost_usd: Total cost in USD
-        _current_prompt: Current prompt being processed
-    """
+    """Claude Code Agent for code generation using Claude Agent SDK."""
     
     name: str = Field(default="claude_code", description="Agent name")
     description: str = Field(
@@ -151,14 +93,12 @@ class ClaudeCodeAgent(BaseAgent):
         """Create ClaudeAgentOptions from agent settings."""
         options_dict = {
             "max_turns": self.max_turns,
-            "cwd": str(self.cwd),  # Ensure cwd is a string
+            "cwd": str(self.cwd),
             "permission_mode": self.permission_mode,
         }
 
         if self.allowed_tools:
             options_dict["allowed_tools"] = self.allowed_tools
-
-        # Official SDK uses system_prompt instead of system_prompt_override
         if self.system_prompt_override:
             options_dict["system_prompt"] = self.system_prompt_override
         elif self.append_system_prompt:
@@ -167,47 +107,29 @@ class ClaudeCodeAgent(BaseAgent):
         return ClaudeAgentOptions(**options_dict)
 
     async def step(self) -> str:
-        """
-        Execute a single step in the agent's workflow.
-
-        This method processes one turn of the conversation with Claude Code.
-        It uses the current prompt stored in _current_prompt and collects
-        messages until the conversation completes or reaches max_turns.
-
-        Returns:
-            str: The result text from the current step
-
-        Note:
-            This method is designed to work with the run() method, which sets
-            up the _current_prompt. For standalone use, call run() instead.
-        """
+        """Execute a single step in the agent's workflow."""
         if not self._current_prompt:
             return "No prompt provided. Use run() method to execute tasks."
 
         try:
             options = self._create_options()
 
-            # Execute one turn using Claude Agent SDK
             async for message in query(
                 prompt=self._current_prompt,
                 options=options
             ):
                 self._messages.append(message)
 
-                # Extract session_id if available
                 if hasattr(message, 'session_id'):
                     self._session_id = message.session_id
 
-                # Check if this is a result message (final message)
                 if hasattr(message, 'type') and message.type == "result":
                     if hasattr(message, 'total_cost_usd'):
                         self._total_cost_usd += message.total_cost_usd
 
-                    # Return the result text
                     if hasattr(message, 'result'):
                         return message.result
                     elif hasattr(message, 'subtype'):
-                        # Handle error cases
                         if message.subtype == "error_max_turns":
                             return f"Error: Reached maximum turns ({self.max_turns})"
                         elif message.subtype == "error_during_execution":
@@ -229,44 +151,15 @@ class ClaudeCodeAgent(BaseAgent):
             return f"Error: Unexpected error: {str(e)}"
 
     async def run(self, request: Optional[str] = None, **kwargs) -> str:
-        """
-        Execute the agent's main loop asynchronously.
-
-        This method runs a complete task using Claude Code SDK. It handles
-        the full conversation lifecycle, including multiple turns if needed.
-
-        Args:
-            request: The task/prompt to execute
-            **kwargs: Additional keyword arguments:
-                - cwd: Override working directory
-                - max_turns: Override max turns
-                - allowed_tools: Override allowed tools
-                - permission_mode: Override permission mode
-                - system_prompt: Override system prompt
-                - append_system_prompt: Append to system prompt
-
-        Returns:
-            str: The final result from Claude Code execution
-
-        Example:
-            result = await agent.run(
-                request="Write a Python function to read CSV files",
-                cwd="/path/to/project",
-                max_turns=5
-            )
-        """
+        """Execute the agent's main loop asynchronously."""
         if not request:
             return "Error: No request provided"
 
-        # Store the prompt for step() method
         self._current_prompt = request
-
-        # Reset state for new run
         self._messages = []
         self._session_id = None
         self._total_cost_usd = 0.0
 
-        # Apply kwargs overrides
         original_values = {}
         for key, value in kwargs.items():
             if hasattr(self, key):
@@ -274,19 +167,15 @@ class ClaudeCodeAgent(BaseAgent):
                 setattr(self, key, value)
 
         try:
-            # Create options with current settings
             options = self._create_options()
 
-            # Execute the full conversation
             result_text = ""
             async for message in query(prompt=request, options=options):
                 self._messages.append(message)
 
-                # Extract session_id
                 if hasattr(message, 'session_id'):
                     self._session_id = message.session_id
 
-                # Handle result message
                 if hasattr(message, 'type') and message.type == "result":
                     if hasattr(message, 'total_cost_usd'):
                         self._total_cost_usd = message.total_cost_usd
@@ -319,34 +208,12 @@ class ClaudeCodeAgent(BaseAgent):
                 setattr(self, key, value)
 
     async def __call__(self, **kwargs) -> str:
-        """
-        Execute the agent with given parameters.
-
-        This method provides a callable interface compatible with BaseAgent.
-
-        Args:
-            **kwargs: Keyword arguments passed to run()
-                - request: The task/prompt (can also be 'task' or 'prompt')
-                - Other kwargs are passed to run()
-
-        Returns:
-            str: The result from run()
-        """
-        # Extract request from various possible keys
+        """Execute the agent with given parameters."""
         request = kwargs.pop('request', None) or kwargs.pop('task', None) or kwargs.pop('prompt', None)
         return await self.run(request=request, **kwargs)
 
     def get_session_info(self) -> Dict[str, Any]:
-        """
-        Get information about the current session.
-
-        Returns:
-            dict: Session information including:
-                - session_id: Current session ID
-                - total_cost_usd: Total cost in USD
-                - num_messages: Number of messages in current session
-                - cwd: Current working directory
-        """
+        """Get information about the current session."""
         return {
             "session_id": self._session_id,
             "total_cost_usd": self._total_cost_usd,
@@ -357,12 +224,7 @@ class ClaudeCodeAgent(BaseAgent):
         }
 
     def get_messages(self) -> List[Any]:
-        """
-        Get all messages from the current session.
-
-        Returns:
-            list: List of Message objects from Claude Code SDK
-        """
+        """Get all messages from the current session."""
         return self._messages.copy()
 
     def reset(self) -> None:
