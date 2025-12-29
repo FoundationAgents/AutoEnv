@@ -1,21 +1,22 @@
 from __future__ import annotations
 
-import asyncio
-import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from pydantic import Field, model_validator, PrivateAttr
 
 from base.agent.base_agent import BaseAgent
-from base.engine.async_llm import AsyncLLM
 
-# Import Claude Agent SDK
+
 try:
-    from claude_agent_sdk import query, ClaudeAgentOptions, ClaudeSDKClient
-    from claude_agent_sdk import AssistantMessage, UserMessage, ResultMessage
-    from claude_agent_sdk import TextBlock, ToolUseBlock, ToolResultBlock
-    from claude_agent_sdk import ClaudeSDKError, CLINotFoundError, ProcessError, CLIJSONDecodeError
+    from claude_agent_sdk import (
+        query,
+        ClaudeAgentOptions,
+        ClaudeSDKError,
+        CLINotFoundError,
+        ProcessError,
+        CLIJSONDecodeError,
+    )
     CLAUDE_AGENT_AVAILABLE = True
 except ImportError:
     CLAUDE_AGENT_AVAILABLE = False
@@ -35,6 +36,7 @@ class ClaudeCodeAgent(BaseAgent):
     )
     
     # Claude Code specific settings
+    # NOTE: Uses `max_turns` for conversation turns with Claude Code CLI (vs BaseAgent's generic `max_steps`)
     max_turns: int = Field(default=10, description="Maximum conversation turns")
     cwd: Optional[Path] = Field(default=None, description="Working directory")
     allowed_tools: Optional[List[str]] = Field(
@@ -91,6 +93,12 @@ class ClaudeCodeAgent(BaseAgent):
 
     def _create_options(self) -> ClaudeAgentOptions:
         """Create ClaudeAgentOptions from agent settings."""
+        # Validate working directory exists
+        if not self.cwd.exists():
+            raise FileNotFoundError(f"Working directory does not exist: {self.cwd}")
+        if not self.cwd.is_dir():
+            raise NotADirectoryError(f"Working directory path is not a directory: {self.cwd}")
+        
         options_dict = {
             "max_turns": self.max_turns,
             "cwd": str(self.cwd),
@@ -105,6 +113,27 @@ class ClaudeCodeAgent(BaseAgent):
             options_dict["append_system_prompt"] = self.append_system_prompt
 
         return ClaudeAgentOptions(**options_dict)
+
+    def _handle_sdk_error(self, e: Exception) -> str:
+        """Handle Claude SDK errors with consistent formatting.
+        
+        Args:
+            e: The exception to handle
+            
+        Returns:
+            Formatted error message string
+        """
+        if isinstance(e, CLINotFoundError):
+            return f"Error: Claude Code CLI not found: {str(e)}"
+        elif isinstance(e, ProcessError):
+            exit_code = getattr(e, 'exit_code', 'unknown')
+            return f"Error: Process failed with exit code {exit_code}: {str(e)}"
+        elif isinstance(e, CLIJSONDecodeError):
+            return f"Error: Failed to parse Claude response: {str(e)}"
+        elif isinstance(e, ClaudeSDKError):
+            return f"Error: Claude SDK error: {str(e)}"
+        else:
+            return f"Error: Unexpected error: {str(e)}"
 
     async def step(self) -> str:
         """Execute a single step in the agent's workflow."""
@@ -123,32 +152,31 @@ class ClaudeCodeAgent(BaseAgent):
                 if hasattr(message, 'session_id'):
                     self._session_id = message.session_id
 
-                if hasattr(message, 'type') and message.type == "result":
-                    if hasattr(message, 'total_cost_usd'):
-                        self._total_cost_usd += message.total_cost_usd
+                # Skip non-result messages
+                if not (hasattr(message, 'type') and message.type == "result"):
+                    continue
 
-                    if hasattr(message, 'result'):
-                        return message.result
-                    elif hasattr(message, 'subtype'):
-                        if message.subtype == "error_max_turns":
-                            return f"Error: Reached maximum turns ({self.max_turns})"
-                        elif message.subtype == "error_during_execution":
-                            return "Error: Execution failed"
+                # Track costs for result messages
+                if hasattr(message, 'total_cost_usd'):
+                    self._total_cost_usd += message.total_cost_usd
 
-                    return "Execution completed"
+                # Return result if available
+                if hasattr(message, 'result'):
+                    return message.result
+
+                # Handle error or completion subtypes
+                if hasattr(message, 'subtype'):
+                    if message.subtype == "error_max_turns":
+                        return f"Error: Reached maximum turns ({self.max_turns})"
+                    elif message.subtype == "error_during_execution":
+                        return "Error: Execution failed"
+
+                return "Execution completed"
 
             return "No result received"
 
-        except CLINotFoundError:
-            return "Error: Claude Code CLI not found. Please install: pip install claude-agent-sdk"
-        except ProcessError as e:
-            return f"Error: Process failed with exit code {getattr(e, 'exit_code', 'unknown')}"
-        except CLIJSONDecodeError as e:
-            return f"Error: Failed to parse Claude response: {str(e)}"
-        except ClaudeSDKError as e:
-            return f"Error: Claude SDK error: {str(e)}"
         except Exception as e:
-            return f"Error: Unexpected error: {str(e)}"
+            return self._handle_sdk_error(e)
 
     async def run(self, request: Optional[str] = None, **kwargs) -> str:
         """Execute the agent's main loop asynchronously."""
@@ -160,11 +188,21 @@ class ClaudeCodeAgent(BaseAgent):
         self._session_id = None
         self._total_cost_usd = 0.0
 
+        # Safely modify attributes, only tracking successful changes
         original_values = {}
         for key, value in kwargs.items():
             if hasattr(self, key):
-                original_values[key] = getattr(self, key)
-                setattr(self, key, value)
+                try:
+                    original_values[key] = getattr(self, key)
+                    setattr(self, key, value)
+                except Exception as e:
+                    # If setting fails, restore any attributes set so far
+                    for restore_key, restore_value in original_values.items():
+                        try:
+                            setattr(self, restore_key, restore_value)
+                        except Exception:
+                            pass  # Best effort restoration
+                    return f"Error: Failed to set attribute '{key}': {str(e)}"
 
         try:
             options = self._create_options()
@@ -176,36 +214,39 @@ class ClaudeCodeAgent(BaseAgent):
                 if hasattr(message, 'session_id'):
                     self._session_id = message.session_id
 
-                if hasattr(message, 'type') and message.type == "result":
-                    if hasattr(message, 'total_cost_usd'):
-                        self._total_cost_usd = message.total_cost_usd
+                # Skip non-result messages
+                if not (hasattr(message, 'type') and message.type == "result"):
+                    continue
 
-                    if hasattr(message, 'result'):
-                        result_text = message.result
-                    elif hasattr(message, 'subtype'):
-                        if message.subtype == "error_max_turns":
-                            result_text = f"Error: Reached maximum turns ({self.max_turns})"
-                        elif message.subtype == "error_during_execution":
-                            result_text = "Error: Execution failed during run"
-                        else:
-                            result_text = f"Completed with status: {message.subtype}"
+                # Track costs for result messages
+                if hasattr(message, 'total_cost_usd'):
+                    self._total_cost_usd = message.total_cost_usd
+
+                # Return result if available
+                if hasattr(message, 'result'):
+                    result_text = message.result
+                # Handle error or completion subtypes
+                elif hasattr(message, 'subtype'):
+                    if message.subtype == "error_max_turns":
+                        result_text = f"Error: Reached maximum turns ({self.max_turns})"
+                    elif message.subtype == "error_during_execution":
+                        result_text = "Error: Execution failed during run"
+                    else:
+                        result_text = f"Completed with status: {message.subtype}"
+                else:
+                    result_text = "Execution completed"
 
             return result_text if result_text else "No result received"
 
-        except CLINotFoundError:
-            return "Error: Claude Code CLI not found. Please install: pip install claude-agent-sdk"
-        except ProcessError as e:
-            return f"Error: Process failed with exit code {getattr(e, 'exit_code', 'unknown')}"
-        except CLIJSONDecodeError as e:
-            return f"Error: Failed to parse Claude response: {str(e)}"
-        except ClaudeSDKError as e:
-            return f"Error: Claude SDK error: {str(e)}"
         except Exception as e:
-            return f"Error: Unexpected error: {str(e)}"
+            return self._handle_sdk_error(e)
         finally:
-            # Restore original values
+            # Restore original values (best effort)
             for key, value in original_values.items():
-                setattr(self, key, value)
+                try:
+                    setattr(self, key, value)
+                except Exception:
+                    pass  # Ignore errors during restoration
 
     async def __call__(self, **kwargs) -> str:
         """Execute the agent with given parameters."""
@@ -233,5 +274,4 @@ class ClaudeCodeAgent(BaseAgent):
         self._session_id = None
         self._total_cost_usd = 0.0
         self._current_prompt = None
-        self.current_step = 0
 

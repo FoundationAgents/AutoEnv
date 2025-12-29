@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 import json
-import os
 import subprocess
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -10,7 +9,6 @@ from typing import Any, Dict, List, Optional
 from pydantic import Field, model_validator, PrivateAttr
 
 from base.agent.base_agent import BaseAgent
-from base.engine.async_llm import AsyncLLM
 
 
 # Check if Codex CLI is available
@@ -31,7 +29,7 @@ CODEX_CLI_AVAILABLE = _check_codex_cli()
 
 
 class CodexAgent(BaseAgent):
-    """Codex Agent for code generation using OpenAI Codex CLI."""
+    """Codex agent for code generation using a Codex CLI tool."""
     
     name: str = Field(default="codex", description="Agent name")
     description: str = Field(
@@ -40,6 +38,7 @@ class CodexAgent(BaseAgent):
     )
     
     # Codex specific settings
+    # NOTE: Uses `max_turns` for conversation turns with Codex CLI (vs BaseAgent's generic `max_steps`).
     max_turns: int = Field(default=10, description="Maximum conversation turns")
     cwd: Optional[Path] = Field(default=None, description="Working directory")
     model: str = Field(
@@ -75,7 +74,6 @@ class CodexAgent(BaseAgent):
     _session_id: Optional[str] = PrivateAttr(default=None)
     _total_cost_usd: float = PrivateAttr(default=0.0)
     _current_prompt: Optional[str] = PrivateAttr(default=None)
-    _process: Optional[subprocess.Popen] = PrivateAttr(default=None)
     
     @model_validator(mode="after")
     def validate_codex_cli_available(self) -> "CodexAgent":
@@ -93,6 +91,12 @@ class CodexAgent(BaseAgent):
             self.cwd = Path.cwd()
         else:
             self.cwd = Path(self.cwd)
+
+        # Validate working directory exists
+        if not self.cwd.exists():
+            raise FileNotFoundError(f"Working directory does not exist: {self.cwd}")
+        if not self.cwd.is_dir():
+            raise NotADirectoryError(f"Working directory path is not a directory: {self.cwd}")
 
         # Validate permission mode
         valid_modes = ["default", "acceptEdits", "bypassPermissions", "plan"]
@@ -127,6 +131,8 @@ class CodexAgent(BaseAgent):
             cmd.append("--full-auto")
 
         cmd.append("--json")
+        # Use "--" so prompt content (even starting with "--") is treated as positional, not CLI flags
+        cmd.append("--")
         cmd.append(prompt)
 
         return cmd
@@ -193,6 +199,7 @@ class CodexAgent(BaseAgent):
                             result["usage"] = usage
 
                 except json.JSONDecodeError:
+                    # Skip invalid JSON lines (e.g., empty/partial) and continue parsing the stream
                     pass
 
             if thread_id:
@@ -206,11 +213,9 @@ class CodexAgent(BaseAgent):
             return result
 
         except Exception as e:
-            raise json.JSONDecodeError(
-                f"Failed to parse Codex CLI output as JSON: {str(e)}",
-                output,
-                0
-            )
+            raise ValueError(
+                f"Failed to parse Codex CLI output as JSON: {e}. Raw output: {output!r}"
+            ) from e
 
     async def step(self) -> str:
         """Execute a single step in the agent's workflow."""
@@ -253,11 +258,21 @@ class CodexAgent(BaseAgent):
         self._session_id = None
         self._total_cost_usd = 0.0
 
+        # Safely modify attributes, only tracking successful changes
         original_values = {}
         for key, value in kwargs.items():
             if hasattr(self, key):
-                original_values[key] = getattr(self, key)
-                setattr(self, key, value)
+                try:
+                    original_values[key] = getattr(self, key)
+                    setattr(self, key, value)
+                except Exception as e:
+                    # If setting fails, restore any attributes set so far
+                    for restore_key, restore_value in original_values.items():
+                        try:
+                            setattr(self, restore_key, restore_value)
+                        except Exception:
+                            pass  # Best effort restoration
+                    return f"Error: Failed to set attribute '{key}': {str(e)}"
 
         try:
             result = await self._run_cli_command(request)
@@ -289,9 +304,12 @@ class CodexAgent(BaseAgent):
             return f"Error during execution: {str(e)}"
 
         finally:
-            # Restore original values
+            # Restore original values (best effort)
             for key, value in original_values.items():
-                setattr(self, key, value)
+                try:
+                    setattr(self, key, value)
+                except Exception:
+                    pass  # Ignore errors during restoration
 
     async def __call__(self, **kwargs) -> str:
         """Execute the agent with given parameters."""
@@ -320,21 +338,4 @@ class CodexAgent(BaseAgent):
         self._session_id = None
         self._total_cost_usd = 0.0
         self._current_prompt = None
-        self.current_step = 0
-        if self._process:
-            try:
-                self._process.kill()
-                self._process.wait(timeout=5)
-            except Exception:
-                pass
-            self._process = None
-
-    def __del__(self):
-        """Cleanup on deletion."""
-        if self._process:
-            try:
-                self._process.kill()
-                self._process.wait(timeout=5)
-            except Exception:
-                pass
 
