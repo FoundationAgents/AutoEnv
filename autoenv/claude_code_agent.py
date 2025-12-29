@@ -81,6 +81,9 @@ class ClaudeCodeAgent(BaseAgent):
         else:
             self.cwd = Path(self.cwd)
 
+        # Validate working directory exists
+        self._validate_cwd()
+
         # Validate permission mode
         valid_modes = ["default", "acceptEdits", "bypassPermissions", "plan"]
         if self.permission_mode not in valid_modes:
@@ -91,14 +94,15 @@ class ClaudeCodeAgent(BaseAgent):
 
         return self
 
-    def _create_options(self) -> ClaudeAgentOptions:
-        """Create ClaudeAgentOptions from agent settings."""
-        # Validate working directory exists
+    def _validate_cwd(self) -> None:
+        """Validate working directory exists and is a directory."""
         if not self.cwd.exists():
             raise FileNotFoundError(f"Working directory does not exist: {self.cwd}")
         if not self.cwd.is_dir():
             raise NotADirectoryError(f"Working directory path is not a directory: {self.cwd}")
-        
+
+    def _create_options(self) -> ClaudeAgentOptions:
+        """Create ClaudeAgentOptions from agent settings."""
         options_dict = {
             "max_turns": self.max_turns,
             "cwd": str(self.cwd),
@@ -117,11 +121,17 @@ class ClaudeCodeAgent(BaseAgent):
     def _handle_sdk_error(self, e: Exception) -> str:
         """Handle Claude SDK errors with consistent formatting.
         
+        Only converts expected SDK errors to user-friendly strings.
+        Re-raises unexpected exceptions (programming errors) for proper debugging.
+        
         Args:
             e: The exception to handle
             
         Returns:
-            Formatted error message string
+            Formatted error message string for SDK errors
+            
+        Raises:
+            Exception: Re-raises non-SDK exceptions for proper error tracking
         """
         if isinstance(e, CLINotFoundError):
             return f"Error: Claude Code CLI not found: {str(e)}"
@@ -133,7 +143,52 @@ class ClaudeCodeAgent(BaseAgent):
         elif isinstance(e, ClaudeSDKError):
             return f"Error: Claude SDK error: {str(e)}"
         else:
-            return f"Error: Unexpected error: {str(e)}"
+            # Re-raise unexpected exceptions (programming errors, etc.) for proper debugging
+            raise
+
+    async def _process_query_stream(self, prompt: str, options: ClaudeAgentOptions) -> str:
+        """Process the query stream and extract result.
+        
+        Handles message iteration, session tracking, cost accumulation, and result extraction.
+        This is shared logic between step() and run() methods.
+        
+        Args:
+            prompt: The prompt to send to Claude
+            options: Claude agent options
+            
+        Returns:
+            Result text from the query
+        """
+        result_text = ""
+        async for message in query(prompt=prompt, options=options):
+            self._messages.append(message)
+
+            if hasattr(message, 'session_id'):
+                self._session_id = message.session_id
+
+            # Skip non-result messages
+            if not (hasattr(message, 'type') and message.type == "result"):
+                continue
+
+            # Track costs for result messages
+            if hasattr(message, 'total_cost_usd'):
+                self._total_cost_usd += message.total_cost_usd
+
+            # Capture result if available
+            if hasattr(message, 'result'):
+                result_text = message.result
+            # Handle error or completion subtypes
+            elif hasattr(message, 'subtype'):
+                if message.subtype == "error_max_turns":
+                    result_text = f"Error: Reached maximum turns ({self.max_turns})"
+                elif message.subtype == "error_during_execution":
+                    result_text = "Error: Execution failed"
+                else:
+                    result_text = f"Completed with status: {message.subtype}"
+            else:
+                result_text = "Execution completed"
+
+        return result_text if result_text else "No result received"
 
     async def step(self) -> str:
         """Execute a single step in the agent's workflow."""
@@ -142,44 +197,24 @@ class ClaudeCodeAgent(BaseAgent):
 
         try:
             options = self._create_options()
-
-            async for message in query(
-                prompt=self._current_prompt,
-                options=options
-            ):
-                self._messages.append(message)
-
-                if hasattr(message, 'session_id'):
-                    self._session_id = message.session_id
-
-                # Skip non-result messages
-                if not (hasattr(message, 'type') and message.type == "result"):
-                    continue
-
-                # Track costs for result messages
-                if hasattr(message, 'total_cost_usd'):
-                    self._total_cost_usd += message.total_cost_usd
-
-                # Return result if available
-                if hasattr(message, 'result'):
-                    return message.result
-
-                # Handle error or completion subtypes
-                if hasattr(message, 'subtype'):
-                    if message.subtype == "error_max_turns":
-                        return f"Error: Reached maximum turns ({self.max_turns})"
-                    elif message.subtype == "error_during_execution":
-                        return "Error: Execution failed"
-
-                return "Execution completed"
-
-            return "No result received"
-
+            return await self._process_query_stream(self._current_prompt, options)
         except Exception as e:
             return self._handle_sdk_error(e)
 
     async def run(self, request: Optional[str] = None, **kwargs) -> str:
-        """Execute the agent's main loop asynchronously."""
+        """Execute the agent's main loop asynchronously.
+        
+        Args:
+            request: The task or prompt to execute
+            **kwargs: Temporary attribute overrides (max_turns, cwd, permission_mode, etc.)
+                     
+        Returns:
+            Result string from execution or error message
+            
+        Note:
+            Attributes modified via kwargs are restored after execution on a "best effort" basis.
+            In rare cases, restoration may fail to avoid masking the primary execution error.
+        """
         if not request:
             return "Error: No request provided"
 
@@ -188,56 +223,47 @@ class ClaudeCodeAgent(BaseAgent):
         self._session_id = None
         self._total_cost_usd = 0.0
 
-        # Safely modify attributes, only tracking successful changes
+        # Whitelist of attributes that can be modified via kwargs
+        modifiable_attrs = {
+            'max_turns', 'cwd', 'permission_mode', 'allowed_tools',
+            'system_prompt_override', 'append_system_prompt'
+        }
+
+        # Safely modify attributes with validation
         original_values = {}
         for key, value in kwargs.items():
-            if hasattr(self, key):
-                try:
-                    original_values[key] = getattr(self, key)
-                    setattr(self, key, value)
-                except Exception as e:
-                    # If setting fails, restore any attributes set so far
-                    for restore_key, restore_value in original_values.items():
-                        try:
-                            setattr(self, restore_key, restore_value)
-                        except Exception:
-                            pass  # Best effort restoration
-                    return f"Error: Failed to set attribute '{key}': {str(e)}"
+            if key not in modifiable_attrs:
+                return f"Error: Attribute '{key}' cannot be modified via kwargs. Allowed: {sorted(modifiable_attrs)}"
+            
+            if not hasattr(self, key):
+                return f"Error: Unknown attribute '{key}'"
+                
+            try:
+                original_values[key] = getattr(self, key)
+                setattr(self, key, value)
+                
+                # Validate critical attributes after modification
+                if key == 'cwd':
+                    if isinstance(self.cwd, str):
+                        self.cwd = Path(self.cwd)
+                    self._validate_cwd()
+                elif key == 'permission_mode':
+                    valid_modes = ["default", "acceptEdits", "bypassPermissions", "plan"]
+                    if value not in valid_modes:
+                        raise ValueError(f"Invalid permission_mode: {value}. Must be one of: {valid_modes}")
+                        
+            except Exception as e:
+                # If validation fails, restore any attributes set so far
+                for restore_key, restore_value in original_values.items():
+                    try:
+                        setattr(self, restore_key, restore_value)
+                    except Exception:
+                        pass  # Best effort restoration
+                return f"Error: Failed to set attribute '{key}': {str(e)}"
 
         try:
             options = self._create_options()
-
-            result_text = ""
-            async for message in query(prompt=request, options=options):
-                self._messages.append(message)
-
-                if hasattr(message, 'session_id'):
-                    self._session_id = message.session_id
-
-                # Skip non-result messages
-                if not (hasattr(message, 'type') and message.type == "result"):
-                    continue
-
-                # Track costs for result messages
-                if hasattr(message, 'total_cost_usd'):
-                    self._total_cost_usd = message.total_cost_usd
-
-                # Return result if available
-                if hasattr(message, 'result'):
-                    result_text = message.result
-                # Handle error or completion subtypes
-                elif hasattr(message, 'subtype'):
-                    if message.subtype == "error_max_turns":
-                        result_text = f"Error: Reached maximum turns ({self.max_turns})"
-                    elif message.subtype == "error_during_execution":
-                        result_text = "Error: Execution failed during run"
-                    else:
-                        result_text = f"Completed with status: {message.subtype}"
-                else:
-                    result_text = "Execution completed"
-
-            return result_text if result_text else "No result received"
-
+            return await self._process_query_stream(request, options)
         except Exception as e:
             return self._handle_sdk_error(e)
         finally:

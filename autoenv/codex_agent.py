@@ -25,7 +25,23 @@ def _check_codex_cli() -> bool:
         return False
 
 
-CODEX_CLI_AVAILABLE = _check_codex_cli()
+# Lazily-evaluated flag indicating whether the Codex CLI is available.
+CODEX_CLI_AVAILABLE: Optional[bool] = None
+
+
+def is_codex_cli_available(force_recheck: bool = False) -> bool:
+    """Check if Codex CLI is available (cached after first call).
+    
+    Args:
+        force_recheck: If True, bypass cache and recheck CLI availability
+        
+    Returns:
+        True if Codex CLI is available, False otherwise
+    """
+    global CODEX_CLI_AVAILABLE
+    if CODEX_CLI_AVAILABLE is None or force_recheck:
+        CODEX_CLI_AVAILABLE = _check_codex_cli()
+    return CODEX_CLI_AVAILABLE
 
 
 class CodexAgent(BaseAgent):
@@ -41,9 +57,9 @@ class CodexAgent(BaseAgent):
     # NOTE: Uses `max_turns` for conversation turns with Codex CLI (vs BaseAgent's generic `max_steps`).
     max_turns: int = Field(default=10, description="Maximum conversation turns")
     cwd: Optional[Path] = Field(default=None, description="Working directory")
-    model: str = Field(
-        default="gpt-4",
-        description="Model name (gpt-4, gpt-3.5-turbo, etc.)"
+    model: Optional[str] = Field(
+        default=None,
+        description="Model identifier for the Codex CLI. If not specified, uses the CLI's default model."
     )
     permission_mode: str = Field(
         default="acceptEdits",
@@ -78,12 +94,13 @@ class CodexAgent(BaseAgent):
     @model_validator(mode="after")
     def validate_codex_cli_available(self) -> "CodexAgent":
         """Validate that Codex CLI is available."""
-        if not CODEX_CLI_AVAILABLE:
+        # Force recheck to handle case where CLI was installed after module import
+        if not is_codex_cli_available(force_recheck=True):
             raise ImportError(
-                "Codex CLI is not installed. "
-                "Install it with: npm install -g @openai/codex\n"
-                "Or using Homebrew: brew install --cask codex\n"
-                "Learn more: https://github.com/openai/codex"
+                "Codex CLI is not installed or not available on PATH. "
+                "Please install the 'codex' command-line tool required for this project "
+                "and ensure it is accessible in your PATH, then try again. "
+                "Refer to your project documentation for the correct installation instructions."
             )
 
         # Set default cwd if not provided
@@ -93,10 +110,7 @@ class CodexAgent(BaseAgent):
             self.cwd = Path(self.cwd)
 
         # Validate working directory exists
-        if not self.cwd.exists():
-            raise FileNotFoundError(f"Working directory does not exist: {self.cwd}")
-        if not self.cwd.is_dir():
-            raise NotADirectoryError(f"Working directory path is not a directory: {self.cwd}")
+        self._validate_cwd()
 
         # Validate permission mode
         valid_modes = ["default", "acceptEdits", "bypassPermissions", "plan"]
@@ -107,6 +121,13 @@ class CodexAgent(BaseAgent):
             )
 
         return self
+
+    def _validate_cwd(self) -> None:
+        """Validate working directory exists and is a directory."""
+        if not self.cwd.exists():
+            raise FileNotFoundError(f"Working directory does not exist: {self.cwd}")
+        if not self.cwd.is_dir():
+            raise NotADirectoryError(f"Working directory path is not a directory: {self.cwd}")
 
     def _build_cli_command(self, prompt: str) -> List[str]:
         """Build Codex CLI command."""
@@ -139,6 +160,9 @@ class CodexAgent(BaseAgent):
 
     async def _run_cli_command(self, prompt: str) -> Dict[str, Any]:
         """Run Codex CLI command and parse JSONL output."""
+        # Validate cwd before use (handles case where cwd was modified via kwargs)
+        self._validate_cwd()
+        
         cmd = self._build_cli_command(prompt)
 
         process = await asyncio.create_subprocess_exec(
@@ -217,6 +241,38 @@ class CodexAgent(BaseAgent):
                 f"Failed to parse Codex CLI output as JSON: {e}. Raw output: {output!r}"
             ) from e
 
+    def _process_result(self, result: Dict[str, Any]) -> str:
+        """Process CLI command result and update internal state.
+        
+        Args:
+            result: Result dictionary from _run_cli_command
+            
+        Returns:
+            Formatted result string
+        """
+        # Update session info
+        if 'session_id' in result:
+            self._session_id = result['session_id']
+        if 'total_cost_usd' in result:
+            self._total_cost_usd = result['total_cost_usd']
+
+        # Append to message history
+        self._messages.append(result)
+
+        # Parse result based on type and subtype
+        if result.get('type') == 'result':
+            subtype = result.get('subtype', 'success')
+            if subtype == 'success':
+                return result.get('result', 'Execution completed')
+            elif subtype == 'error_max_turns':
+                return f"Error: Reached maximum turns ({self.max_turns})"
+            elif subtype == 'error_during_execution':
+                return "Error: Execution failed"
+            else:
+                return f"Completed with status: {subtype}"
+        
+        return result.get('result', 'No result received')
+
     async def step(self) -> str:
         """Execute a single step in the agent's workflow."""
         if not self._current_prompt:
@@ -224,32 +280,28 @@ class CodexAgent(BaseAgent):
 
         try:
             result = await self._run_cli_command(self._current_prompt)
-
-            if 'session_id' in result:
-                self._session_id = result['session_id']
-            if 'total_cost_usd' in result:
-                self._total_cost_usd = result['total_cost_usd']
-
-            self._messages.append(result)
-
-            if result.get('type') == 'result':
-                subtype = result.get('subtype', 'success')
-                if subtype == 'success':
-                    return result.get('result', 'Execution completed')
-                elif subtype == 'error_max_turns':
-                    return f"Error: Reached maximum turns ({self.max_turns})"
-                elif subtype == 'error_during_execution':
-                    return "Error: Execution failed"
-                else:
-                    return f"Completed with status: {subtype}"
-
-            return result.get('result', 'No result received')
-
-        except Exception as e:
+            return self._process_result(result)
+        except (TimeoutError, RuntimeError, ValueError, FileNotFoundError, NotADirectoryError) as e:
+            # Known CLI execution errors - return as error strings
             return f"Error during execution: {str(e)}"
+        except Exception:
+            # Re-raise unexpected errors (programming errors) for proper debugging
+            raise
 
     async def run(self, request: Optional[str] = None, **kwargs) -> str:
-        """Execute the agent's main loop asynchronously."""
+        """Execute the agent's main loop asynchronously.
+        
+        Args:
+            request: The task or prompt to execute
+            **kwargs: Temporary attribute overrides (max_turns, timeout, cwd, model, etc.)
+                     
+        Returns:
+            Result string from execution or error message
+            
+        Note:
+            Attributes modified via kwargs are restored after execution on a "best effort" basis.
+            In rare cases, restoration may fail to avoid masking the primary execution error.
+        """
         if not request:
             return "Error: No request provided"
 
@@ -258,50 +310,56 @@ class CodexAgent(BaseAgent):
         self._session_id = None
         self._total_cost_usd = 0.0
 
-        # Safely modify attributes, only tracking successful changes
+        # Whitelist of attributes that can be modified via kwargs
+        modifiable_attrs = {
+            'max_turns', 'timeout', 'cwd', 'model', 
+            'permission_mode', 'allowed_tools',
+            'system_prompt_override', 'append_system_prompt'
+        }
+
+        # Safely modify attributes with validation
         original_values = {}
         for key, value in kwargs.items():
-            if hasattr(self, key):
-                try:
-                    original_values[key] = getattr(self, key)
-                    setattr(self, key, value)
-                except Exception as e:
-                    # If setting fails, restore any attributes set so far
-                    for restore_key, restore_value in original_values.items():
-                        try:
-                            setattr(self, restore_key, restore_value)
-                        except Exception:
-                            pass  # Best effort restoration
-                    return f"Error: Failed to set attribute '{key}': {str(e)}"
+            if key not in modifiable_attrs:
+                return f"Error: Attribute '{key}' cannot be modified via kwargs. Allowed: {sorted(modifiable_attrs)}"
+            
+            if not hasattr(self, key):
+                return f"Error: Unknown attribute '{key}'"
+                
+            try:
+                original_values[key] = getattr(self, key)
+                setattr(self, key, value)
+                
+                # Validate critical attributes after modification
+                if key == 'cwd':
+                    # Convert to Path if string provided
+                    if isinstance(self.cwd, str):
+                        self.cwd = Path(self.cwd)
+                    self._validate_cwd()
+                elif key == 'permission_mode':
+                    valid_modes = ["default", "acceptEdits", "bypassPermissions", "plan"]
+                    if value not in valid_modes:
+                        raise ValueError(f"Invalid permission_mode: {value}. Must be one of: {valid_modes}")
+                        
+            except Exception as e:
+                # If validation fails, restore any attributes set so far
+                for restore_key, restore_value in original_values.items():
+                    try:
+                        setattr(self, restore_key, restore_value)
+                    except Exception:
+                        pass  # Best effort restoration
+                return f"Error: Failed to set attribute '{key}': {str(e)}"
 
         try:
             result = await self._run_cli_command(request)
+            return self._process_result(result)
 
-            if 'session_id' in result:
-                self._session_id = result['session_id']
-            if 'total_cost_usd' in result:
-                self._total_cost_usd = result['total_cost_usd']
-
-            self._messages.append(result)
-
-            if result.get('type') == 'result':
-                subtype = result.get('subtype', 'success')
-
-                if subtype == 'success':
-                    result_text = result.get('result', 'Execution completed')
-                elif subtype == 'error_max_turns':
-                    result_text = f"Error: Reached maximum turns ({self.max_turns})"
-                elif subtype == 'error_during_execution':
-                    result_text = "Error: Execution failed during run"
-                else:
-                    result_text = f"Completed with status: {subtype}"
-            else:
-                result_text = result.get('result', 'No result received')
-
-            return result_text
-
-        except Exception as e:
+        except (TimeoutError, RuntimeError, ValueError, FileNotFoundError, NotADirectoryError) as e:
+            # Known CLI execution errors - return as error strings
             return f"Error during execution: {str(e)}"
+        except Exception:
+            # Re-raise unexpected errors (programming errors) for proper debugging
+            raise
 
         finally:
             # Restore original values (best effort)
