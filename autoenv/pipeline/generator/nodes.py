@@ -70,6 +70,9 @@ class GeneratorContext(NodeContext):
     level_gen_result: Any = None
     max_reward_result: Any = None
 
+    # Code agent backend: "miniswe" (default), "codex", or "claude"
+    code_agent_backend: str = "miniswe"
+
     # Status
     success: bool = False
     error: str | None = None
@@ -216,7 +219,7 @@ class CodeFixNode(BaseNode):
             ctx.error = "CodeFixNode requires env_folder_path"
             return
 
-        code_agent = ECodeAgent(llm=AsyncLLM(self.llm.config))
+        code_agent = ECodeAgent(llm=AsyncLLM(self.llm.config), backend=ctx.code_agent_backend)
 
         task = ECODE_AGENT_CODE_FIX_PROMPT.format(
             env_id=ctx.env_id,
@@ -224,7 +227,7 @@ class CodeFixNode(BaseNode):
             validator_checklist=VALIDATOR_CHECKLIST,
         )
         ctx.code_fix_result = await code_agent(requirements=task, cwds=str(ctx.env_folder_path))
-        print(f"[CodeFixNode] ✓ code fix completed")
+        print(f"[CodeFixNode] ✓ code fix completed (backend={ctx.code_agent_backend})")
 
 
 class LevelGenNode(BaseNode):
@@ -239,7 +242,7 @@ class LevelGenNode(BaseNode):
             ctx.error = "LevelGenNode requires env_folder_path"
             return
 
-        code_agent = ECodeAgent(llm=AsyncLLM(self.llm.config))
+        code_agent = ECodeAgent(llm=AsyncLLM(self.llm.config), backend=ctx.code_agent_backend)
 
         task = ECODE_AGENT_LEVEL_GENERATION_PROMPT.format(
             env_id=ctx.env_id,
@@ -262,7 +265,7 @@ class MaxRewardNode(BaseNode):
             ctx.error = "MaxRewardNode requires env_folder_path"
             return
 
-        code_agent = ECodeAgent(llm=AsyncLLM(self.llm.config))
+        code_agent = ECodeAgent(llm=AsyncLLM(self.llm.config), backend=ctx.code_agent_backend)
 
         task = ECODE_AGENT_CALCULATE_MAX_REWARD_PROMPT.format(
             env_id=ctx.env_id,

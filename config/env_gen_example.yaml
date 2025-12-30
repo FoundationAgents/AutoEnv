@@ -19,3 +19,8 @@ theme: "<inline_text>"
 # Output directory for generated environments
 envs_root_path: "workspace/envs"
 
+# Code agent backend: "miniswe" (default), "codex", or "claude"
+# - miniswe: Uses MiniSWE agent with LLM (recommended, works with any LLM)
+# - codex: Uses OpenAI Codex CLI (requires OPENAI_API_KEY)
+# - claude: Uses Claude Code CLI (requires ANTHROPIC_API_KEY)
+code_agent_backend: "miniswe"

@@ -20,10 +20,29 @@ try:
     CLAUDE_AGENT_AVAILABLE = True
 except ImportError:
     CLAUDE_AGENT_AVAILABLE = False
-    # Fallback types
-    AssistantMessage = UserMessage = ResultMessage = Any
-    TextBlock = ToolUseBlock = ToolResultBlock = Any
-    ClaudeSDKError = CLINotFoundError = ProcessError = CLIJSONDecodeError = Exception
+    # Fallback exception definitions that maintain proper inheritance
+    # These match the SDK's exception hierarchy for consistent error handling
+    class ClaudeSDKError(Exception):
+        """Base exception for Claude SDK errors."""
+        pass
+    
+    class CLINotFoundError(ClaudeSDKError):
+        """Exception raised when Claude CLI is not found."""
+        pass
+    
+    class ProcessError(ClaudeSDKError):
+        """Exception raised when process execution fails."""
+        def __init__(self, message="", exit_code=-1):
+            super().__init__(message)
+            self.exit_code = exit_code
+    
+    class CLIJSONDecodeError(ClaudeSDKError):
+        """Exception raised when JSON decoding fails."""
+        pass
+    
+    # Stub for query and ClaudeAgentOptions when SDK is unavailable
+    query = None
+    ClaudeAgentOptions = None
 
 
 class ClaudeCodeAgent(BaseAgent):
@@ -38,6 +57,10 @@ class ClaudeCodeAgent(BaseAgent):
     # Claude Code specific settings
     # NOTE: Uses `max_turns` for conversation turns with Claude Code CLI (vs BaseAgent's generic `max_steps`)
     max_turns: int = Field(default=10, description="Maximum conversation turns")
+    max_messages: int = Field(
+        default=1000,
+        description="Maximum number of messages to keep in history. Older messages are discarded."
+    )
     cwd: Optional[Path] = Field(default=None, description="Working directory")
     allowed_tools: Optional[List[str]] = Field(
         default=None,
@@ -45,7 +68,14 @@ class ClaudeCodeAgent(BaseAgent):
     )
     permission_mode: str = Field(
         default="acceptEdits",
-        description="Permission mode: default|acceptEdits|bypassPermissions|plan"
+        description=(
+            "Permission mode controlling agent's action execution behavior.\n"
+            "- 'default': Interactive mode, requests confirmation before actions\n"
+            "- 'acceptEdits': Auto-accepts code edits, still confirms dangerous operations\n"
+            "- 'bypassPermissions': ⚠️ DANGEROUS - Bypasses all permission checks and executes "
+            "actions without confirmation. Only use in fully trusted, isolated environments.\n"
+            "- 'plan': Planning mode, generates action plans without executing"
+        )
     )
     system_prompt_override: Optional[str] = Field(
         default=None,
@@ -54,6 +84,18 @@ class ClaudeCodeAgent(BaseAgent):
     append_system_prompt: Optional[str] = Field(
         default=None,
         description="Append to system prompt (only for non-interactive mode)"
+    )
+    api_base_url: Optional[str] = Field(
+        default=None,
+        description="Custom API base URL (e.g., for proxies or API gateways)"
+    )
+    api_key: Optional[str] = Field(
+        default=None,
+        description="API key for authentication. If not provided, uses ANTHROPIC_API_KEY env var"
+    )
+    env_vars: Optional[Dict[str, str]] = Field(
+        default=None,
+        description="Additional environment variables to pass to Claude CLI"
     )
     
     class Config:
@@ -64,6 +106,7 @@ class ClaudeCodeAgent(BaseAgent):
     _session_id: Optional[str] = PrivateAttr(default=None)
     _total_cost_usd: float = PrivateAttr(default=0.0)
     _current_prompt: Optional[str] = PrivateAttr(default=None)
+    _max_messages: int = PrivateAttr(default=1000)  # Limit message history to prevent unbounded growth
 
     @model_validator(mode="after")
     def validate_claude_agent_available(self) -> "ClaudeCodeAgent":
@@ -115,6 +158,22 @@ class ClaudeCodeAgent(BaseAgent):
             options_dict["system_prompt"] = self.system_prompt_override
         elif self.append_system_prompt:
             options_dict["append_system_prompt"] = self.append_system_prompt
+        
+        # Build environment variables for Claude CLI
+        env_dict = {}
+        if self.env_vars:
+            env_dict.update(self.env_vars)
+        
+        # Set API key if provided
+        if self.api_key:
+            env_dict["ANTHROPIC_API_KEY"] = self.api_key
+        
+        # Set base URL if provided (Claude CLI respects ANTHROPIC_BASE_URL)
+        if self.api_base_url:
+            env_dict["ANTHROPIC_BASE_URL"] = self.api_base_url
+        
+        if env_dict:
+            options_dict["env"] = env_dict
 
         return ClaudeAgentOptions(**options_dict)
 
@@ -161,6 +220,10 @@ class ClaudeCodeAgent(BaseAgent):
         """
         result_text = ""
         async for message in query(prompt=prompt, options=options):
+            # Enforce max_messages limit to prevent unbounded memory growth
+            if len(self._messages) >= self._max_messages:
+                # Remove oldest message to maintain sliding window
+                self._messages.pop(0)
             self._messages.append(message)
 
             if hasattr(message, 'session_id'):
@@ -211,6 +274,11 @@ class ClaudeCodeAgent(BaseAgent):
         Returns:
             Result string from execution or error message
             
+        Warning:
+            This agent is NOT safe for concurrent use. Do not call run() from multiple
+            coroutines simultaneously on the same agent instance, as attribute modifications
+            will interfere with each other.
+            
         Note:
             Attributes modified via kwargs are restored after execution on a "best effort" basis.
             In rare cases, restoration may fail to avoid masking the primary execution error.
@@ -226,17 +294,18 @@ class ClaudeCodeAgent(BaseAgent):
         # Whitelist of attributes that can be modified via kwargs
         modifiable_attrs = {
             'max_turns', 'cwd', 'permission_mode', 'allowed_tools',
-            'system_prompt_override', 'append_system_prompt'
+            'system_prompt_override', 'append_system_prompt',
+            'api_base_url', 'api_key', 'env_vars'
         }
 
         # Safely modify attributes with validation
         original_values = {}
         for key, value in kwargs.items():
-            if key not in modifiable_attrs:
-                return f"Error: Attribute '{key}' cannot be modified via kwargs. Allowed: {sorted(modifiable_attrs)}"
-            
             if not hasattr(self, key):
                 return f"Error: Unknown attribute '{key}'"
+            
+            if key not in modifiable_attrs:
+                return f"Error: Attribute '{key}' cannot be modified via kwargs. Allowed: {sorted(modifiable_attrs)}"
                 
             try:
                 original_values[key] = getattr(self, key)
@@ -244,8 +313,27 @@ class ClaudeCodeAgent(BaseAgent):
                 
                 # Validate critical attributes after modification
                 if key == 'cwd':
-                    if isinstance(self.cwd, str):
-                        self.cwd = Path(self.cwd)
+                    # Security: Validate and sanitize cwd to prevent directory traversal attacks
+                    if isinstance(value, str):
+                        new_cwd = Path(value)
+                    elif isinstance(value, Path):
+                        new_cwd = value
+                    else:
+                        raise ValueError("cwd must be a string or pathlib.Path")
+                    
+                    # Security: Prevent absolute paths to sensitive directories
+                    if new_cwd.is_absolute():
+                        raise ValueError(
+                            "For security reasons, cwd cannot be set to an absolute path via kwargs. "
+                            "Set cwd during agent initialization instead."
+                        )
+                    
+                    # Security: Prevent directory traversal via '..' 
+                    if ".." in new_cwd.parts:
+                        raise ValueError("cwd cannot contain parent directory references ('..')")
+                    
+                    # Resolve relative to current cwd and validate
+                    self.cwd = (self.cwd / new_cwd).resolve()
                     self._validate_cwd()
                 elif key == 'permission_mode':
                     valid_modes = ["default", "acceptEdits", "bypassPermissions", "plan"]
@@ -268,11 +356,16 @@ class ClaudeCodeAgent(BaseAgent):
             return self._handle_sdk_error(e)
         finally:
             # Restore original values (best effort)
+            restoration_failures = []
             for key, value in original_values.items():
                 try:
                     setattr(self, key, value)
-                except Exception:
-                    pass  # Ignore errors during restoration
+                except Exception as e:
+                    # Track restoration failures for potential debugging
+                    restoration_failures.append(f"{key}: {e}")
+            
+            # Note: We don't raise restoration errors to avoid masking the primary execution result.
+            # In production, consider logging restoration_failures for debugging.
 
     async def __call__(self, **kwargs) -> str:
         """Execute the agent with given parameters."""

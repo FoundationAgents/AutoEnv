@@ -63,19 +63,14 @@ class CodexAgent(BaseAgent):
     )
     permission_mode: str = Field(
         default="acceptEdits",
-        description="Permission mode: default|acceptEdits|bypassPermissions|plan"
-    )
-    allowed_tools: Optional[List[str]] = Field(
-        default=None,
-        description="Allowed tools (e.g., ['Read', 'Write', 'Bash'])"
-    )
-    system_prompt_override: Optional[str] = Field(
-        default=None,
-        description="Override system prompt (only for non-interactive mode)"
-    )
-    append_system_prompt: Optional[str] = Field(
-        default=None,
-        description="Append to system prompt (only for non-interactive mode)"
+        description=(
+            "Permission mode controlling agent's action execution behavior.\n"
+            "- 'default': Interactive mode, requests confirmation before actions\n"
+            "- 'acceptEdits': Auto-accepts code edits, still confirms dangerous operations\n"
+            "- 'bypassPermissions': ⚠️ DANGEROUS - Bypasses all permission checks and executes "
+            "actions without confirmation. Only use in fully trusted, isolated environments.\n"
+            "- 'plan': Planning mode, generates action plans without executing"
+        )
     )
     timeout: int = Field(
         default=300,
@@ -193,7 +188,7 @@ class CodexAgent(BaseAgent):
         output = stdout.decode('utf-8').strip()
 
         if not output:
-            return {"result": "", "session_id": None}
+            return {"result": "No output received", "session_id": None}
 
         try:
             lines = output.split('\n')
@@ -298,6 +293,11 @@ class CodexAgent(BaseAgent):
         Returns:
             Result string from execution or error message
             
+        Warning:
+            This agent is NOT safe for concurrent use. Do not call run() from multiple
+            coroutines simultaneously on the same agent instance, as attribute modifications
+            will interfere with each other.
+            
         Note:
             Attributes modified via kwargs are restored after execution on a "best effort" basis.
             In rare cases, restoration may fail to avoid masking the primary execution error.
@@ -312,9 +312,7 @@ class CodexAgent(BaseAgent):
 
         # Whitelist of attributes that can be modified via kwargs
         modifiable_attrs = {
-            'max_turns', 'timeout', 'cwd', 'model', 
-            'permission_mode', 'allowed_tools',
-            'system_prompt_override', 'append_system_prompt'
+            'max_turns', 'timeout', 'cwd', 'model', 'permission_mode'
         }
 
         # Safely modify attributes with validation
@@ -332,9 +330,27 @@ class CodexAgent(BaseAgent):
                 
                 # Validate critical attributes after modification
                 if key == 'cwd':
-                    # Convert to Path if string provided
-                    if isinstance(self.cwd, str):
-                        self.cwd = Path(self.cwd)
+                    # Security: Validate and sanitize cwd to prevent directory traversal attacks
+                    if isinstance(value, str):
+                        new_cwd = Path(value)
+                    elif isinstance(value, Path):
+                        new_cwd = value
+                    else:
+                        raise ValueError("cwd must be a string or pathlib.Path")
+                    
+                    # Security: Prevent absolute paths to sensitive directories
+                    if new_cwd.is_absolute():
+                        raise ValueError(
+                            "For security reasons, cwd cannot be set to an absolute path via kwargs. "
+                            "Set cwd during agent initialization instead."
+                        )
+                    
+                    # Security: Prevent directory traversal via '..' 
+                    if ".." in new_cwd.parts:
+                        raise ValueError("cwd cannot contain parent directory references ('..')")
+                    
+                    # Resolve relative to current cwd and validate
+                    self.cwd = (self.cwd / new_cwd).resolve()
                     self._validate_cwd()
                 elif key == 'permission_mode':
                     valid_modes = ["default", "acceptEdits", "bypassPermissions", "plan"]
@@ -363,11 +379,16 @@ class CodexAgent(BaseAgent):
 
         finally:
             # Restore original values (best effort)
+            restoration_failures = []
             for key, value in original_values.items():
                 try:
                     setattr(self, key, value)
-                except Exception:
-                    pass  # Ignore errors during restoration
+                except Exception as e:
+                    # Track restoration failures for potential debugging
+                    restoration_failures.append(f"{key}: {e}")
+            
+            # Note: We don't raise restoration errors to avoid masking the primary execution result.
+            # In production, consider logging restoration_failures for debugging.
 
     async def __call__(self, **kwargs) -> str:
         """Execute the agent with given parameters."""
