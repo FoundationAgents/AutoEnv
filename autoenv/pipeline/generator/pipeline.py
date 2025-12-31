@@ -70,6 +70,7 @@ class GeneratorPipeline(BasePipeline):
         requirements: str,
         output_dir: Path | str | None = None,
         env_theme: str = "random",
+        code_agent_backend: str = "miniswe",
     ) -> GeneratorContext:
         """
         Run generation pipeline.
@@ -78,6 +79,7 @@ class GeneratorPipeline(BasePipeline):
             requirements: Environment requirements (string or .txt file path)
             output_dir: Output root directory, defaults to workspace/envs
             env_theme: Environment theme name
+            code_agent_backend: Code agent backend ("miniswe", "codex", "claude")
 
         Returns:
             GeneratorContext: Context containing generation results
@@ -92,6 +94,7 @@ class GeneratorPipeline(BasePipeline):
         ctx = GeneratorContext(
             requirements=requirements,
             env_theme=env_theme,
+            code_agent_backend=code_agent_backend,
         )
         if output_dir:
             ctx.envs_root_path = Path(output_dir)
