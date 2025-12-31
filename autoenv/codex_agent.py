@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import subprocess
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -75,6 +76,13 @@ class CodexAgent(BaseAgent):
     timeout: int = Field(
         default=300,
         description="Timeout in seconds for CLI commands"
+    )
+    api_key: Optional[str] = Field(
+        default=None,
+        description=(
+            "Optional API key for Codex CLI. If set, passed via OPENAI_API_KEY environment variable. "
+            "If not set, CLI uses its own login state (codex login)."
+        )
     )
     
     class Config:
@@ -160,11 +168,16 @@ class CodexAgent(BaseAgent):
         
         cmd = self._build_cli_command(prompt)
 
+        env = os.environ.copy()
+        if self.api_key:
+            env["OPENAI_API_KEY"] = self.api_key
+
         process = await asyncio.create_subprocess_exec(
             *cmd,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
-            cwd=str(self.cwd)
+            cwd=str(self.cwd),
+            env=env
         )
 
         try:

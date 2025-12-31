@@ -107,7 +107,7 @@ class EnvDescNode(BaseNode):
             local_time = time.localtime(t)
             ctx.env_id = time.strftime("%Y%m%d_%H%M%S", local_time) + f"_env_{ctx.env_theme}"
         if not ctx.env_folder_path:
-            ctx.env_folder_path = ctx.envs_root_path / ctx.env_id
+            ctx.env_folder_path = (ctx.envs_root_path / ctx.env_id).resolve()  # Use absolute path
         ctx.env_folder_path.mkdir(parents=True, exist_ok=True)
 
 
@@ -227,7 +227,13 @@ class CodeFixNode(BaseNode):
             validator_checklist=VALIDATOR_CHECKLIST,
         )
         ctx.code_fix_result = await code_agent(requirements=task, cwds=str(ctx.env_folder_path))
-        print(f"[CodeFixNode] ✓ code fix completed (backend={ctx.code_agent_backend})")
+        
+        # Check for errors in result
+        if ctx.code_fix_result and ctx.code_fix_result.startswith("Error"):
+            print(f"[CodeFixNode] ⚠️ WARNING: {ctx.code_fix_result[:200]}...")
+            print(f"[CodeFixNode] Continuing despite error...")
+        else:
+            print(f"[CodeFixNode] ✓ code fix completed (backend={ctx.code_agent_backend})")
 
 
 class LevelGenNode(BaseNode):
@@ -250,7 +256,24 @@ class LevelGenNode(BaseNode):
             validator_checklist=VALIDATOR_CHECKLIST,
         )
         ctx.level_gen_result = await code_agent(requirements=task, cwds=str(ctx.env_folder_path))
-        print(f"[LevelGenNode] ✓ level generation completed")
+        
+        # Check for errors in result
+        if ctx.level_gen_result and str(ctx.level_gen_result).startswith("Error"):
+            print(f"[LevelGenNode] ⚠️ WARNING: {str(ctx.level_gen_result)[:200]}...")
+            print(f"[LevelGenNode] Continuing despite error...")
+        else:
+            # Verify levels directory was created with level files
+            levels_dir = ctx.env_folder_path / "levels"
+            if levels_dir.exists():
+                level_files = list(levels_dir.glob("*.yaml"))
+                if len(level_files) >= 1:
+                    print(f"[LevelGenNode] ✓ level generation completed - {len(level_files)} levels created")
+                    if len(level_files) < 15:
+                        print(f"[LevelGenNode] ⚠️ Note: Expected 15 levels, got {len(level_files)}")
+                else:
+                    print(f"[LevelGenNode] ⚠️ WARNING: levels/ directory exists but contains no .yaml files!")
+            else:
+                print(f"[LevelGenNode] ⚠️ WARNING: levels/ directory NOT created!")
 
 
 class MaxRewardNode(BaseNode):
@@ -272,7 +295,18 @@ class MaxRewardNode(BaseNode):
             workspace=ctx.env_folder_path,
         )
         ctx.max_reward_result = await code_agent(requirements=task, cwds=str(ctx.env_folder_path))
-        print(f"[MaxRewardNode] ✓ max reward calculation completed")
+        
+        # Check for errors in result
+        if ctx.max_reward_result and ctx.max_reward_result.startswith("Error"):
+            print(f"[MaxRewardNode] ⚠️ WARNING: {ctx.max_reward_result[:200]}...")
+            print(f"[MaxRewardNode] Continuing despite error...")
+        else:
+            # Verify level_max_rewards.json was created
+            rewards_file = ctx.env_folder_path / "level_max_rewards.json"
+            if rewards_file.exists():
+                print(f"[MaxRewardNode] ✓ max reward calculation completed - level_max_rewards.json created")
+            else:
+                print(f"[MaxRewardNode] ⚠️ WARNING: level_max_rewards.json NOT created!")
 
 
 class ArchiveNode(BaseNode):

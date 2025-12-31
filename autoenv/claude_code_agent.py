@@ -229,8 +229,13 @@ class ClaudeCodeAgent(BaseAgent):
             if hasattr(message, 'session_id'):
                 self._session_id = message.session_id
 
-            # Skip non-result messages
-            if not (hasattr(message, 'type') and message.type == "result"):
+            # Check if this is a result message (by class name or type attribute)
+            is_result_message = (
+                type(message).__name__ == "ResultMessage" or
+                (hasattr(message, 'type') and message.type == "result")
+            )
+            
+            if not is_result_message:
                 continue
 
             # Track costs for result messages
@@ -238,7 +243,7 @@ class ClaudeCodeAgent(BaseAgent):
                 self._total_cost_usd += message.total_cost_usd
 
             # Capture result if available
-            if hasattr(message, 'result'):
+            if hasattr(message, 'result') and message.result:
                 result_text = message.result
             # Handle error or completion subtypes
             elif hasattr(message, 'subtype'):
@@ -246,6 +251,8 @@ class ClaudeCodeAgent(BaseAgent):
                     result_text = f"Error: Reached maximum turns ({self.max_turns})"
                 elif message.subtype == "error_during_execution":
                     result_text = "Error: Execution failed"
+                elif message.subtype == "success":
+                    result_text = getattr(message, 'result', "Execution completed successfully")
                 else:
                     result_text = f"Completed with status: {message.subtype}"
             else:

@@ -26,11 +26,20 @@ class ECodeAgent(BaseAgent):
         """Factory method to create the appropriate agent based on backend."""
         if self.backend == "codex":
             from autoenv.codex_agent import CodexAgent
-            agent = CodexAgent(cwd=cwds)
+            agent = CodexAgent(cwd=cwds, permission_mode="acceptEdits", timeout=900)  # 15 min timeout for complex tasks
         
         elif self.backend == "claude":
             from autoenv.claude_code_agent import ClaudeCodeAgent
-            agent = ClaudeCodeAgent(cwd=cwds)
+            # Check environment variables for custom API configuration
+            api_base_url = os.environ.get("ANTHROPIC_BASE_URL")
+            api_key = os.environ.get("ANTHROPIC_API_KEY")
+            agent = ClaudeCodeAgent(
+                cwd=cwds,
+                permission_mode="bypassPermissions",  # Allow file operations without confirmation
+                api_base_url=api_base_url,
+                api_key=api_key,
+                max_turns=50  # Allow more turns for complex tasks
+            )
         
         else:  # miniswe (default)
             repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
