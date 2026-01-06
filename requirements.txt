@@ -117,3 +117,9 @@ zipp==3.21.0
 pillow==11.3.0
 rembg==2.0.68
 onnxruntime-gpu==1.23.2
+
+# 3D Rendering (PyRender)
+pyrender>=0.1.45
+trimesh>=3.20.0
+pyglet>=1.5.0
+PyOpenGL>=3.1.0

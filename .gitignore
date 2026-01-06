@@ -9,3 +9,6 @@
 /config/model_config.yaml
 /config/env_gen.yaml
 /config/env_skin_gen.yaml
+/docs/
+/test/*_output/
+/render_server/node_modules/
