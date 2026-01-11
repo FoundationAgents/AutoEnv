@@ -42,7 +42,6 @@ class RenderConfig(BaseModel):
         grid_size: 网格尺寸（ASCII 渲染使用）
         default_symbol: 未映射物体的默认 ASCII 符号
         empty_symbol: 空格子的 ASCII 符号
-        render_server_url: 3D 渲染服务器 URL
     
     Example:
         >>> # 纯色背景
@@ -67,6 +66,12 @@ class RenderConfig(BaseModel):
     background: Background = Field(
         default_factory=lambda: BackgroundColor(color="#000000"),
         description="背景配置（纯色或图片）"
+    )
+    
+    # 素材映射配置
+    asset_mapping: Dict[str, str] = Field(
+        default_factory=dict, 
+        description="素材映射，key 为物体 ID 或类型前缀，value 为素材文件名（不含扩展名）"
     )
     
     # ASCII 渲染专用
@@ -166,6 +171,10 @@ class BaseRenderer(ABC):
         """
         获取素材文件的完整路径。
         
+        支持素材映射：
+        1. 精确匹配：asset_mapping["player"] -> "horse"
+        2. 前缀匹配：asset_mapping["treasure_"] -> "crown"（匹配 treasure_0, treasure_1 等）
+        
         Args:
             obj_id: 物体 ID
             extension: 文件扩展名（如 ".png", ".gltf"）
@@ -173,7 +182,33 @@ class BaseRenderer(ABC):
         Returns:
             素材文件的完整路径
         """
-        return os.path.join(self.config.asset_path, f"{obj_id}{extension}")
+        # 获取映射后的素材名称
+        asset_name = self._resolve_asset_name(obj_id)
+        return os.path.join(self.config.asset_path, f"{asset_name}{extension}")
+    
+    def _resolve_asset_name(self, obj_id: str) -> str:
+        """
+        解析素材名称，支持精确匹配和前缀匹配。
+        
+        Args:
+            obj_id: 物体 ID
+            
+        Returns:
+            映射后的素材名称，如果没有映射则返回原 obj_id
+        """
+        mapping = self.config.asset_mapping
+        
+        # 1. 精确匹配
+        if obj_id in mapping:
+            return mapping[obj_id]
+        
+        # 2. 前缀匹配（查找以 "_" 结尾的前缀键）
+        for prefix, asset_name in mapping.items():
+            if prefix.endswith("_") and obj_id.startswith(prefix):
+                return asset_name
+        
+        # 3. 无匹配，返回原 ID
+        return obj_id
 
 
 # 类型提示的延迟导入

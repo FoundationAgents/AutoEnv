@@ -176,6 +176,10 @@ class Renderer3D(BaseRenderer):
         
         # 转换为 PIL Image
         image = Image.fromarray(color)
+        
+        # 应用视野遮罩（后处理）
+        image = self._apply_view_mask(image, semantic_view.view_region)
+        
         return image
     
     def render_with_camera(
@@ -217,6 +221,224 @@ class Renderer3D(BaseRenderer):
             return self.render(semantic_view)
         finally:
             semantic_view.view_region = original_view_region
+    
+    # ============================================================
+    # 视野遮罩方法（后处理）
+    # ============================================================
+    
+    def _apply_view_mask(
+        self,
+        image: "Image.Image",
+        view_region: Any
+    ) -> "Image.Image":
+        """
+        根据 view_region 的形状信息应用视野遮罩。
+        
+        支持的形状类型：
+        - circle: 圆形遮罩
+        - sector: 扇形遮罩
+        - ring: 环形遮罩
+        
+        Args:
+            image: 渲染后的 PIL Image
+            view_region: 视野区域配置，包含 shape_type 等参数
+            
+        Returns:
+            应用遮罩后的图像
+        """
+        if view_region is None:
+            return image
+        
+        if not isinstance(view_region, dict):
+            return image
+        
+        shape_type = view_region.get("shape_type")
+        
+        if shape_type == "circle":
+            return self._apply_circular_mask(image, view_region)
+        elif shape_type == "sector":
+            return self._apply_sector_mask(image, view_region)
+        elif shape_type == "ring":
+            return self._apply_ring_mask(image, view_region)
+        
+        return image
+    
+    def _apply_circular_mask(
+        self,
+        image: "Image.Image",
+        view_region: Dict[str, Any]
+    ) -> "Image.Image":
+        """
+        应用圆形遮罩。
+        
+        圆形外的区域将被设为黑色。
+        
+        Args:
+            image: 原始图像
+            view_region: 包含 center 和 radius 的配置
+            
+        Returns:
+            应用遮罩后的图像
+        """
+        from PIL import ImageDraw
+        
+        center = view_region.get("center")
+        radius = view_region.get("radius")
+        
+        if center is None or radius is None:
+            # 如果没有指定中心，默认使用图像中心
+            width, height = image.size
+            center = (width // 2, height // 2)
+            if radius is None:
+                radius = min(width, height) // 2
+        
+        cx, cy = float(center[0]), float(center[1])
+        r = float(radius)
+        
+        width, height = image.size
+        
+        # 确保图像是 RGBA 模式
+        if image.mode != "RGBA":
+            image = image.convert("RGBA")
+        
+        # 创建圆形遮罩
+        mask = Image.new('L', (width, height), 0)
+        draw = ImageDraw.Draw(mask)
+        
+        # 绘制圆形（白色区域为可见）
+        draw.ellipse(
+            [cx - r, cy - r, cx + r, cy + r],
+            fill=255
+        )
+        
+        # 创建输出图像（黑色背景）
+        result = Image.new('RGBA', (width, height), (0, 0, 0, 255))
+        result.paste(image, mask=mask)
+        
+        return result
+    
+    def _apply_sector_mask(
+        self,
+        image: "Image.Image",
+        view_region: Dict[str, Any]
+    ) -> "Image.Image":
+        """
+        应用扇形遮罩。
+        
+        扇形外的区域将被设为黑色。
+        
+        Args:
+            image: 原始图像
+            view_region: 包含 center, radius, angle_start, angle_end 的配置
+            
+        Returns:
+            应用遮罩后的图像
+        """
+        from PIL import ImageDraw
+        
+        center = view_region.get("center")
+        radius = view_region.get("radius")
+        angle_start = view_region.get("angle_start", 0)
+        angle_end = view_region.get("angle_end", 360)
+        
+        width, height = image.size
+        
+        if center is None:
+            center = (width // 2, height // 2)
+        if radius is None:
+            radius = min(width, height) // 2
+        
+        cx, cy = float(center[0]), float(center[1])
+        r = float(radius)
+        
+        # 确保图像是 RGBA 模式
+        if image.mode != "RGBA":
+            image = image.convert("RGBA")
+        
+        # 创建扇形遮罩
+        mask = Image.new('L', (width, height), 0)
+        draw = ImageDraw.Draw(mask)
+        
+        # PIL 的角度是从3点钟方向顺时针计算的
+        # 我们的系统是从12点钟方向（正上方）计算的
+        # 需要转换：PIL角度 = 90 - 我们的角度
+        pil_start = 90 - angle_end
+        pil_end = 90 - angle_start
+        
+        # 绘制扇形
+        draw.pieslice(
+            [cx - r, cy - r, cx + r, cy + r],
+            start=pil_start,
+            end=pil_end,
+            fill=255
+        )
+        
+        # 创建输出图像（黑色背景）
+        result = Image.new('RGBA', (width, height), (0, 0, 0, 255))
+        result.paste(image, mask=mask)
+        
+        return result
+    
+    def _apply_ring_mask(
+        self,
+        image: "Image.Image",
+        view_region: Dict[str, Any]
+    ) -> "Image.Image":
+        """
+        应用环形遮罩（圆环）。
+        
+        环形外和内圆区域将被设为黑色。
+        
+        Args:
+            image: 原始图像
+            view_region: 包含 center, outer_radius, inner_radius 的配置
+            
+        Returns:
+            应用遮罩后的图像
+        """
+        from PIL import ImageDraw
+        
+        center = view_region.get("center")
+        outer_radius = view_region.get("outer_radius")
+        inner_radius = view_region.get("inner_radius", 0)
+        
+        width, height = image.size
+        
+        if center is None:
+            center = (width // 2, height // 2)
+        if outer_radius is None:
+            outer_radius = min(width, height) // 2
+        
+        cx, cy = float(center[0]), float(center[1])
+        r_outer = float(outer_radius)
+        r_inner = float(inner_radius)
+        
+        # 确保图像是 RGBA 模式
+        if image.mode != "RGBA":
+            image = image.convert("RGBA")
+        
+        # 创建环形遮罩
+        mask = Image.new('L', (width, height), 0)
+        draw = ImageDraw.Draw(mask)
+        
+        # 先绘制外圆（白色）
+        draw.ellipse(
+            [cx - r_outer, cy - r_outer, cx + r_outer, cy + r_outer],
+            fill=255
+        )
+        
+        # 再绘制内圆（黑色，挖空）
+        if r_inner > 0:
+            draw.ellipse(
+                [cx - r_inner, cy - r_inner, cx + r_inner, cy + r_inner],
+                fill=0
+            )
+        
+        # 创建输出图像（黑色背景）
+        result = Image.new('RGBA', (width, height), (0, 0, 0, 255))
+        result.paste(image, mask=mask)
+        
+        return result
     
     def _parse_background_color(self) -> List[float]:
         """解析背景颜色为 RGBA 列表"""
@@ -726,7 +948,132 @@ class Renderer3DFallback(BaseRenderer):
         # 添加降级提示
         draw.text((10, 10), "3D Fallback (PyRender Unavailable)", fill=(200, 200, 200))
         
+        # 应用视野遮罩（后处理）
+        image = self._apply_view_mask(image, semantic_view.view_region)
+        
         return image
+    
+    def _apply_view_mask(
+        self,
+        image: "Image.Image",
+        view_region: Any
+    ) -> "Image.Image":
+        """根据 view_region 应用视野遮罩"""
+        if view_region is None or not isinstance(view_region, dict):
+            return image
+        
+        shape_type = view_region.get("shape_type")
+        
+        if shape_type == "circle":
+            return self._apply_circular_mask(image, view_region)
+        elif shape_type == "sector":
+            return self._apply_sector_mask(image, view_region)
+        elif shape_type == "ring":
+            return self._apply_ring_mask(image, view_region)
+        
+        return image
+    
+    def _apply_circular_mask(
+        self,
+        image: "Image.Image",
+        view_region: Dict[str, Any]
+    ) -> "Image.Image":
+        """应用圆形遮罩"""
+        from PIL import ImageDraw
+        
+        center = view_region.get("center")
+        radius = view_region.get("radius")
+        width, height = image.size
+        
+        if center is None:
+            center = (width // 2, height // 2)
+        if radius is None:
+            radius = min(width, height) // 2
+        
+        cx, cy = float(center[0]), float(center[1])
+        r = float(radius)
+        
+        if image.mode != "RGBA":
+            image = image.convert("RGBA")
+        
+        mask = Image.new('L', (width, height), 0)
+        draw = ImageDraw.Draw(mask)
+        draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=255)
+        
+        result = Image.new('RGBA', (width, height), (0, 0, 0, 255))
+        result.paste(image, mask=mask)
+        return result
+    
+    def _apply_sector_mask(
+        self,
+        image: "Image.Image",
+        view_region: Dict[str, Any]
+    ) -> "Image.Image":
+        """应用扇形遮罩"""
+        from PIL import ImageDraw
+        
+        center = view_region.get("center")
+        radius = view_region.get("radius")
+        angle_start = view_region.get("angle_start", 0)
+        angle_end = view_region.get("angle_end", 360)
+        width, height = image.size
+        
+        if center is None:
+            center = (width // 2, height // 2)
+        if radius is None:
+            radius = min(width, height) // 2
+        
+        cx, cy = float(center[0]), float(center[1])
+        r = float(radius)
+        
+        if image.mode != "RGBA":
+            image = image.convert("RGBA")
+        
+        mask = Image.new('L', (width, height), 0)
+        draw = ImageDraw.Draw(mask)
+        
+        pil_start = 90 - angle_end
+        pil_end = 90 - angle_start
+        draw.pieslice([cx - r, cy - r, cx + r, cy + r], start=pil_start, end=pil_end, fill=255)
+        
+        result = Image.new('RGBA', (width, height), (0, 0, 0, 255))
+        result.paste(image, mask=mask)
+        return result
+    
+    def _apply_ring_mask(
+        self,
+        image: "Image.Image",
+        view_region: Dict[str, Any]
+    ) -> "Image.Image":
+        """应用环形遮罩"""
+        from PIL import ImageDraw
+        
+        center = view_region.get("center")
+        outer_radius = view_region.get("outer_radius")
+        inner_radius = view_region.get("inner_radius", 0)
+        width, height = image.size
+        
+        if center is None:
+            center = (width // 2, height // 2)
+        if outer_radius is None:
+            outer_radius = min(width, height) // 2
+        
+        cx, cy = float(center[0]), float(center[1])
+        r_outer = float(outer_radius)
+        r_inner = float(inner_radius)
+        
+        if image.mode != "RGBA":
+            image = image.convert("RGBA")
+        
+        mask = Image.new('L', (width, height), 0)
+        draw = ImageDraw.Draw(mask)
+        draw.ellipse([cx - r_outer, cy - r_outer, cx + r_outer, cy + r_outer], fill=255)
+        if r_inner > 0:
+            draw.ellipse([cx - r_inner, cy - r_inner, cx + r_inner, cy + r_inner], fill=0)
+        
+        result = Image.new('RGBA', (width, height), (0, 0, 0, 255))
+        result.paste(image, mask=mask)
+        return result
     
     def _get_background_color(self) -> str:
         """获取背景颜色"""

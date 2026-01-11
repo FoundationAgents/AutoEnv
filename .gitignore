@@ -11,4 +11,5 @@
 /config/env_skin_gen.yaml
 /docs/
 /test/*_output/
+/test/test_models
 /render_server/node_modules/
