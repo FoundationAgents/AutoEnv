@@ -5,12 +5,15 @@ Flow:
 1. AnalyzerNode: Analyze instruction/benchmark, generate analysis.json
 2. StrategistNode: Create strategy based on analysis, generate strategy.json
 3. AssetGeneratorNode: Generate image assets based on strategy
-4. AssemblyNode: Assemble assets into runnable game
+4. BackgroundRemovalNode: Remove backgrounds from assets
+5. Image3DConvertNode: Convert 2D assets to 3D models (optional)
+6. AssemblyNode: Assemble assets into runnable game
 """
 
 import asyncio
 import json
 import shutil
+import time
 from pathlib import Path
 from typing import Any
 
@@ -50,6 +53,10 @@ class AutoEnvContext(NodeContext):
     # AssetGeneratorNode output
     generated_assets: dict[str, str] = Field(default_factory=dict)
     style_anchor_image: str | None = None
+
+    # Image23DNode output (3D models)
+    models_3d: dict[str, Any] = Field(default_factory=dict)
+    small_assets_dir: Path | None = None
 
     # AssemblyNode output
     game_dir: Path | None = None
@@ -285,8 +292,11 @@ class AssemblyNode(AgentNode):
 
         game_file = game_dir / "game.py"
         if game_file.exists():
+            # Validate that the generated code references existing assets; if not, fallback
+            if not self._validate_generated_game(ctx, game_dir, game_file):
+                self._generate_default_game(ctx, game_dir)
             ctx.game_dir = game_dir
-            ctx.game_file = game_file
+            ctx.game_file = game_dir / "game.py"
             ctx.success = True
         else:
             # Generate default game code
@@ -334,3 +344,381 @@ class AssemblyNode(AgentNode):
         asset_list = list(ctx.generated_assets.keys())
         game_code = DEFAULT_GAME_CODE.format(asset_list=asset_list)
         (game_dir / "game.py").write_text(game_code, encoding="utf-8")
+
+    def _validate_generated_game(self, ctx: AutoEnvContext, game_dir: Path, game_file: Path) -> bool:
+        """Check if generated game.py references assets that exist. Return True if valid, False to trigger fallback."""
+        try:
+            code = game_file.read_text(encoding="utf-8")
+        except Exception:
+            return False
+
+        # Collect referenced image filenames from the code (simple heuristic)
+        import re
+        referenced = set(re.findall(r"([A-Za-z0-9_\-]+\.png)", code))
+
+        # Build set of available asset filenames
+        assets_dir = game_dir / "assets"
+        available = set()
+        if assets_dir.exists():
+            for p in assets_dir.glob("*.png"):
+                available.add(p.name)
+
+        # If code references any filename not available, consider invalid
+        missing = [fn for fn in referenced if fn not in available]
+        if missing:
+            print(f"[Assembly] Detected missing asset files referenced in game.py: {missing}. Falling back to default game code.")
+            return False
+        return True
+
+
+class Image3DConvertNode(BaseNode):
+    """Convert 2D image assets to 3D models using Meshy API (parallel execution)."""
+
+    meshy_api_key: str = Field(default="")
+    meshy_base_url: str = Field(default="https://api.meshy.ai/v1")
+    target_polycount: int = Field(default=10000)
+    timeout: float = Field(default=600)
+    max_assets_to_convert: int = Field(default=4)
+
+    model_config = {"arbitrary_types_allowed": True}
+
+    async def execute(self, ctx: AutoEnvContext) -> None:
+        """Execute 3D conversion for selected assets in parallel."""
+        from autoenv.pipeline.visual.meshy_client import MeshyClient
+
+        if not self.meshy_api_key:
+            ctx.error = "Image3DConvertNode requires meshy_api_key"
+            return
+
+        assets_dir = ctx.output_dir / "assets"
+        if not assets_dir.exists():
+            ctx.error = "Assets directory not found"
+            return
+
+        models_dir = ctx.output_dir / "models_3d"
+        models_dir.mkdir(parents=True, exist_ok=True)
+
+        # Initialize timing logs
+        timing_log = {
+            "start_time": time.time(),
+            "assets": {},
+        }
+
+        print(f"[Image3DConvert] Starting 3D conversion → {models_dir}")
+        print(f"[Image3DConvert] API: {self.meshy_base_url}")
+        print(f"[Image3DConvert] Target polycount: {self.target_polycount}")
+
+        client = MeshyClient(
+            api_key=self.meshy_api_key,
+            base_url=self.meshy_base_url,
+        )
+
+        # Select assets to convert
+        assets_to_convert = self._select_assets_for_3d(ctx)
+        print(f"[Image3DConvert] Converting {len(assets_to_convert)} assets in PARALLEL: {assets_to_convert}")
+
+        # Store 3D model info in context
+        if not hasattr(ctx, "models_3d"):
+            ctx.models_3d = {}
+
+        # Filter valid assets
+        valid_assets = []
+        for asset_id in assets_to_convert:
+            image_path = assets_dir / f"{asset_id}.png"
+            if not image_path.exists():
+                print(f"[Image3DConvert] ⚠ Skip {asset_id}: image not found")
+            else:
+                valid_assets.append((asset_id, image_path))
+
+        if not valid_assets:
+            print("[Image3DConvert] No valid assets to convert")
+            return
+
+        # Create parallel conversion tasks
+        async def convert_single_asset(asset_id: str, image_path: Path) -> dict:
+            """Convert a single asset to 3D."""
+            asset_timing = {"start": time.time(), "asset_id": asset_id}
+            print(f"[Image3DConvert] → Starting: {asset_id}")
+
+            def progress_callback(task_id, status, progress):
+                elapsed = time.time() - asset_timing["start"]
+                print(f"[Image3DConvert]   {asset_id}: {status} {progress}% ({elapsed:.1f}s)")
+
+            try:
+                result = await client.image_to_3d(
+                    image_path=image_path,
+                    timeout=self.timeout,
+                    progress_callback=progress_callback,
+                    target_polycount=self.target_polycount,
+                )
+
+                asset_timing["end"] = time.time()
+                asset_timing["duration"] = asset_timing["end"] - asset_timing["start"]
+
+                if result["success"]:
+                    model_urls = result.get("model_urls", {})
+                    glb_url = model_urls.get("glb")
+
+                    if glb_url:
+                        output_path = models_dir / f"{asset_id}.glb"
+                        download_start = time.time()
+
+                        download_result = await client.download_model(
+                            model_url=glb_url,
+                            output_path=output_path,
+                        )
+
+                        download_time = time.time() - download_start
+                        asset_timing["download_time"] = download_time
+
+                        if download_result["success"]:
+                            asset_timing["success"] = True
+                            asset_timing["output_path"] = str(output_path)
+                            asset_timing["model_urls"] = model_urls
+                            print(
+                                f"[Image3DConvert] ✓ {asset_id}.glb saved "
+                                f"(convert: {asset_timing['duration']:.1f}s, "
+                                f"download: {download_time:.1f}s)"
+                            )
+                        else:
+                            asset_timing["success"] = False
+                            asset_timing["error"] = f"Download failed: {download_result.get('error')}"
+                            print(f"[Image3DConvert] ✗ {asset_id}: Download failed: {download_result.get('error')}")
+                    else:
+                        asset_timing["success"] = False
+                        asset_timing["error"] = "No GLB URL in result"
+                        print(f"[Image3DConvert] ✗ {asset_id}: No GLB URL in result")
+                else:
+                    asset_timing["success"] = False
+                    asset_timing["error"] = result.get("error", "Unknown error")
+                    print(f"[Image3DConvert] ✗ {asset_id}: Conversion failed: {result.get('error')}")
+
+            except Exception as e:
+                asset_timing["success"] = False
+                asset_timing["error"] = str(e)
+                asset_timing["end"] = time.time()
+                asset_timing["duration"] = asset_timing["end"] - asset_timing["start"]
+                print(f"[Image3DConvert] ✗ {asset_id}: Error: {e}")
+
+            return asset_timing
+
+        # Execute all conversions in parallel
+        print(f"[Image3DConvert] Launching {len(valid_assets)} parallel conversion tasks...")
+        tasks = [convert_single_asset(asset_id, image_path) for asset_id, image_path in valid_assets]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        # Process results
+        success_count = 0
+        for result in results:
+            if isinstance(result, Exception):
+                print(f"[Image3DConvert] ✗ Task exception: {result}")
+                continue
+
+            asset_id = result.get("asset_id")
+            timing_log["assets"][asset_id] = {
+                "start": result.get("start"),
+                "end": result.get("end"),
+                "duration": result.get("duration"),
+                "download_time": result.get("download_time"),
+            }
+
+            if result.get("success"):
+                success_count += 1
+                ctx.models_3d[asset_id] = {
+                    "path": result.get("output_path"),
+                    "model_urls": result.get("model_urls"),
+                    "conversion_time": result.get("duration"),
+                    "download_time": result.get("download_time"),
+                }
+
+        # Final timing summary
+        timing_log["end_time"] = time.time()
+        timing_log["total_duration"] = timing_log["end_time"] - timing_log["start_time"]
+        timing_log["parallel_count"] = len(valid_assets)
+        timing_log["success_count"] = success_count
+
+        print(f"[Image3DConvert] Done. Total time: {timing_log['total_duration']:.1f}s")
+        print(f"[Image3DConvert] Converted: {success_count}/{len(valid_assets)} models in parallel")
+
+        # Save timing log
+        self._save_timing_log(ctx.output_dir, timing_log)
+
+    def _select_assets_for_3d(self, ctx: AutoEnvContext) -> list[str]:
+        """Select which assets to convert to 3D (prioritize style anchor)."""
+        selected = []
+        strategy = ctx.strategy or {}
+        style_anchor = strategy.get("style_anchor")
+        all_assets = list(ctx.generated_assets.keys()) if ctx.generated_assets else []
+
+        # Prioritize style anchor
+        if style_anchor and style_anchor in all_assets:
+            selected.append(style_anchor)
+
+        # Add other assets up to limit
+        for asset_id in all_assets:
+            if asset_id not in selected:
+                selected.append(asset_id)
+            if len(selected) >= self.max_assets_to_convert:
+                break
+
+        return selected
+
+    def _save_timing_log(self, output_dir: Path, timing_log: dict[str, Any]) -> None:
+        """Save timing log to file."""
+        log_file = output_dir / "3d_timing_log.json"
+        with open(log_file, "w", encoding="utf-8") as f:
+            json.dump(timing_log, f, indent=2)
+        print(f"[Image3DConvert] Timing log saved: {log_file}")
+
+
+class ThreeJSAssemblyNode(AgentNode):
+    """Assemble 3D models into a runnable three.js HTML scene."""
+
+    async def execute(self, ctx: AutoEnvContext) -> None:
+        if not ctx.models_3d:
+            ctx.error = "ThreeJSAssemblyNode requires 3D models from Image3DConvertNode"
+            return
+
+        if not ctx.strategy:
+            ctx.error = "ThreeJSAssemblyNode requires strategy"
+            return
+
+        game_dir = ctx.output_dir / "game"
+        game_dir.mkdir(parents=True, exist_ok=True)
+
+        # Copy 3D models into game/models
+        models_src = ctx.output_dir / "models_3d"
+        models_dst = game_dir / "models"
+        if models_src.exists():
+            if models_dst.exists():
+                shutil.rmtree(models_dst)
+            shutil.copytree(models_src, models_dst)
+
+        # Generate three.js HTML scene
+        html_file = game_dir / "index.html"
+        self._generate_threejs_scene(ctx, game_dir, html_file)
+
+        # Optionally ask agent to enhance scene with custom logic
+        if self.agent:
+            enhancement_prompt = self._build_enhancement_prompt(ctx, html_file)
+            await self.agent.run(request=enhancement_prompt)
+
+        if html_file.exists():
+            ctx.game_dir = game_dir
+            ctx.game_file = html_file
+            ctx.success = True
+            print(f"[ThreeJSAssembly] ✓ Generated: {html_file}")
+            print(f"[ThreeJSAssembly] To view: Open {html_file} in browser or run: python -m http.server --directory {game_dir}")
+
+    def _generate_threejs_scene(self, ctx: AutoEnvContext, game_dir: Path, html_file: Path) -> None:
+        """Generate three.js HTML file from template."""
+        # Read template
+        template_path = Path(__file__).parent / "threejs_template.html"
+        with open(template_path, encoding="utf-8") as f:
+            template = f.read()
+
+        # Build model paths mapping
+        model_paths = {}
+        for asset_id, model_info in ctx.models_3d.items():
+            # Use relative path: models/asset_id.glb
+            model_paths[asset_id] = f"models/{asset_id}.glb"
+
+        # Generate positioning code based on strategy
+        assets = ctx.strategy.get("assets", [])
+        positioning_code = self._generate_positioning_code(assets)
+
+        # Generate animation code (placeholder for now, can be enhanced)
+        animation_code = self._generate_animation_code(assets)
+
+        # Fill template
+        html_content = template.replace(
+            "{MODEL_COUNT}", str(len(ctx.models_3d))
+        ).replace(
+            "{MODEL_PATHS_JSON}", json.dumps(model_paths, indent=12)
+        ).replace(
+            "{MODEL_POSITIONING_CODE}", positioning_code
+        ).replace(
+            "{ANIMATION_CODE}", animation_code
+        )
+
+        html_file.write_text(html_content, encoding="utf-8")
+
+    def _generate_positioning_code(self, assets: list[dict[str, Any]]) -> str:
+        """Generate JavaScript code to position models based on strategy."""
+        import math
+        
+        positioning = []
+        
+        for i, asset in enumerate(assets):
+            asset_id = asset.get("id", f"asset_{i}")
+            # Simple grid layout: spread models in a circle
+            angle = (i / len(assets)) * 2 * math.pi
+            x = 3 * math.cos(angle)
+            z = 3 * math.sin(angle)
+            y = 0
+            scale = 1.0
+            
+            # Check asset type for positioning hints
+            asset_name = asset.get("name", "").lower()
+            if "player" in asset_name or "character" in asset_name:
+                x, z = 0, 0  # Center player
+                y = 0
+            elif "background" in asset_name or "environment" in asset_name:
+                y = -0.5
+                scale = 2.0
+            elif "ui" in asset_name or "overlay" in asset_name:
+                continue  # Skip UI elements in 3D positioning
+            
+            positioning.append(f"""
+                    if (assetId === '{asset_id}') {{
+                        model.position.set({x:.2f}, {y:.2f}, {z:.2f});
+                        model.scale.setScalar({scale});
+                    }}""")
+        
+        return "\n".join(positioning) if positioning else "// Default positioning"
+
+    def _generate_animation_code(self, assets: list[dict[str, Any]]) -> str:
+        """Generate JavaScript animation code."""
+        animations = []
+        
+        for asset in assets:
+            asset_id = asset.get("id")
+            asset_name = asset.get("name", "").lower()
+            
+            # Add simple rotation animation for non-character objects
+            if "box" in asset_name or "crate" in asset_name or "cube" in asset_name:
+                animations.append(f"""
+            if (models['{asset_id}']) {{
+                models['{asset_id}'].rotation.y += 0.01;
+            }}""")
+        
+        return "\n".join(animations) if animations else "// No animations"
+
+    def _build_enhancement_prompt(self, ctx: AutoEnvContext, html_file: Path) -> str:
+        """Build prompt for agent to enhance three.js scene (optional)."""
+        strategy_json = json.dumps(ctx.strategy, indent=2, ensure_ascii=False)
+        model_list = "\n".join([f"- {asset_id}.glb" for asset_id in ctx.models_3d.keys()])
+        
+        return f"""You are enhancing a three.js 3D game scene. The current HTML file is at: {html_file}
+
+Available 3D models:
+{model_list}
+
+Game strategy:
+{strategy_json}
+
+Tasks:
+1. Review the generated three.js scene in {html_file}
+2. Add interactive game logic (e.g., player movement, collision detection, game objectives)
+3. Improve model positioning based on the game strategy
+4. Add appropriate animations (idle, walk, interact, etc.)
+5. Implement camera controls suitable for the game type
+6. Add game state management (score, health, etc.)
+
+Requirements:
+- Keep using the existing three.js CDN imports
+- Maintain the model loading structure
+- Ensure the scene is playable and matches the strategy
+- Add comments explaining the game logic
+
+Output: Modified {html_file} with enhanced game functionality."""

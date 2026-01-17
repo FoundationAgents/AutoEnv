@@ -2,19 +2,29 @@
 Skin Generation Entry Point
 
 Generates visual assets for environments using VisualPipeline.
+Supports both 2D and 3D generation modes.
 
-Two modes:
+Modes:
   1. Instruction mode: Use `requirements` as input prompt
   2. Existing environment mode: Use `exist_environment_path` to analyze and visualize
 
+Dimension modes:
+  - 2D (default): Generate 2D image assets
+  - 3D: Generate 2D assets and convert to 3D models via Meshy API
+
 Usage:
+    # 2D generation (default)
     python run_skin_generation.py --config config/env_skin_gen.yaml
-    python run_skin_generation.py --env benchmarks/01_Maze
     python run_skin_generation.py --instruction "A pixel art dungeon game"
+    
+    # 3D generation
+    python run_skin_generation.py --3d --instruction "A 3D Sokoban puzzle game"
+    python run_skin_generation.py --dimension 3d --instruction "A 3D puzzle game"
 """
 
 import argparse
 import asyncio
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -39,27 +49,56 @@ async def run_skin_gen(
     output_dir: Path,
     exist_env_path: Path | None = None,
     instruction: str | None = None,
+    dimension: str = "2d",
+    meshy_config: dict | None = None,
 ):
-    """Run skin generation pipeline."""
+    """Run skin generation pipeline.
+    
+    Args:
+        model: LLM model name
+        image_model: Image generation model name
+        output_dir: Output directory
+        exist_env_path: Path to existing environment
+        instruction: Text instruction for generation
+        dimension: "2d" or "3d"
+        meshy_config: Meshy API configuration for 3D mode
+    """
     if not exist_env_path and not instruction:
         print("❌ Provide either 'exist_environment_path' or 'requirements'")
         return
 
+    # Timing
+    start_time = time.time()
+
     # Determine output location with timestamp
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    dim_suffix = "_3d" if dimension == "3d" else ""
     if exist_env_path:
         label = exist_env_path.name
-        visual_output = exist_env_path / f"visual_{ts}"
+        visual_output = exist_env_path / f"visual{dim_suffix}_{ts}"
     else:
         label = instruction[:30] + "..." if len(instruction) > 30 else instruction
-        visual_output = output_dir / f"visual_{ts}"
+        visual_output = output_dir / f"visual{dim_suffix}_{ts}"
 
     visual_output.mkdir(parents=True, exist_ok=True)
 
-    print(f"🎨 [{label}] Generating visuals...")
+    # Create pipeline with dimension support
+    print(f"🎮 [{label}] Generating {dimension.upper()} scene...")
+    
+    # Validate Meshy config for 3D mode
+    if dimension == "3d" and (not meshy_config or not meshy_config.get("api_key")):
+        print("❌ 3D mode requires Meshy API key. Set 'meshy.api_key' in config.")
+        return
+    
+    # Create unified pipeline
     pipeline = VisualPipeline.create_default(
         llm_name=model,
         image_model=image_model,
+        dimension=dimension,
+        meshy_api_key=meshy_config.get("api_key", "") if meshy_config else "",
+        meshy_base_url=meshy_config.get("base_url", "https://api.meshy.ai/v1") if meshy_config else "https://api.meshy.ai/v1",
+        max_3d_assets=meshy_config.get("max_assets", 4) if meshy_config else 4,
+        target_polycount=meshy_config.get("target_polycount", 10000) if meshy_config else 10000,
     )
 
     ctx = await pipeline.run(
@@ -68,10 +107,20 @@ async def run_skin_gen(
         output_dir=visual_output,
     )
 
+    # Calculate elapsed time
+    elapsed = time.time() - start_time
+
     if ctx.success:
-        print(f"✅ [{label}] Visuals generated → {visual_output}")
+        print(f"✅ [{label}] Generation complete → {visual_output}")
+        print(f"⏱️  Total time: {elapsed:.1f}s")
+        
+        # Show 3D model info if available
+        if dimension == "3d" and hasattr(ctx, "models_3d") and ctx.models_3d:
+            print(f"🧊 3D Models generated: {len(ctx.models_3d)}")
+            for model_id, info in ctx.models_3d.items():
+                print(f"   - {model_id}: {info.get('path')}")
     else:
-        print(f"❌ [{label}] Visual generation failed: {ctx.error}")
+        print(f"❌ [{label}] Generation failed: {ctx.error}")
 
 
 async def main():
@@ -82,6 +131,16 @@ async def main():
     parser.add_argument("--model", help="Override: LLM model name")
     parser.add_argument("--image-model", help="Override: image model name")
     parser.add_argument("--output", help="Override: output directory")
+    
+    # 3D generation options
+    parser.add_argument("--3d", dest="enable_3d", action="store_true",
+                        help="Enable 3D generation mode")
+    parser.add_argument("--dimension", choices=["2d", "3d"], default=None,
+                        help="Generation dimension: 2d or 3d")
+    parser.add_argument("--meshy-key", help="Override: Meshy API key")
+    parser.add_argument("--max-3d-assets", type=int, default=None,
+                        help="Maximum number of assets to convert to 3D")
+    
     args = parser.parse_args()
 
     cfg = load_config(args.config)
@@ -92,6 +151,21 @@ async def main():
     output = args.output or cfg.get("envs_root_path") or "workspace/envs"
     exist_env_path = args.env or cfg.get("exist_environment_path")
     instruction = args.instruction or cfg.get("requirements")
+    
+    # Determine dimension (CLI takes priority)
+    if args.enable_3d:
+        dimension = "3d"
+    elif args.dimension:
+        dimension = args.dimension
+    else:
+        dimension = cfg.get("dimension", "2d")
+
+    # Meshy configuration for 3D
+    meshy_config = cfg.get("meshy", {})
+    if args.meshy_key:
+        meshy_config["api_key"] = args.meshy_key
+    if args.max_3d_assets:
+        meshy_config["max_assets"] = args.max_3d_assets
 
     if not image_model:
         print("❌ No image_model configured. Set 'image_model' in config or --image-model")
@@ -111,6 +185,9 @@ async def main():
     print(f"🤖 Model: {model}")
     print(f"🎨 Image Model: {image_model}")
     print(f"📁 Output: {output}")
+    print(f"📐 Dimension: {dimension.upper()}")
+    if dimension == "3d":
+        print(f"🧊 Meshy API: {meshy_config.get('base_url', 'https://api.meshy.ai/v1')}")
     if exist_env_path:
         print(f"📂 Environment: {exist_env_path}")
     if instruction:
@@ -123,6 +200,8 @@ async def main():
             output_dir=output_dir,
             exist_env_path=exist_env_path,
             instruction=instruction,
+            dimension=dimension,
+            meshy_config=meshy_config,
         )
 
         # Print and save cost summary
