@@ -82,22 +82,7 @@ class Camera2D(BaseCamera):
         position: 相机位置 (x, y)
         relative_vertices: 相对于 position 的多边形顶点
     
-    Example:
-        >>> # 矩形视野 (100x80)
-        >>> camera = Camera2D(
-        ...     position=(0, 0),
-        ...     relative_vertices=[(-50, -40), (50, -40), (50, 40), (-50, 40)]
-        ... )
-        >>> 
-        >>> # 扇形视野 (近似)
-        >>> import math
-        >>> radius = 100
-        >>> angle_range = 60  # 度
-        >>> vertices = [(0, 0)]  # 扇形中心
-        >>> for a in range(-30, 31, 10):
-        ...     rad = math.radians(a)
-        ...     vertices.append((radius * math.sin(rad), radius * math.cos(rad)))
-        >>> camera = Camera2D(position=(50, 50), relative_vertices=vertices)
+    See test/test_interaction_ascii.py and test/test_interaction_2d.py for usage examples.
     """
     
     def __init__(
@@ -366,17 +351,7 @@ class Camera3D(BaseCamera):
         near: 近裁剪面距离
         far: 远裁剪面距离
     
-    Example:
-        >>> camera = Camera3D(
-        ...     position=(0, 5, 10),
-        ...     direction=(0, 0, -1),
-        ...     fov=60,
-        ...     aspect=16/9,
-        ...     near=0.1,
-        ...     far=100
-        ... )
-        >>> camera.view.contains_point((0, 5, 5))
-        True
+    See test/test_interaction_3d.py for usage examples.
     """
     
     def __init__(
