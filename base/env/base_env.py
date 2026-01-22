@@ -9,10 +9,12 @@ from base.env.base_observation import ObservationPolicy
 from base.env.semantic_view import SemanticView, ObjectData
 
 if TYPE_CHECKING:
+    from PIL import Image
     from base.env.base_camera import BaseCamera
     from base.env.view_volume import ViewVolume
     from base.env.spatial_index import SpatialIndex
     from base.env.bounding_box import BoundingBox, BoundingBox2D, BoundingBox3D
+    from base.render.base_renderer import BaseRenderer
 
 
 class BaseEnv(ABC):
@@ -152,17 +154,20 @@ class SkinEnv(ObsEnv):
 
 class CameraEnv(SkinEnv):
     """
-    带有 Camera 视野系统的环境基类。
+    带有 Camera 视野系统和 Renderer 渲染器的环境基类。
     
     提供统一的 2D/3D 视野检测接口，通过 ViewVolume 抽象和空间索引实现高效的可见性检测。
+    渲染器负责将 SemanticView 转换为最终输出（ASCII 字符串或 PIL Image）。
     
     核心功能：
     - 统一的 get_visible_objects() 接口，2D/3D 行为一致
     - 可选的空间索引（Octree/QuadTree）加速查询
     - OBB 碰撞检测支持
+    - 集成渲染器，自动将 SemanticView 渲染为 agent 可读的输出
     
     Attributes:
         camera: Camera 实例 (Camera2D 或 Camera3D)
+        renderer: Renderer 实例 (ASCIIRenderer, Renderer2D, 或 Renderer3D)
         spatial_index: 可选的空间索引实例
     """
     
@@ -170,6 +175,7 @@ class CameraEnv(SkinEnv):
         self,
         env_id,
         camera: "BaseCamera",
+        renderer: Optional["BaseRenderer"] = None,
         spatial_index: Optional["SpatialIndex"] = None,
         obs_policy: Optional[ObservationPolicy] = None
     ):
@@ -179,16 +185,23 @@ class CameraEnv(SkinEnv):
         Args:
             env_id: 环境 ID
             camera: Camera 实例，定义观察区域
+            renderer: Renderer 实例，负责将 SemanticView 渲染为输出
+                      - ASCIIRenderer: 输出 str
+                      - Renderer2D: 输出 PIL.Image
+                      - Renderer3D: 输出 PIL.Image
+                      如果为 None，则 skinned 输出为 SemanticView 本身
             spatial_index: 可选的空间索引，用于加速大规模场景的查询
             obs_policy: 观察策略（仅用于向后兼容，CameraEnv 不使用此参数）
         """
         super().__init__(env_id, obs_policy)
         self.camera = camera
+        self.renderer: Optional["BaseRenderer"] = renderer
         self.spatial_index: Optional["SpatialIndex"] = spatial_index
         
         # 物体状态缓存，用于空间索引
         self._object_cache: Dict[str, Dict[str, Any]] = {}
-    
+    def observe_semantic(self):
+        pass
     def get_visible_objects(
         self,
         view: "ViewVolume",
@@ -422,6 +435,24 @@ class CameraEnv(SkinEnv):
         """
         pass
     
+    def get_rendered_observation(self) -> Union[str, "Image.Image", SemanticView]:
+        """
+        获取当前渲染后的观察。
+        
+        使用 Renderer 将当前 SemanticView 渲染为最终输出。
+        可在 reset() 后调用以获取初始观察。
+        
+        Returns:
+            渲染结果，类型取决于 Renderer:
+            - ASCIIRenderer: str
+            - Renderer2D/3D: PIL.Image
+            - 无 Renderer: SemanticView
+        """
+        semantic_view = self.observe()
+        if self.renderer is not None:
+            return self.renderer.render(semantic_view)
+        return semantic_view
+    
     def observe(self) -> SemanticView:
         """
         框架实现的观察流程，返回标准化的 SemanticView。
@@ -466,9 +497,10 @@ class CameraEnv(SkinEnv):
     
     def step(self, action: Dict[str, Any]):
         """
-        扩展的 step 逻辑，包含 Camera 更新。
+        扩展的 step 逻辑，包含 Camera 更新和 Renderer 渲染。
         
-        在状态转移后更新 Camera，然后调用父类的 step 逻辑。
+        在状态转移后更新 Camera，然后获取 SemanticView 并使用 Renderer 渲染。
+        渲染结果（str 或 PIL.Image）存入 info["skinned"]。
         """
         # Reset last action result; transition can set it
         self._last_action_result = None
@@ -481,19 +513,27 @@ class CameraEnv(SkinEnv):
             self.camera.update(self._state["agent"])
         
         # 更新空间索引（如果物体可能移动）
-        # 注意：如果物体频繁移动，可以考虑只更新变化的物体
-        # self.update_spatial_index()
+        self.update_spatial_index()
         
-        # 获取语义观察和渲染输出
         raw_obs = self.observe_semantic()
         semantic_view = self.observe()
-        agent_obs = self.render_skin(raw_obs)
+        
+        # 使用 Renderer 渲染输出
+        # 渲染结果类型取决于 Renderer:
+        # - ASCIIRenderer: str
+        # - Renderer2D/3D: PIL.Image
+        if self.renderer is not None:
+            skinned_output: Union[str, "Image.Image"] = self.renderer.render(semantic_view)
+        else:
+            # 没有 Renderer 时，回退到 render_skin 或直接使用 semantic_view
+            skinned_output = self.render_skin(raw_obs)
+
         if_done = self.done()
         
         info = {
             "raw_obs": raw_obs,
             "semantic_view": semantic_view,
-            "skinned": agent_obs,
+            "skinned": skinned_output,
             "events": events,
             "reward_info": rinfo,
             "last_action_result": self._last_action_result,

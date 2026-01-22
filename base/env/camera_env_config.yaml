@@ -1,0 +1,232 @@
+# ============================================================
+# DSL TEMPLATE FOR CAMERA-BASED ENVIRONMENTS (v3.0)
+# Purpose: Let an agent fill this YAML to define a new env
+# with Camera + CameraEnv + Renderer architecture
+# ============================================================
+
+meta:                              # REQUIRED: basic infos
+  id: ""
+  name: "<env_name>"               # e.g., "DungeonExplorer"
+  description: "<one-line summary>"
+  render_mode: "2d"                # "ascii" | "2d" | "3d" - determines which renderer to use
+
+state_template:                    # REQUIRED: complete state schema and default values
+  globals:                         # OPTIONAL: you can set some global variables here.
+    max_steps: 50                  # maximum steps per episode
+  agent:
+    pos: [0, 0]                    # REQUIRED: starting position (2D: [x,y], 3D: [x,y,z])
+    direction: [0, 1]              # OPTIONAL: agent facing direction (for 3D camera)
+    # If inventory exists:
+    inventory: {}                  # OPTIONAL: agent's inventory
+  tiles:                           # OPTIONAL (grid-like envs)
+    size: [10, 10]                 # width x height
+    default_type: "floor"          # default tile type
+  objects: []                      # REQUIRED: list of objects in world
+    # Each object should have:
+    # - id: unique identifier (matches asset file name)
+    # - pos: position [x, y] or [x, y, z]
+    # - size: optional [width, height] in pixels
+    # - z_index: optional render layer (higher = on top)
+    # - type: optional object type for grouping
+    # Example:
+    # - id: "wall_1"
+    #   pos: [100, 100]
+    #   size: [32, 32]
+    #   type: "wall"
+    #   z_index: 0
+
+# ============================================================
+# CAMERA CONFIGURATION (NEW)
+# Defines what the agent can "see" - replaces observation policy
+# ============================================================
+camera:                            # REQUIRED: defines agent's view
+  dimension: 2                     # 2 or 3
+  
+  # 2D Camera Settings (dimension: 2)
+  camera_2d:
+    shape: "rectangle"             # "rectangle" | "circle" | "sector" | "ring" | "polygon"
+    # Rectangle params:
+    width: 200                     # view width in pixels
+    height: 200                    # view height in pixels
+    # OR Circle params:
+    # radius: 100                  # view radius
+    # segments: 16                 # polygon approximation segments
+    # OR Sector params:
+    # radius: 100
+    # angle_start: -45             # degrees, 0 is up
+    # angle_end: 45
+    # OR Ring params:
+    # outer_radius: 150
+    # inner_radius: 50             # blind spot in center
+    # OR Polygon params:
+    # relative_vertices: [[-50, -50], [50, -50], [50, 50], [-50, 50]]
+    
+    follow_agent: true             # whether camera follows agent position
+  
+  # 3D Camera Settings (dimension: 3)
+  camera_3d:
+    fov: 60.0                      # vertical field of view (degrees)
+    aspect: 1.777                  # width/height ratio (16:9 = 1.777)
+    near: 0.1                      # near clipping plane
+    far: 100.0                     # far clipping plane
+    follow_agent: true             # camera follows agent
+    # Optional: camera offset from agent
+    offset: [0, 5, 10]             # [x, y, z] offset from agent position
+
+# ============================================================
+# RENDERER CONFIGURATION (NEW)
+# Defines how SemanticView is converted to final output
+# ============================================================
+renderer:                          # REQUIRED: defines output format
+  type: "2d"                       # "ascii" | "2d" | "3d"
+  
+  # Common settings
+  asset_path: "./assets"           # path to asset files
+  
+  # ASCII Renderer settings (type: "ascii")
+  ascii:
+    grid_size: [10, 10]            # [width, height] in characters
+    symbol_map:                    # object ID -> character mapping
+      agent: "@"
+      wall: "#"
+      floor: "."
+      goal: "G"
+      treasure: "$"
+      enemy: "E"
+    default_symbol: "?"            # for unknown objects
+    empty_symbol: "."              # for empty spaces
+  
+  # 2D Renderer settings (type: "2d")
+  2d:
+    resolution: [800, 600]         # output image [width, height]
+    background:
+      type: "color"                # "color" | "image"
+      color: "#1a1a2e"             # hex color (for type: "color")
+      # OR for image background:
+      # path: "./assets/background.png"
+      # mode: "cover"              # "stretch" | "tile" | "center" | "cover" | "contain"
+    asset_mapping:                 # optional: object ID -> asset file mapping
+      player: "hero_sprite"        # "player" objects use "hero_sprite.png"
+      "treasure_": "gold_coin"     # prefix match: all "treasure_*" use "gold_coin.png"
+  
+  # 3D Renderer settings (type: "3d")
+  3d:
+    resolution: [1280, 720]
+    background:
+      type: "color"
+      color: "#87CEEB"             # sky blue
+    lights:                        # scene lighting
+      - type: "ambient"
+        color: [1.0, 1.0, 1.0]
+        intensity: 0.3
+      - type: "directional"
+        color: [1.0, 0.95, 0.9]
+        intensity: 1.0
+        direction: [-1, -1, -1]
+    default_material:              # PBR material for objects without material
+      base_color: [0.5, 0.5, 0.5, 1.0]
+      metallic: 0.0
+      roughness: 0.5
+
+# ============================================================
+# SPATIAL INDEX (OPTIONAL)
+# For large scenes, use spatial indexing to speed up visibility checks
+# ============================================================
+spatial_index:                     # OPTIONAL: for performance optimization
+  enabled: false                   # whether to use spatial indexing
+  type: "auto"                     # "auto" | "quadtree" | "octree"
+  max_objects: 10                  # max objects per node before split
+  max_depth: 8                     # maximum tree depth
+  world_bounds:                    # world boundaries
+    min: [-1000, -1000]            # [x, y] or [x, y, z]
+    max: [1000, 1000]
+
+# ============================================================
+# REWARD CONFIGURATION
+# ============================================================
+reward:                            # REQUIRED: reward rules
+  events:                          # EVENT-BASED reward entries
+    - trigger: "<event_name>"
+      value_key: "<reward_key>"    # look up in reward values
+  # Domain-specific reward values:
+  # example:
+  # goal_rewards:
+  #   reached: 100.0
+  # item_rewards:
+  #   treasure: 10.0
+  #   key: 5.0
+
+# ============================================================
+# TRANSITION (ACTIONS)
+# ============================================================
+transition:                        # REQUIRED: action space & how T works
+  actions:
+    - name: "MOVE"
+      params: [dx, dy]             # movement delta
+      description: "Move the agent by delta"
+    - name: "INTERACT"
+      params: [object_id]          # target object
+      description: "Interact with an object"
+  # Implementation note: 
+  # - action dict format: {"action": "MOVE", "params": {"dx": 1, "dy": 0}}
+  # - use params.get('param_name') in transition method
+
+# ============================================================
+# TERMINATION CONDITIONS
+# ============================================================
+termination:                       # REQUIRED: when to end episode
+  max_steps: 50                    # mirrors globals.max_steps
+  conditions: []                   # list of condition strings
+    # Example conditions:
+    # - "agent.pos == goal_pos"
+    # - "agent.health <= 0"
+    # - "all_treasures_collected"
+
+# ============================================================
+# GENERATOR CONFIGURATION
+# ============================================================
+generator:                         # REQUIRED: how to generate world instances
+  mode: "procedural"               # "procedural" | "template" | "mixed"
+  output_format: "yaml"            # "yaml" | "json"
+  pipeline:                        # list of generation steps
+    - name: "init_from_template"
+      desc: "Initialize world with state_template as base"
+      args: {}
+    - name: "<step_name>"
+      desc: "<step description>"
+      args: {}                     # step-specific arguments
+  
+  randomization:                   # OPTIONAL: control randomness
+    seed_based: true               # use seed for reproducibility
+    parameters:                    # randomizable parameters
+      difficulty: [0.1, 1.0]       # example: difficulty range
+
+# ============================================================
+# WORLD LOADING
+# ============================================================
+world_loading:                     # REQUIRED: loading configuration
+  directory: "levels/"             # path pattern for world files
+  format: "yaml"                   # "yaml" | "json" | "pickle"
+  validation_schema: "state_template"
+  naming_convention: "{world_id}.yaml"
+
+# ============================================================
+# TEXT OUTPUT TEMPLATE (OPTIONAL)
+# For text-based or hybrid output modes
+# ============================================================
+text_template:                     # OPTIONAL: additional text overlay
+  enabled: false
+  format: |
+    Step {t}/{max_steps}
+    Position: {agent_pos}
+    Inventory: {inventory}
+    {custom_info}
+
+# ============================================================
+# MISCELLANEOUS
+# ============================================================
+misc:
+  logging: true
+  store_rollouts: true
+  debug_mode: false
+
