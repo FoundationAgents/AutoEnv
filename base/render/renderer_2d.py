@@ -41,16 +41,7 @@ class Renderer2D(BaseRenderer):
     - {asset_path}/{obj_id}.png
     - 素材使用原始尺寸，或由 ObjectData.size 指定
     
-    Example:
-        >>> from base.render.base_renderer import BackgroundColor
-        >>> config = RenderConfig(
-        ...     asset_path="./assets/sprites",
-        ...     resolution=(1920, 1080),
-        ...     background=BackgroundColor(color="#1a1a2e")
-        ... )
-        >>> renderer = Renderer2D(config)
-        >>> image = renderer.render(semantic_view)
-        >>> image.save("output.png")
+    See test/test_interaction_2d.py for complete usage examples.
     """
     
     def __init__(self, config: Optional[RenderConfig] = None):

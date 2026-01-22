@@ -56,27 +56,7 @@ class Renderer3D(BaseRenderer):
     - numpy: 数值计算
     - Pillow: 图像处理
     
-    Example:
-        >>> config = RenderConfig(resolution=(800, 600))
-        >>> renderer = Renderer3D(config)
-        >>> 
-        >>> semantic_view = SemanticView(
-        ...     view_region={
-        ...         "camera_position": [10, 10, 10],
-        ...         "camera_target": [0, 0, 0],
-        ...         "fov": 60
-        ...     },
-        ...     objects=[
-        ...         {
-        ...             "id": "sphere_1",
-        ...             "pos": (0, 1, 0),
-        ...             "geometry": "sphere",
-        ...             "material": {"base_color": [1, 0, 0, 1], "metallic": 0.5}
-        ...         }
-        ...     ]
-        ... )
-        >>> image = renderer.render(semantic_view)
-        >>> image.save("output_3d.png")
+    See test/test_interaction_3d.py for complete usage examples.
     """
     
     # 几何体生成函数映射
