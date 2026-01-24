@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,10 +13,12 @@
             font-family: Arial, sans-serif;
         }
 
+
         #canvas-container {
             width: 100vw;
             height: 100vh;
         }
+
 
         #info {
             position: absolute;
@@ -27,6 +30,7 @@
             border-radius: 5px;
             font-size: 14px;
         }
+
 
         #loading {
             position: absolute;
@@ -41,6 +45,7 @@
         }
     </style>
 </head>
+
 
 <body>
     <div id="canvas-container"></div>
@@ -71,10 +76,14 @@
 
         // ==== SCENE SETUP ====
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x87CEEB); // Sky blue
+        scene.background = new THREE.Color(0xA0A0A0); // Bright neutral background (NOT dark)
+        scene.fog = new THREE.Fog(0xA0A0A0, 50, 100); // Bright fog to match background
 
         // Camera
         const camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
             75,
             window.innerWidth / window.innerHeight,
             0.1,
@@ -97,11 +106,11 @@
         controls.minDistance = 2;
         controls.maxDistance = 50;
 
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        // Lighting - BRIGHT and CLEAR (default: well-lit scenes)
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.2); // Increased from 0.5 to 1.2
         scene.add(ambientLight);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2); // Increased from 1 to 1.2
         directionalLight.position.set(10, 20, 10);
         directionalLight.castShadow = true;
         directionalLight.shadow.camera.left = -20;
@@ -155,6 +164,7 @@
                     const model = gltf.scene;
                     model.name = assetId;
 
+
                     // Enable shadows
                     model.traverse((child) => {
                         if (child.isMesh) {
@@ -164,13 +174,29 @@
                     });
 
                     // Ensure model sits on ground (prevent sinking below y=0)
+                    // Calculate accurate bounding box and adjust position
                     const bbox = new THREE.Box3().setFromObject(model);
+                    const modelHeight = bbox.max.y - bbox.min.y;
                     const minY = bbox.min.y;
-                    if (Number.isFinite(minY)) {
-                        model.position.y += -minY + 0.01; // small lift above ground
+
+                    // Move model up so its bottom is just above ground (y=0)
+                    if (Number.isFinite(minY) && minY < 0) {
+                        model.position.y += Math.abs(minY) + 0.01;
+                    }
+
+                    // Special handling for player/character models - ensure visibility
+                    if (assetId.toLowerCase().includes('player') ||
+                        assetId.toLowerCase().includes('character') ||
+                        assetId.toLowerCase().includes('avatar')) {
+                        // Move character up to ensure full visibility above ground
+                        model.position.y = Math.max(model.position.y, modelHeight * 0.5);
+                        // Adjust camera to focus on character
+                        camera.position.set(5, modelHeight + 3, 8);
+                        controls.target.set(0, modelHeight * 0.5, 0);
                     }
 
                     // Position models (customize based on strategy)
+                    { MODEL_POSITIONING_CODE }
                     { MODEL_POSITIONING_CODE }
 
                     scene.add(model);
@@ -209,6 +235,7 @@
 
             // Custom animations (will be populated by Python)
             { ANIMATION_CODE }
+            { ANIMATION_CODE }
 
             controls.update();
             renderer.render(scene, camera);
@@ -224,5 +251,6 @@
         animate();
     </script>
 </body>
+
 
 </html>

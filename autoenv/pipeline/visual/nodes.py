@@ -544,7 +544,7 @@ class Image3DConvertNode(BaseNode):
         self._save_timing_log(ctx.output_dir, timing_log)
 
     def _select_assets_for_3d(self, ctx: AutoEnvContext) -> list[str]:
-        """Select which assets to convert to 3D (prioritize interactive game elements)."""
+        """Select which assets to convert to 3D."""
         strategy = ctx.strategy or {}
         all_assets = list(ctx.generated_assets.keys()) if ctx.generated_assets else []
         
@@ -724,35 +724,62 @@ class ThreeJSAssemblyNode(AgentNode):
         html_file.write_text(html_content, encoding="utf-8")
 
     def _generate_positioning_code(self, assets: list[dict[str, Any]]) -> str:
-        """Generate JavaScript code to position models based on strategy."""
+        """Generate JavaScript code to position models based on strategy with bounding box awareness."""
         import math
         
         positioning = []
         
         for i, asset in enumerate(assets):
             asset_id = asset.get("id", f"asset_{i}")
-            # Simple grid layout: spread models in a circle
-            angle = (i / len(assets)) * 2 * math.pi
-            x = 3 * math.cos(angle)
-            z = 3 * math.sin(angle)
-            y = 0
-            scale = 1.0
-            
-            # Check asset type for positioning hints
             asset_name = asset.get("name", "").lower()
-            if "player" in asset_name or "character" in asset_name:
-                x, z = 0, 0  # Center player
-                y = 0
-            elif "background" in asset_name or "environment" in asset_name:
-                y = -0.5
-                scale = 2.0
-            elif "ui" in asset_name or "overlay" in asset_name:
-                continue  # Skip UI elements in 3D positioning
             
-            positioning.append(f"""
+            # Skip UI elements
+            if any(keyword in asset_name for keyword in ["ui", "overlay", "hud", "button"]):
+                continue
+            
+            # Player/character models: center placement with auto height adjustment
+            if "player" in asset_name or "character" in asset_name:
+                positioning.append(f"""
                     if (assetId === '{asset_id}') {{
-                        model.position.set({x:.2f}, {y:.2f}, {z:.2f});
-                        model.scale.setScalar({scale});
+                        const bbox = new THREE.Box3().setFromObject(model);
+                        const modelHeight = bbox.max.y - bbox.min.y;
+                        const minY = bbox.min.y;
+                        
+                        // Center placement
+                        model.position.set(0, 0, 0);
+                        
+                        // Auto lift: ensure bottom of model is above ground
+                        if (Number.isFinite(minY) && minY < 0) {{
+                            model.position.y += Math.abs(minY) + 0.1;
+                        }}
+                    }}""")
+            
+            # Background/environment models: scale and position
+            elif "background" in asset_name or "environment" in asset_name:
+                positioning.append(f"""
+                    if (assetId === '{asset_id}') {{
+                        model.position.y = -0.5;
+                        model.scale.setScalar(2.0);
+                    }}""")
+            
+            # Other props: circular layout with auto height adjustment
+            else:
+                angle = (i / max(len(assets), 1)) * 2 * math.pi
+                x = 3 * math.cos(angle)
+                z = 3 * math.sin(angle)
+                
+                positioning.append(f"""
+                    if (assetId === '{asset_id}') {{
+                        const bbox = new THREE.Box3().setFromObject(model);
+                        const minY = bbox.min.y;
+                        
+                        // Circular layout
+                        model.position.set({x:.2f}, 0, {z:.2f});
+                        
+                        // Auto adjust height to prevent sinking
+                        if (Number.isFinite(minY) && minY < 0) {{
+                            model.position.y += Math.abs(minY) + 0.05;
+                        }}
                     }}""")
         
         return "\n".join(positioning) if positioning else "// Default positioning"
@@ -797,12 +824,13 @@ class ThreeJSAssemblyNode(AgentNode):
     5) Implement camera controls: keep ORBIT; add FIRST-PERSON or follow camera only if it fits the game; prevent clipping through ground/objects and keep near/far planes reasonable.
     6) Add game state management (score/health/progress), UI hints if helpful, and reset/restart hooks.
 
-    Quality & safety requirements:
-    - Keep using the existing three.js CDN imports (modelPaths:models/asset_name.glb).
-    - Add three.js CDN assets for environmental enrichment if needed.
-    - Ensure stable rendering: enable shadows carefully, cap lights, avoid excessive post-processing; keep frame rate smooth.
-    - Ensure reliable interaction: solid ground, no falling through, prevent camera from going underground, clamp movement to play area, and guard against null/undefined models before use.
-    - Ensure the scene is playable and matches the strategy
+     Quality & safety requirements:
+     - Keep using the existing three.js CDN imports (modelPaths:models/asset_name.glb).
+     - Add three.js CDN assets for environmental enrichment if needed.
+     - Ensure stable rendering: enable shadows carefully, cap lights, avoid excessive post-processing; keep frame rate smooth.
+     - Ensure reliable interaction: solid ground, no falling through, prevent camera from going underground, clamp movement to play area, and guard against null/undefined models before use.
+     - Ensure the scene is playable and matches the strategy
+     - Keep the scene bright/clear (light background + ambientLight ≥ 1.0), and ensure player models visible and stay fully above ground/floor (use bounding box to lift if needed; add lights if still dark).
 
-    Output:
-    - Write back a single, working {html_file} with enhanced gameplay, controls, and safety checks (no separate files required)."""
+     Output:
+     - Write back a single, working {html_file} with enhanced gameplay, controls, brightness/visibility, and safety checks (no separate files required)."""
