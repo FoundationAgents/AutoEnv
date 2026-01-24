@@ -544,23 +544,62 @@ class Image3DConvertNode(BaseNode):
         self._save_timing_log(ctx.output_dir, timing_log)
 
     def _select_assets_for_3d(self, ctx: AutoEnvContext) -> list[str]:
-        """Select which assets to convert to 3D (prioritize style anchor)."""
-        selected = []
+        """Select which assets to convert to 3D (prioritize interactive game elements)."""
         strategy = ctx.strategy or {}
-        style_anchor = strategy.get("style_anchor")
         all_assets = list(ctx.generated_assets.keys()) if ctx.generated_assets else []
-
-        # Prioritize style anchor
-        if style_anchor and style_anchor in all_assets:
-            selected.append(style_anchor)
-
-        # Add other assets up to limit
+        
+        if not all_assets:
+            return []
+        
+        # Define priority categories for game elements
+        priority_keywords = {
+            "critical": ["player", "character", "avatar", "hero"],
+            "high": ["block", "box", "crate", "cube", "piece", "tile", "platform", "goal", "target","ground", "floor", "wall"],
+            "medium": ["obstacle", "enemy", "item", "collectible"]
+        }
+        
+        # Keywords to filter out (not suitable for 3D conversion)
+        exclude_keywords = ["ui", "hud", "button", "text", "overlay", "background", 
+                           "menu", "icon", "cursor", "arrow", "indicator", "display",
+                           "counter", "timer", "score", "health", "bar"]
+        
+        # Score each asset
+        scored_assets = []
         for asset_id in all_assets:
-            if asset_id not in selected:
-                selected.append(asset_id)
-            if len(selected) >= self.max_assets_to_convert:
-                break
-
+            asset_name = asset_id.lower()
+            
+            # Filter out UI/overlay elements
+            if any(keyword in asset_name for keyword in exclude_keywords):
+                print(f"[Image3DConvert] Skipping UI element: {asset_id}")
+                continue
+            
+            # Calculate priority score
+            score = 0
+            if any(keyword in asset_name for keyword in priority_keywords["critical"]):
+                score = 4
+            elif any(keyword in asset_name for keyword in priority_keywords["high"]):
+                score = 3
+            elif any(keyword in asset_name for keyword in priority_keywords["medium"]):
+                score = 2
+            else:
+                score = 2  # Default medium priority
+            
+            # Boost score if it's the style anchor
+            style_anchor = strategy.get("style_anchor")
+            if style_anchor and asset_id == style_anchor:
+                score += 1
+            
+            scored_assets.append((score, asset_id))
+        
+        # Sort by score (descending) and select top assets
+        scored_assets.sort(reverse=True, key=lambda x: x[0])
+        selected = [asset_id for _, asset_id in scored_assets[:self.max_assets_to_convert]]
+        
+        print(f"[Image3DConvert] Selected {len(selected)} critical assets from {len(all_assets)} total")
+        for asset_id in selected:
+            score = next(s for s, a in scored_assets if a == asset_id)
+            print(f"  - {asset_id} (priority: {score})")
+        
         return selected
 
     def _save_timing_log(self, output_dir: Path, timing_log: dict[str, Any]) -> None:
@@ -586,6 +625,9 @@ class ThreeJSAssemblyNode(AgentNode):
         game_dir = ctx.output_dir / "game"
         game_dir.mkdir(parents=True, exist_ok=True)
 
+        # Save prompt context for reproducibility
+        self._save_checkpoint(ctx, game_dir)
+
         # Copy 3D models into game/models
         models_src = ctx.output_dir / "models_3d"
         models_dst = game_dir / "models"
@@ -609,6 +651,44 @@ class ThreeJSAssemblyNode(AgentNode):
             ctx.success = True
             print(f"[ThreeJSAssembly] ✓ Generated: {html_file}")
             print(f"[ThreeJSAssembly] To view: Open {html_file} in browser or run: python -m http.server --directory {game_dir}")
+
+    def _save_checkpoint(self, ctx: AutoEnvContext, game_dir: Path) -> None:
+        """Save pipeline context and templates for reproducibility."""
+        prompt_dir = game_dir / "checkpoint"
+        prompt_dir.mkdir(parents=True, exist_ok=True)
+
+        # Save node source
+        try:
+            import re
+            nodes_path = Path(__file__)
+            nodes_text = nodes_path.read_text(encoding="utf-8")
+            match = re.search(r"class ThreeJSAssemblyNode[\s\S]*", nodes_text)
+            node_content = match.group(0) if match else nodes_text
+            
+            # Optionally prepend instruction
+            instruction_header = ""
+            try:
+                config_path = Path.cwd() / "config" / "env_skin_gen.yaml"
+                if config_path.exists():
+                    config = yaml.safe_load(config_path.read_text())
+                    if config and "instruction" in config:
+                        instruction_header = f"{config['instruction']}\n{'=' * 51}\n"
+            except Exception:
+                pass
+            
+            full_content = instruction_header + node_content
+            (prompt_dir / "ThreeJSAssemblyNode.txt").write_text(full_content, encoding="utf-8")
+        except Exception as e:
+            print(f"[ThreeJSAssembly] Warning: failed to save node source: {e}")
+
+        # Save three.js template
+        try:
+            template_path = Path(__file__).parent / "threejs_template.html"
+            if template_path.exists():
+                content = template_path.read_text(encoding="utf-8")
+                (prompt_dir / "threejs_template.html").write_text(content, encoding="utf-8")
+        except Exception as e:
+            print(f"[ThreeJSAssembly] Warning: failed to save template: {e}")
 
     def _generate_threejs_scene(self, ctx: AutoEnvContext, game_dir: Path, html_file: Path) -> None:
         """Generate three.js HTML file from template."""
@@ -695,30 +775,34 @@ class ThreeJSAssemblyNode(AgentNode):
         return "\n".join(animations) if animations else "// No animations"
 
     def _build_enhancement_prompt(self, ctx: AutoEnvContext, html_file: Path) -> str:
-        """Build prompt for agent to enhance three.js scene (optional)."""
+        """Build prompt for agent to enhance three.js scene."""
         strategy_json = json.dumps(ctx.strategy, indent=2, ensure_ascii=False)
         model_list = "\n".join([f"- {asset_id}.glb" for asset_id in ctx.models_3d.keys()])
         
         return f"""You are enhancing a three.js 3D game scene. The current HTML file is at: {html_file}
 
-Available 3D models:
-{model_list}
+    Available 3D models:
+    {model_list}
 
-Game strategy:
-{strategy_json}
+    Game strategy:
+    {strategy_json}
 
-Tasks:
-1. Review the generated three.js scene in {html_file}
-2. Add interactive game logic (e.g., player movement, collision detection, game objectives)
-3. Improve model positioning based on the game strategy
-4. Add appropriate animations (idle, walk, interact, etc.)
-5. Implement camera controls suitable for the game type
-6. Add game state management (score, health, etc.)
+    Goal: Deliver a polished, visually refined and interactive 3D scene that plays smoothly, respects the strategy, and avoids rendering/interaction bugs.
 
-Requirements:
-- Keep using the existing three.js CDN imports
-- Maintain the model loading structure
-- Ensure the scene is playable and matches the strategy
-- Add comments explaining the game logic
+    Tasks:
+    1) Review the generated scene in {html_file}.
+    2) Add robust interactive logic (e.g., player/agent movement, collision detection with boundaries/obstacles, clear objectives with win/lose or success/fail conditions.
+    3) Improve model positioning to match the strategy (e.g., spawn zones, obstacles, collectibles, goals). Avoid overlapping or sunken models.
+    4) Add sensible animations (e.g., idle, walk/run, interact) and simple feedback (highlights) that do not break performance.
+    5) Implement camera controls: keep ORBIT; add FIRST-PERSON or follow camera only if it fits the game; prevent clipping through ground/objects and keep near/far planes reasonable.
+    6) Add game state management (score/health/progress), UI hints if helpful, and reset/restart hooks.
 
-Output: Modified {html_file} with enhanced game functionality."""
+    Quality & safety requirements:
+    - Keep using the existing three.js CDN imports (modelPaths:models/asset_name.glb).
+    - Add three.js CDN assets for environmental enrichment if needed.
+    - Ensure stable rendering: enable shadows carefully, cap lights, avoid excessive post-processing; keep frame rate smooth.
+    - Ensure reliable interaction: solid ground, no falling through, prevent camera from going underground, clamp movement to play area, and guard against null/undefined models before use.
+    - Ensure the scene is playable and matches the strategy
+
+    Output:
+    - Write back a single, working {html_file} with enhanced gameplay, controls, and safety checks (no separate files required)."""
