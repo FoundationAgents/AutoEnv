@@ -14,6 +14,7 @@ import asyncio
 import json
 import shutil
 import time
+import yaml
 from pathlib import Path
 from typing import Any
 
@@ -22,6 +23,7 @@ from pydantic import Field
 from autoenv.pipeline.visual.prompt import (
     BENCHMARK_ANALYSIS_PROMPT,
     DEFAULT_GAME_CODE,
+    ENHANCEMENT_PROMPT,
     GAME_ASSEMBLY_BENCHMARK_PROMPT,
     GAME_ASSEMBLY_INSTRUCTION_PROMPT,
     INSTRUCTION_ANALYSIS_PROMPT,
@@ -379,6 +381,11 @@ class Image3DConvertNode(BaseNode):
     target_polycount: int = Field(default=10000)
     timeout: float = Field(default=600)
     max_assets_to_convert: int = Field(default=4)
+    # New controls
+    max_parallel_tasks: int = Field(default=5)
+    download_timeout: float = Field(default=600)
+    download_retries: int = Field(default=3)
+    download_backoff: float = Field(default=1.5)
 
     model_config = {"arbitrary_types_allowed": True}
 
@@ -415,7 +422,10 @@ class Image3DConvertNode(BaseNode):
 
         # Select assets to convert
         assets_to_convert = self._select_assets_for_3d(ctx)
-        print(f"[Image3DConvert] Converting {len(assets_to_convert)} assets in PARALLEL: {assets_to_convert}")
+        print(
+            f"[Image3DConvert] Converting {len(assets_to_convert)} assets"
+            f" with concurrency={self.max_parallel_tasks}: {assets_to_convert}"
+        )
 
         # Store 3D model info in context
         if not hasattr(ctx, "models_3d"):
@@ -434,76 +444,85 @@ class Image3DConvertNode(BaseNode):
             print("[Image3DConvert] No valid assets to convert")
             return
 
+        # Concurrency semaphore
+        semaphore = asyncio.Semaphore(max(1, self.max_parallel_tasks))
+
         # Create parallel conversion tasks
         async def convert_single_asset(asset_id: str, image_path: Path) -> dict:
             """Convert a single asset to 3D."""
-            asset_timing = {"start": time.time(), "asset_id": asset_id}
-            print(f"[Image3DConvert] → Starting: {asset_id}")
+            async with semaphore:
+                asset_timing = {"start": time.time(), "asset_id": asset_id}
+                print(f"[Image3DConvert] → Starting: {asset_id}")
 
-            def progress_callback(task_id, status, progress):
-                elapsed = time.time() - asset_timing["start"]
-                print(f"[Image3DConvert]   {asset_id}: {status} {progress}% ({elapsed:.1f}s)")
+                def progress_callback(task_id, status, progress):
+                    elapsed = time.time() - asset_timing["start"]
+                    print(f"[Image3DConvert]   {asset_id}: {status} {progress}% ({elapsed:.1f}s)")
 
-            try:
-                result = await client.image_to_3d(
-                    image_path=image_path,
-                    timeout=self.timeout,
-                    progress_callback=progress_callback,
-                    target_polycount=self.target_polycount,
-                )
+                try:
+                    result = await client.image_to_3d(
+                        image_path=image_path,
+                        timeout=self.timeout,
+                        progress_callback=progress_callback,
+                        target_polycount=self.target_polycount,
+                    )
 
-                asset_timing["end"] = time.time()
-                asset_timing["duration"] = asset_timing["end"] - asset_timing["start"]
+                    asset_timing["end"] = time.time()
+                    asset_timing["duration"] = asset_timing["end"] - asset_timing["start"]
 
-                if result["success"]:
-                    model_urls = result.get("model_urls", {})
-                    glb_url = model_urls.get("glb")
+                    if result["success"]:
+                        model_urls = result.get("model_urls", {})
+                        glb_url = model_urls.get("glb")
 
-                    if glb_url:
-                        output_path = models_dir / f"{asset_id}.glb"
-                        download_start = time.time()
+                        if glb_url:
+                            output_path = models_dir / f"{asset_id}.glb"
+                            download_start = time.time()
 
-                        download_result = await client.download_model(
-                            model_url=glb_url,
-                            output_path=output_path,
-                        )
-
-                        download_time = time.time() - download_start
-                        asset_timing["download_time"] = download_time
-
-                        if download_result["success"]:
-                            asset_timing["success"] = True
-                            asset_timing["output_path"] = str(output_path)
-                            asset_timing["model_urls"] = model_urls
-                            print(
-                                f"[Image3DConvert] ✓ {asset_id}.glb saved "
-                                f"(convert: {asset_timing['duration']:.1f}s, "
-                                f"download: {download_time:.1f}s)"
+                            download_result = await client.download_model(
+                                model_url=glb_url,
+                                output_path=output_path,
+                                timeout=self.download_timeout,
+                                retries=self.download_retries,
+                                backoff=self.download_backoff,
                             )
+
+                            download_time = time.time() - download_start
+                            asset_timing["download_time"] = download_time
+
+                            if download_result["success"]:
+                                asset_timing["success"] = True
+                                asset_timing["output_path"] = str(output_path)
+                                asset_timing["model_urls"] = model_urls
+                                print(
+                                    f"[Image3DConvert] ✓ {asset_id}.glb saved "
+                                    f"(convert: {asset_timing['duration']:.1f}s, "
+                                    f"download: {download_time:.1f}s)"
+                                )
+                            else:
+                                asset_timing["success"] = False
+                                asset_timing["error"] = f"Download failed: {download_result.get('error')}"
+                                print(f"[Image3DConvert] ✗ {asset_id}: Download failed: {download_result.get('error')}")
                         else:
                             asset_timing["success"] = False
-                            asset_timing["error"] = f"Download failed: {download_result.get('error')}"
-                            print(f"[Image3DConvert] ✗ {asset_id}: Download failed: {download_result.get('error')}")
+                            asset_timing["error"] = "No GLB URL in result"
+                            print(f"[Image3DConvert] ✗ {asset_id}: No GLB URL in result")
                     else:
                         asset_timing["success"] = False
-                        asset_timing["error"] = "No GLB URL in result"
-                        print(f"[Image3DConvert] ✗ {asset_id}: No GLB URL in result")
-                else:
+                        asset_timing["error"] = result.get("error", "Unknown error")
+                        print(f"[Image3DConvert] ✗ {asset_id}: Conversion failed: {result.get('error')}")
+
+                except Exception as e:
                     asset_timing["success"] = False
-                    asset_timing["error"] = result.get("error", "Unknown error")
-                    print(f"[Image3DConvert] ✗ {asset_id}: Conversion failed: {result.get('error')}")
+                    asset_timing["error"] = str(e)
+                    asset_timing["end"] = time.time()
+                    asset_timing["duration"] = asset_timing["end"] - asset_timing["start"]
+                    print(f"[Image3DConvert] ✗ {asset_id}: Error: {e}")
 
-            except Exception as e:
-                asset_timing["success"] = False
-                asset_timing["error"] = str(e)
-                asset_timing["end"] = time.time()
-                asset_timing["duration"] = asset_timing["end"] - asset_timing["start"]
-                print(f"[Image3DConvert] ✗ {asset_id}: Error: {e}")
-
-            return asset_timing
+                return asset_timing
 
         # Execute all conversions in parallel
-        print(f"[Image3DConvert] Launching {len(valid_assets)} parallel conversion tasks...")
+        print(
+            f"[Image3DConvert] Launching {len(valid_assets)} tasks with concurrency={self.max_parallel_tasks}..."
+        )
         tasks = [convert_single_asset(asset_id, image_path) for asset_id, image_path in valid_assets]
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -805,32 +824,9 @@ class ThreeJSAssemblyNode(AgentNode):
         """Build prompt for agent to enhance three.js scene."""
         strategy_json = json.dumps(ctx.strategy, indent=2, ensure_ascii=False)
         model_list = "\n".join([f"- {asset_id}.glb" for asset_id in ctx.models_3d.keys()])
-        
-        return f"""You are enhancing a three.js 3D game scene. The current HTML file is at: {html_file}
 
-    Available 3D models:
-    {model_list}
-
-    Game strategy:
-    {strategy_json}
-
-    Goal: Deliver a polished, visually refined and interactive 3D scene that plays smoothly, respects the strategy, and avoids rendering/interaction bugs.
-
-    Tasks:
-    1) Review the generated scene in {html_file}.
-    2) Add robust interactive logic (e.g., player/agent movement, collision detection with boundaries/obstacles, clear objectives with win/lose or success/fail conditions.
-    3) Improve model positioning to match the strategy (e.g., spawn zones, obstacles, collectibles, goals). Avoid overlapping or sunken models.
-    4) Add sensible animations (e.g., idle, walk/run, interact) and simple feedback (highlights) that do not break performance.
-    5) Implement camera controls: keep ORBIT; add FIRST-PERSON or follow camera only if it fits the game; prevent clipping through ground/objects and keep near/far planes reasonable.
-    6) Add game state management (score/health/progress), UI hints if helpful, and reset/restart hooks.
-
-     Quality & safety requirements:
-     - Keep using the existing three.js CDN imports (modelPaths:models/asset_name.glb).
-     - Add three.js CDN assets for environmental enrichment if needed.
-     - Ensure stable rendering: enable shadows carefully, cap lights, avoid excessive post-processing; keep frame rate smooth.
-     - Ensure reliable interaction: solid ground, no falling through, prevent camera from going underground, clamp movement to play area, and guard against null/undefined models before use.
-     - Ensure the scene is playable and matches the strategy
-     - Keep the scene bright/clear (light background + ambientLight ≥ 1.0), and ensure player models visible and stay fully above ground/floor (use bounding box to lift if needed; add lights if still dark).
-
-     Output:
-     - Write back a single, working {html_file} with enhanced gameplay, controls, brightness/visibility, and safety checks (no separate files required)."""
+        return ENHANCEMENT_PROMPT.format(
+            html_file=html_file,
+            model_list=model_list,
+            strategy_json=strategy_json,
+        )

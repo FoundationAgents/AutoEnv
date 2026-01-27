@@ -359,3 +359,34 @@ while running:
 
 pygame.quit()
 '''
+
+# ============== 3D Scene Enhancement Prompt ==============
+
+ENHANCEMENT_PROMPT = """You are enhancing a three.js 3D game scene. The current HTML file is at: {html_file}
+
+Available 3D models:
+{model_list}
+
+Game strategy:
+{strategy_json}
+
+Goal: Deliver a polished, visually refined and interactive 3D scene that plays smoothly, respects the strategy, and avoids rendering/interaction bugs.
+
+Tasks:
+1) Review the generated scene in {html_file}.
+2) Add robust interactive logic (e.g., player/agent movement, collision detection with boundaries/obstacles, clear objectives with win/lose or success/fail conditions.
+3) Improve model positioning to match the strategy (e.g., spawn zones, obstacles, collectibles, goals). Avoid overlapping or sunken models.
+4) Add sensible animations (e.g., idle, walk/run, interact) and simple feedback (highlights) that do not break performance.
+5) Implement camera controls: keep ORBIT; add FIRST-PERSON or follow camera only if it fits the game; prevent clipping through ground/objects and keep near/far planes reasonable.
+6) Add game state management (score/health/progress), UI hints if helpful, and reset/restart hooks.
+
+ Quality & safety requirements:
+ - Keep using the existing three.js CDN imports (modelPaths:models/asset_name.glb).
+ - Add three.js CDN assets for environmental enrichment if needed.
+ - Ensure stable rendering: enable shadows carefully, cap lights, avoid excessive post-processing; keep frame rate smooth.
+ - Ensure reliable interaction: solid ground, no falling through, prevent camera from going underground, clamp movement to play area, and guard against null/undefined models before use.
+ - Ensure the scene is playable and matches the strategy
+ - Keep the scene bright/clear (light background + ambientLight ≥ 1.0), and ensure player models visible and stay fully above ground/floor (use bounding box to lift if needed; add lights if still dark).
+
+ Output:
+ - Write back a single, working {html_file} with enhanced gameplay, controls, brightness/visibility, and safety checks (no separate files required)."""

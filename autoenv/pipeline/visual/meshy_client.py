@@ -273,6 +273,11 @@ class MeshyClient:
         self,
         model_url: str,
         output_path: Path,
+        *,
+        timeout: float = 600,
+        retries: int = 3,
+        backoff: float = 1.5,
+        chunk_size: int = 1024 * 1024,
     ) -> dict[str, Any]:
         """
         Download a 3D model file.
@@ -280,29 +285,44 @@ class MeshyClient:
         Args:
             model_url: URL of the model file
             output_path: Path to save the model
+            timeout: Total timeout for a single download attempt (seconds)
+            retries: Number of retry attempts on failure/timeouts
+            backoff: Exponential backoff base between retries
+            chunk_size: Streaming chunk size (bytes)
 
         Returns:
             Result with success status
         """
-        try:
-            output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
 
-            async with aiohttp.ClientSession() as session:
-                async with session.get(model_url) as resp:
-                    if resp.status != 200:
-                        return {
-                            "success": False,
-                            "error": f"HTTP {resp.status}",
-                        }
-                    content = await resp.read()
-                    output_path.write_bytes(content)
+        last_error: str | None = None
+        for attempt in range(1, max(1, retries) + 1):
+            try:
+                timeout_cfg = aiohttp.ClientTimeout(total=timeout)
+                async with aiohttp.ClientSession(timeout=timeout_cfg) as session:
+                    async with session.get(model_url) as resp:
+                        if resp.status != 200:
+                            last_error = f"HTTP {resp.status}"
+                            raise RuntimeError(last_error)
 
-            return {
-                "success": True,
-                "path": str(output_path),
-            }
-        except Exception as e:
-            return {
-                "success": False,
-                "error": str(e),
-            }
+                        # Stream to file to reduce memory usage
+                        with open(output_path, "wb") as f:
+                            async for chunk in resp.content.iter_chunked(chunk_size):
+                                if chunk:
+                                    f.write(chunk)
+
+                return {
+                    "success": True,
+                    "path": str(output_path),
+                }
+            except Exception as e:
+                last_error = str(e)
+                if attempt < max(1, retries):
+                    # Exponential backoff before retry
+                    delay = backoff ** (attempt - 1)
+                    await asyncio.sleep(delay)
+                else:
+                    return {
+                        "success": False,
+                        "error": last_error or "download failed",
+                    }
