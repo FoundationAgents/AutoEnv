@@ -1,0 +1,237 @@
+### INIT_GAME_CODE ###
+function initializeGame() {
+    // Initialize game state
+    gameState.puzzlePieces = [];
+    gameState.goalPlatforms = [];
+    gameState.regularPlatforms = [];
+    gameState.selectedPiece = null;
+    
+    // Traverse the scene to categorize objects
+    scene.traverse((object) => {
+        if (object.isMesh || object.isGroup) {
+            // Check for puzzle pieces (crates)
+            if (object.userData.isPuzzlePiece) {
+                gameState.puzzlePieces.push(object);
+                // Save original material for highlighting
+                if (object.material) {
+                    object.userData.originalMaterial = object.material;
+                }
+            }
+            
+            // Check for goal platforms (target zones)
+            if (object.userData.isGoalPlatform) {
+                gameState.goalPlatforms.push(object);
+                if (object.material) {
+                    object.userData.originalMaterial = object.material;
+                }
+            }
+            
+            // Check for regular platforms (floor tiles)
+            if (object.userData.isPlatform && !object.userData.isGoalPlatform) {
+                gameState.regularPlatforms.push(object);
+            }
+        }
+    });
+    
+    console.log('Game initialized:', {
+        puzzlePieces: gameState.puzzlePieces.length,
+        goalPlatforms: gameState.goalPlatforms.length,
+        regularPlatforms: gameState.regularPlatforms.length
+    });
+}
+### END_INIT_GAME_CODE ###
+
+### HANDLE_KEYPRESS_CODE ###
+function handleKeyPress(key) {
+    // ESC: Deselect current piece (handle FIRST)
+    if (key === 'Escape') {
+        if (gameState.selectedPiece) {
+            // Restore original material
+            if (gameState.selectedPiece.userData.originalMaterial) {
+                gameState.selectedPiece.material = gameState.selectedPiece.userData.originalMaterial;
+            }
+            gameState.selectedPiece = null;
+        }
+        return;
+    }
+    
+    // If no piece is selected, ignore movement keys
+    if (!gameState.selectedPiece) {
+        if (key === 'r' || key === 'R') {
+            // R without selection: Restart level
+            location.reload();
+        }
+        return;
+    }
+    
+    const gridSize = 2;
+    let moved = false;
+    
+    // WASD/Arrow keys: Move selected piece on grid
+    if (key === 'w' || key === 'ArrowUp') {
+        gameState.selectedPiece.position.z -= gridSize;
+        moved = true;
+    } else if (key === 's' || key === 'ArrowDown') {
+        gameState.selectedPiece.position.z += gridSize;
+        moved = true;
+    } else if (key === 'a' || key === 'ArrowLeft') {
+        gameState.selectedPiece.position.x -= gridSize;
+        moved = true;
+    } else if (key === 'd' || key === 'ArrowRight') {
+        gameState.selectedPiece.position.x += gridSize;
+        moved = true;
+    } 
+    // Space: Snap to platform and deselect
+    else if (key === ' ' || key === 'Spacebar') {
+        snapToPlatform(gameState.selectedPiece);
+        return;
+    }
+    // R: Rotate piece
+    else if (key === 'r' || key === 'R') {
+        gameState.selectedPiece.rotation.y += Math.PI / 2;
+    }
+    
+    // After movement, snap to grid
+    if (moved) {
+        gameState.selectedPiece.position.x = Math.round(gameState.selectedPiece.position.x / gridSize) * gridSize;
+        gameState.selectedPiece.position.z = Math.round(gameState.selectedPiece.position.z / gridSize) * gridSize;
+    }
+}
+### END_HANDLE_KEYPRESS_CODE ###
+
+### MOUSE_CLICK_CODE ###
+function onMouseClick(event) {
+    // Calculate mouse position in normalized device coordinates
+    const mouse = new THREE.Vector2();
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    
+    // Update the raycaster
+    raycaster.setFromCamera(mouse, camera);
+    
+    // Find intersected objects
+    const intersects = raycaster.intersectObjects(scene.children, true);
+    
+    if (intersects.length > 0) {
+        let clickedObject = intersects[0].object;
+        
+        // Traverse up to find the root object with userData
+        while (clickedObject.parent && !clickedObject.userData.isPuzzlePiece) {
+            clickedObject = clickedObject.parent;
+            if (clickedObject === scene) break;
+        }
+        
+        // If we found a puzzle piece, select it
+        if (clickedObject.userData.isPuzzlePiece) {
+            selectPiece(clickedObject);
+        } else {
+            // Clicked elsewhere, deselect
+            if (gameState.selectedPiece) {
+                if (gameState.selectedPiece.userData.originalMaterial) {
+                    gameState.selectedPiece.material = gameState.selectedPiece.userData.originalMaterial;
+                }
+                gameState.selectedPiece = null;
+            }
+        }
+    }
+}
+### END_MOUSE_CLICK_CODE ###
+
+### HELPER_FUNCTIONS ###
+function selectPiece(clickedObject) {
+    // If clicking the same piece, deselect it
+    if (gameState.selectedPiece === clickedObject) {
+        if (gameState.selectedPiece.userData.originalMaterial) {
+            gameState.selectedPiece.material = gameState.selectedPiece.userData.originalMaterial;
+        }
+        gameState.selectedPiece = null;
+        return;
+    }
+    
+    // Deselect previous piece
+    if (gameState.selectedPiece) {
+        if (gameState.selectedPiece.userData.originalMaterial) {
+            gameState.selectedPiece.material = gameState.selectedPiece.userData.originalMaterial;
+        }
+    }
+    
+    // Select new piece
+    gameState.selectedPiece = clickedObject;
+    
+    // Highlight the selected piece
+    if (clickedObject.material) {
+        // Save original material if not already saved
+        if (!clickedObject.userData.originalMaterial) {
+            clickedObject.userData.originalMaterial = clickedObject.material;
+        }
+        
+        // Create highlight material
+        const highlightMaterial = new THREE.MeshStandardMaterial({
+            color: 0x00ff00,
+            emissive: 0x00ff00,
+            emissiveIntensity: 0.3,
+            metalness: 0.5,
+            roughness: 0.5
+        });
+        
+        clickedObject.material = highlightMaterial;
+    }
+}
+
+function snapToPlatform(piece) {
+    if (!piece) return;
+    
+    const gridSize = 2;
+    
+    // Snap position to grid
+    piece.position.x = Math.round(piece.position.x / gridSize) * gridSize;
+    piece.position.z = Math.round(piece.position.z / gridSize) * gridSize;
+    
+    // Restore original material
+    if (piece.userData.originalMaterial) {
+        piece.material = piece.userData.originalMaterial;
+    }
+    
+    // Deselect piece
+    gameState.selectedPiece = null;
+    
+    // Check win condition
+    checkWinCondition();
+}
+
+function checkWinCondition() {
+    if (gameState.puzzlePieces.length === 0 || gameState.goalPlatforms.length === 0) {
+        return;
+    }
+    
+    let piecesOnGoals = 0;
+    const threshold = 0.5; // Distance threshold for snapping
+    
+    // Check each puzzle piece
+    for (const piece of gameState.puzzlePieces) {
+        let onGoal = false;
+        
+        // Check against each goal platform
+        for (const goal of gameState.goalPlatforms) {
+            const dx = Math.abs(piece.position.x - goal.position.x);
+            const dz = Math.abs(piece.position.z - goal.position.z);
+            
+            if (dx < threshold && dz < threshold) {
+                onGoal = true;
+                break;
+            }
+        }
+        
+        if (onGoal) {
+            piecesOnGoals++;
+        }
+    }
+    
+    // Win condition: all pieces on goal platforms
+    if (piecesOnGoals === gameState.puzzlePieces.length) {
+        setTimeout(() => {
+            alert('Congratulations! You solved the puzzle!');
+        }, 100);
+    }
+}
+### END_HELPER_FUNCTIONS ###

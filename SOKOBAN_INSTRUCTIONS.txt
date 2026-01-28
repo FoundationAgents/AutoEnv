@@ -1,0 +1,296 @@
+================================================================================
+3D SOKOBAN GAME GENERATION INSTRUCTIONS
+================================================================================
+
+VERSION 1: BASIC
+--------------------------------------------------------------------------------
+
+A 3D Sokoban puzzle game with simple geometric blocks.
+Features:
+- Isometric 3D perspective
+- Clean, minimalist aesthetic
+- The player controls a small cube to push boxes onto goal tiles
+
+
+VERSION 2: STANDARD (RECOMMENDED)
+--------------------------------------------------------------------------------
+
+A 3D Sokoban puzzle game with detailed isometric graphics.
+
+Visual Style:
+- Isometric 3D view (26.565 degrees)
+- Modern minimalist design with clean geometry
+- Low-poly but detailed 3D models
+- Smooth color gradients and soft shading
+
+Game Elements:
+1. Player Character: A blue cube with subtle shading, represents the player
+2. Pushable Box: Orange-red cube with directional indicator, must be pushed to goals
+3. Goal Platform: Green-glowing base tile where boxes must be placed
+4. Floor Tiles: Light gray base tiles with subtle grid pattern
+5. Walls: Dark blue-gray tall blocks that block movement
+6. Pressure Plates: Gray tiles with raised circular button
+7. Elevated Platforms: Blue transparent platform segments
+8. Environmental Details: Shadows and lighting effects
+
+
+VERSION 3: ADVANCED
+--------------------------------------------------------------------------------
+
+A sophisticated 3D Sokoban puzzle game with complex geometric assets.
+
+Art Direction:
+- Isometric 3D rendering with proper depth perception
+- Modern minimalist sci-fi aesthetic (similar to Monument Valley)
+- Three-face shading for cubes (top face lightest, left medium, right darkest)
+- Professional lighting with subtle gradients
+
+Detailed Asset Requirements:
+
+1. PLAYER_CHARACTER (Cyan Cube)
+   - 32x32x32 unit isometric cube
+   - Vibrant cyan (#3498DB) with three-face shading
+   - Dark outline for edge definition
+   - Small highlight indicator on top surface
+   - Clean geometric form, no soft shadows
+
+2. PUSHABLE_BOX (Orange Cube)
+   - Same geometry as player cube
+   - Warm orange (#E67E22) color
+   - Directional arrow on top face
+   - Identical three-face shading to player
+   - Geometric edge highlights
+
+3. GOAL_PLATFORM (Glowing Base)
+   - Isometric diamond floor shape (64x32 pixels)
+   - Mint green center (#1ABC9C)
+   - Subtle inner glow effect
+   - Three-face shading matching player lighting
+   - Seamlessly tileable edges
+
+4. FLOOR_TILES (Grid Pattern)
+   - Light gray base (#BDC3C7) with darker grid (#95A5A6)
+   - Isometric diamond 64x32 shape
+   - Subtle gradient for depth
+   - Clean geometric edges
+   - Repeating pattern for tileable game board
+
+5. WALL_BLOCKS (Tall Obstacles)
+   - Dark blue-gray (#2C3E50) tall cube (32x32x64)
+   - Double-height blocking element
+   - Geometric panel lines on surfaces
+   - Three-face shading for consistency
+   - Sharp, clean edges
+
+6. PRESSURE_PLATE (Interactive Floor)
+   - Gray floor tile (#95A5A6) with mechanical button
+   - Raised circular button element in center
+   - Geometric panel details
+   - Three-face shading matching walls
+   - Tileable design
+
+7. BRIDGE_SEGMENT (Glass Platform)
+   - Extended transparent platform
+   - Light blue (#3498DB) semi-transparent material
+   - Ethereal quality with subtle inner glow
+   - Same tileable base shape as goal platform
+   - Layered depth effect
+
+8. SHADOW_SPRITE (Lighting Effect)
+   - Soft elliptical shadow element
+   - Black with radial fade to transparent
+   - Subtle blur effect
+   - Matches player/box lighting direction (top-left)
+   - Non-tileable unique element
+
+Color Palette:
+- Primary Blue: #3498DB (player, bridges, accents)
+- Secondary Orange: #E67E22 (boxes, interactive elements)
+- Accent Green: #1ABC9C (goals, success indicators)
+- Background Gray: #BDC3C7 (floor, base)
+- Detail Gray: #95A5A6 (grid, edges)
+- Dark Blue: #2C3E50 (walls, obstacles)
+
+Rendering Requirements:
+- Low-poly geometric style (1000-10000 polygons per asset)
+- Flat shading with color blocks (no photo-realism)
+- Isometric projection consistency
+- Clear silhouettes and edge definition
+- Proper UV mapping for tileable elements
+- No bloom or glow shaders (use painted highlights instead)
+- High contrast for clarity in small sizes
+
+Technical Specifications:
+- Target Resolution: 64x64 pixels (2D), upscale to 3D models
+- Target Polycount: 10000 per asset maximum
+- Format: GLB (binary glTF) for three.js compatibility
+- Scale: Maintain consistent unit proportions
+- Optimization: Baked lighting, no dynamic shadows
+
+
+VERSION 4: ULTRA-DETAILED
+--------------------------------------------------------------------------------
+
+A premium 3D Sokoban puzzle game with rich visual design and complex assets.
+
+Design Philosophy:
+Modern minimalist with influences from Monument Valley, Portal 2 and Deus Ex: Human Revolution.
+Emphasize clean geometry, strategic color palette, and professional lighting.
+Create a cohesive isometric world with consistent art direction across all assets.
+
+ENVIRONMENT & FOUNDATION:
+
+Floor System:
+- Primary floor: Matte light gray (#BDC3C7) with embossed grid pattern
+- Grid spacing indicates 1-unit squares for game logic clarity
+- Subtle beveled edges for depth perception
+- Multiple surface variations: standard, slightly worn, polished
+- Seamlessly tileable with perfect edge matching
+- Supports 4-directional rotation without visual breaks
+
+Wall Architecture:
+- Main walls: Dark steel blue-gray (#2C3E50) with vertical panel lines
+- Wall surfaces show geometric segmentation (3x3 panel grid)
+- Recessed panel lines with subtle shadow lines
+- Multiple heights: standard (1 unit), tall (2 units), short (0.5 units)
+- Rounded corner options for variety
+- Strategic lighting to show wall depth and solidity
+
+GAMEPLAY ASSETS:
+
+Player Avatar (Sokoban Agent):
+- Form: Perfect cube, 32x32x32 units in isometric space
+- Material: Matte cyan (#3498DB) with metallic edge highlights
+- Surface Detail: Subtle beveled edges, not rounded
+- Orientation Indicator: Forward-facing arrow/marker on top
+- Animation Readiness: Smooth geometry for rotation/movement
+- Lighting: Three-face model - top face brightest, left medium, right darkest
+- Special Effect: Thin 1-pixel accent line on edges for definition
+
+Pushable Crate (Box Object):
+- Form: Identical cube geometry to player
+- Material: Warm terra-orange (#E67E22) with directional arrow
+- Surface Markers: Numbered or lettered (if multiple crates)
+- Edge Highlight: Single highlight line on top-left edge
+- Pushable Indicator: Clear visual distinction from walls
+- Animation: Smooth edges for rolling animation
+- Contrast: Distinct enough from environment to read at small scale
+
+Goal Receptacle (Target Platform):
+- Form: Isometric diamond floor tile (64x32 in plan view, 32 in height)
+- Primary Color: Mint green (#1ABC9C) glowing surface
+- Glow Effect: Subtle soft halo, not bloom - use painted gradient instead
+- Surface Pattern: Circular target reticle or concentric rings
+- State Indication: Visual change when box is placed (optional)
+- Lighting: Maintains three-face shading consistency
+- Multiple Variants: Regular goal, bonus goal, checkpoint indicator
+
+Obstacle & Environmental Elements:
+
+Pressure Plate (Trigger Tile):
+- Base: Gray floor (#95A5A6) with raised circular button center
+- Button Form: Raised dome (half-sphere) protruding from floor
+- Activation Visual: Button depression or color change concept
+- Surrounding: Beveled edge frame around button
+- Tileable: Compatible with standard floor tiles
+- States: Unpressed (raised), pressed (sunken), activated (glowing)
+
+Bridge/Corridor Extension:
+- Material: Translucent cyan glass (#3498DB at 70% opacity)
+- Form: Extended rectangular platform segment
+- Visual Effect: Subtle internal glow from edges only
+- Pattern: Geometric grid overlay representing structure
+- Integration: Blends with standard floor tiles
+- Safety: Clear edge definition for pathfinding visibility
+
+Fragile Floor (Hazard Element):
+- Base: Lighter gray (#D5DBDB) with crack pattern
+- Crack Graphics: Radial cracks from center, subtle depth lines
+- Animation Ready: Geometry for breaking/falling effect
+- Warning Visual: Maybe slight color tint difference from normal floor
+- Integrity Indicator: Visual degradation options available
+- Danger Signaling: Subtle visual cue without being obvious
+
+ATMOSPHERIC & SPECIAL ELEMENTS:
+
+Shadows (Depth Indicator):
+- Form: Elliptical shadow sprite beneath moving objects
+- Material: Black (#000000) with radial transparency gradient
+- Size: Proportional to object height (60x30 for main objects)
+- Blur: Soft edge with feathered transition
+- Lighting Direction: Consistent top-left light source
+- Real-time: Follows object position for depth clarity
+
+Particle Effects (Visual Polish):
+- Success Particle: Golden/yellow sparkle burst when box placed
+- Failure Particle: Red/orange dust cloud for invalid placement
+- Movement Trail: Light blue path indicator (optional)
+- Geometry: Simple geometric shapes, not realistic physics
+
+ADVANCED VISUAL FEATURES:
+
+Lighting Model:
+- Primary Light: Top-left direction (45° from top, 45° from left)
+- Color Temperature: Cool white, slight blue tint
+- Shadow Intensity: Moderate, not harsh (avoid pure black shadows)
+- Ambient Lighting: Slight overall brightness to maintain clarity
+- Edge Lighting: Subtle accent lights on prominent edges
+- No real-time shadows: All lighting is baked into vertex colors
+
+Material Properties:
+- Finish: Matte (not shiny)
+- Specularity: Very low (only on specific highlight lines)
+- Metallic Accents: Subtle brass/copper edges on premium assets
+- Wear Patterns: Optional - aged look on high-use floor tiles
+- Biohazard Markings: Optional - sci-fi detail elements
+
+Color Harmony:
+- Analogous Color Scheme: Blues, teals, cyans
+- Complementary Accent: Orange/warm tones for interactive elements
+- Saturation: High saturation for game elements, muted for environment
+- Value Contrast: Clear distinction between player, boxes, goals, obstacles
+- Colorblind Friendly: Pattern differentiation beyond color alone
+
+TECHNICAL SPECIFICATIONS:
+
+Model Optimization:
+- Polygon Target: 4,000-8,000 per asset
+- Texture Resolution: 1024x1024 base, scaled for tile-ability
+- File Format: GLB with embedded textures for three.js
+- Vertex Colors: Baked lighting as vertex color information
+- Normal Maps: High-quality for edge definition
+- Materials: PBR-ready but with stylized settings
+
+Performance Considerations:
+- LOD Levels: Optional second level of detail for distant view
+- Instancing: All floor tiles identical for draw call optimization
+- Batching: Group similar asset types in scene rendering
+- Animation: GPU-ready skeleton setup (optional)
+
+Consistency Requirements:
+- Scale: All assets maintain proportional isometric dimensions
+- Lighting: Identical light source position across all models
+- Orientation: Consistent front/back definition
+- Accessibility: No details smaller than 2 pixels at game scale
+- Clarity: Readable at 32x32 pixel display size minimum
+
+DELIVERY EXPECTATIONS:
+
+Quality Metrics:
+✓ Professional appearance at target resolution
+✓ Clear silhouettes without ambiguity
+✓ Consistent aesthetic across all assets
+✓ Optimized for real-time 3D engine (three.js)
+✓ Readable colors with proper contrast
+✓ Seamless tiling where applicable
+✓ Animation-ready geometry where needed
+✓ Accessible to colorblind players
+
+File Organization:
+- One .glb file per asset type
+- Clear naming convention (asset_name.glb)
+- Proper material assignments for visual clarity
+- Baked lighting for immediate rendering
+- Ready for integration into game engine
+
+
