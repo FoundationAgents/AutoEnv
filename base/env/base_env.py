@@ -6,6 +6,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional, Tuple, List
 from base.env.base_observation import ObservationPolicy
+from base.env.skin_output import SkinRenderOutput
 
 class BaseEnv(ABC):
     """Defines the true state, transition, and reward."""
@@ -115,6 +116,25 @@ class SkinEnv(ObsEnv):
         """Render the final input from semantic observation."""
         pass
 
+    def render(self, omega) -> SkinRenderOutput:
+        """Unified render API with backward compatibility for legacy render_skin outputs."""
+        rendered = self.render_skin(omega)
+
+        if isinstance(rendered, SkinRenderOutput):
+            return rendered
+
+        if isinstance(rendered, dict) and "agent_view" in rendered:
+            return SkinRenderOutput(
+                agent_view=rendered.get("agent_view"),
+                human_view=rendered.get("human_view"),
+                modality=rendered.get("modality", "text"),
+                artifacts=rendered.get("artifacts", {}),
+                metadata=rendered.get("metadata", {}),
+            )
+
+        # Legacy path: string/dict/any returned from render_skin is treated as agent view.
+        return SkinRenderOutput(agent_view=rendered, modality="text")
+
     def done(self) -> bool:
         # Default: only step count; override/add conditions if needed
         return self._t >= self.configs["termination"]["max_steps"]
@@ -130,14 +150,20 @@ class SkinEnv(ObsEnv):
         reward, events, rinfo = self.reward(action)
         self._t += 1
         raw_obs = self.observe_semantic()
-        agent_obs = self.render_skin(raw_obs)
-        if_done = self.done(s_next)
+        rendered = self.render(raw_obs)
+        agent_obs = rendered.agent_view
+        try:
+            if_done = self.done(s_next)
+        except TypeError:
+            if_done = self.done()
         info = {
             "raw_obs": raw_obs,
             "skinned": agent_obs,
+            "agent_obs": agent_obs,
+            "human_view": rendered.resolved_human_view(),
+            "render_output": rendered.to_dict(),
             "events": events,
             "reward_info": rinfo,
             "last_action_result": self._last_action_result,
         }
         return s_next, reward, if_done, info
-

@@ -10,6 +10,15 @@ from base.engine.logs import logger as _logger
 from base.env.base_env import SkinEnv
 from base.engine.logs import logger
 
+
+def _extract_agent_observation(rendered: Any) -> Any:
+    """Support both unified render output and legacy render_skin return values."""
+    if hasattr(rendered, "agent_view"):
+        return rendered.agent_view
+    if isinstance(rendered, dict) and "agent_view" in rendered:
+        return rendered.get("agent_view")
+    return rendered
+
 # Maximum number of past actions to retain; if None, retain all past actions
 MAX_PAST_ACTIONS = None
 
@@ -183,7 +192,11 @@ class SolverAgent(BaseAgent):
         events_count = {}
         
         raw_obs = env.observe_semantic()
-        agent_obs = env.render_skin(raw_obs)
+        if hasattr(env, "render"):
+            rendered = env.render(raw_obs)
+        else:
+            rendered = env.render_skin(raw_obs)
+        agent_obs = _extract_agent_observation(rendered)
         initial_observation = agent_obs
 
         while cur_steps < max_step and not env.done():
@@ -221,7 +234,7 @@ class SolverAgent(BaseAgent):
                 "parse_error": (action or {}).get("_parse_error"),
             })
             cur_reward += reward
-            agent_obs = info["skinned"]
+            agent_obs = info.get("agent_obs", info.get("skinned"))
             for e in info.get("events", []):
                 events_count[e] = events_count.get(e, 0) + 1
             cur_steps += 1
