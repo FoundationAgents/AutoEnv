@@ -38,6 +38,7 @@ async def run_generation(
     output: str,
     mode: str = "textual",
     image_model: str | None = None,
+    code_agent_backend: str = "miniswe",
 ):
     """Run a single generation task."""
     label = theme
@@ -46,9 +47,9 @@ async def run_generation(
         theme = Path(theme).read_text(encoding="utf-8")
 
     # Step 1: Run generator pipeline
-    print(f"🚀 [{label}] Generating environment...")
+    print(f"🚀 [{label}] Generating environment (backend={code_agent_backend})...")
     gen_pipeline = GeneratorPipeline.create_default(llm_name=model)
-    gen_ctx = await gen_pipeline.run(requirements=theme, output_dir=output)
+    gen_ctx = await gen_pipeline.run(requirements=theme, output_dir=output, code_agent_backend=code_agent_backend)
 
     if not gen_ctx.success:
         print(f"❌ [{label}] Generation failed: {gen_ctx.error}")
@@ -97,6 +98,7 @@ async def main():
     mode = args.mode or cfg.get("mode") or "textual"
     image_model = cfg.get("image_model")
     concurrency = cfg.get("concurrency", 1)
+    code_agent_backend = cfg.get("code_agent_backend", "miniswe")
 
     Path(output).mkdir(parents=True, exist_ok=True)
     print(f"🔧 Config: {args.config}")
@@ -104,6 +106,7 @@ async def main():
     print(f"🎨 Image Model: {image_model}")
     print(f"📁 Output: {output}")
     print(f"📦 Mode: {mode}")
+    print(f"🔧 Code Agent: {code_agent_backend}")
 
     # Determine themes (priority: CLI --theme > themes_folder > theme)
     themes: list[str] = []
@@ -123,7 +126,7 @@ async def main():
 
     async def task(t: str):
         async with sem:
-            await run_generation(t, model, output, mode, image_model)
+            await run_generation(t, model, output, mode, image_model, code_agent_backend)
 
     with CostMonitor() as monitor:
         await asyncio.gather(*[task(t) for t in themes])

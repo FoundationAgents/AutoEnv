@@ -19,3 +19,11 @@ theme: "<inline_text>"
 # Output directory for generated environments
 envs_root_path: "workspace/envs"
 
+# Code agent backend: "miniswe" (default), "codex", or "claude"
+# - miniswe: Uses MiniSWE agent with LLM (recommended, works with any LLM)
+# - codex: Uses OpenAI Codex CLI (requires OPENAI_API_KEY)
+# - claude: Uses Claude Agent SDK (Python package)
+#   • Required: Environment variable ANTHROPIC_API_KEY
+#   • Optional: Custom base URL ANTHROPIC_BASE_URL (set when using proxy)
+#   • Recommended: Write vars to .env and `source .env` in shell
+code_agent_backend: "miniswe"
