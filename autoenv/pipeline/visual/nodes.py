@@ -63,6 +63,7 @@ class AutoEnvContext(NodeContext):
     # AssemblyNode output
     game_dir: Path | None = None
     game_file: Path | None = None
+    skin_manifest: dict[str, Any] = Field(default_factory=dict)
     success: bool = False
     error: str | None = None
 
@@ -306,6 +307,17 @@ class AssemblyNode(AgentNode):
             ctx.game_dir = game_dir
             ctx.game_file = game_dir / "game.py"
             ctx.success = True
+
+        if ctx.success and ctx.game_file:
+            ctx.skin_manifest = {
+                "modality": "2d",
+                "entrypoint": str(ctx.game_file),
+                "artifacts": {
+                    "game_dir": str(game_dir),
+                    "assets_dir": str(assets_dst),
+                },
+                "asset_ids": sorted(ctx.generated_assets.keys()),
+            }
 
     def _build_game_code_prompt(self, ctx: AutoEnvContext) -> str:
         """Build game code generation prompt based on source type"""
@@ -668,6 +680,16 @@ class ThreeJSAssemblyNode(AgentNode):
             ctx.game_dir = game_dir
             ctx.game_file = html_file
             ctx.success = True
+            ctx.skin_manifest = {
+                "modality": "3d",
+                "entrypoint": str(html_file),
+                "artifacts": {
+                    "game_dir": str(game_dir),
+                    "models_dir": str(models_dst),
+                },
+                "asset_ids": sorted(ctx.models_3d.keys()),
+                "model_count": len(ctx.models_3d),
+            }
             print(f"[ThreeJSAssembly] ✓ Generated: {html_file}")
             print(f"[ThreeJSAssembly] To view: Open {html_file} in browser or run: python -m http.server --directory {game_dir}")
 

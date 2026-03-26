@@ -271,6 +271,9 @@ async def run_skin_gen(
     if ctx.success:
         logger.info(f"✅ [{label}] Generation complete → {visual_output}")
         logger.info(f"⏱️  Total time: {elapsed:.1f}s")
+        if getattr(ctx, "skin_manifest", None):
+            manifest = ctx.skin_manifest
+            logger.info(f"🧾 Skin manifest: modality={manifest.get('modality')} entrypoint={manifest.get('entrypoint')}")
         
         # Show 3D model info if available
         if dimension == "3d" and hasattr(ctx, "models_3d") and ctx.models_3d:
@@ -442,4 +445,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
